@@ -1,0 +1,86 @@
+<div class="row">
+	<div class="col-md-2" ng-repeat="label in ['Programs','Classes' ,'Posts' ,'Assignments', 'Notifications', 'Blogs']">
+		<div class="widget">
+			<div class="widget-content padding-25 bg-blue-300">
+			  <div class="counter counter-lg counter-inverse">
+			    <div class="counter-label text-uppercase">{{label}}</div>
+			    <span class="counter-number">220</span>
+			  </div>
+			</div>
+		</div>
+	</div>
+</div>
+
+<div class="row">
+	<div class="col-md-6">
+		<div class="widget widget-shadow" id="chartBarStacked">
+	            <div class="widget-content padding-30 height-full">
+	              <div class="chart-header padding-bottom-10" style="height:calc(100% - 350px);">
+	                <div class="font-size-20 inline-block">
+	                  Overview of
+	                  <div class="btn-group vertical-align-bottom margin-left-3 font-size-20">
+	                    <div data-toggle="dropdown" aria-expanded="false" style="cursor: pointer;" role="complementary">
+	                      Last year
+	                      <span class="caret"></span>
+	                    </div>
+	                    <ul class="dropdown-menu" role="menu">
+	                      <li role="presentation"><a href="javascript:void(0)" role="menuitem">The year before last</a></li>
+	                      <li role="presentation"><a href="javascript:void(0)" role="menuitem">Three years ago</a></li>
+	                    </ul>
+	                  </div>
+	                </div>
+	                <ul class="list-inline pull-right">
+	                  <li>
+	                    <span class="icon wb-medium-point blue-600 margin-right-5"></span>TYPE1</li>
+	                  <li>
+	                    <span class="icon wb-medium-point purple-600 margin-right-5"></span>TYPE2</li>
+	                  <li>
+	                    <span class="icon wb-medium-point blue-grey-300 margin-right-5"></span>TYPE3</li>
+	                </ul>
+	              </div>
+	              <div class="ct-chart height-350"><svg xmlns:ct="http://gionkunz.github.com/chartist-js/ct" width="100%" height="100%" class="ct-chart-bar" style="width: 100%; height: 100%;"><g class="ct-grids"><line y1="320" y2="320" x1="30" x2="735" class="ct-grid ct-vertical"></line><line y1="283.3333333333333" y2="283.3333333333333" x1="30" x2="735" class="ct-grid ct-vertical"></line><line y1="246.66666666666669" y2="246.66666666666669" x1="30" x2="735" class="ct-grid ct-vertical"></line><line y1="210" y2="210" x1="30" x2="735" class="ct-grid ct-vertical"></line><line y1="173.33333333333334" y2="173.33333333333334" x1="30" x2="735" class="ct-grid ct-vertical"></line><line y1="136.66666666666666" y2="136.66666666666666" x1="30" x2="735" class="ct-grid ct-vertical"></line><line y1="100" y2="100" x1="30" x2="735" class="ct-grid ct-vertical"></line><line y1="63.333333333333314" y2="63.333333333333314" x1="30" x2="735" class="ct-grid ct-vertical"></line><line y1="26.666666666666686" y2="26.666666666666686" x1="30" x2="735" class="ct-grid ct-vertical"></line><line y1="-10" y2="-10" x1="30" x2="735" class="ct-grid ct-vertical"></line></g><g><g class="ct-series ct-series-a"><line x1="59.375" x2="59.375" y1="320" y2="279.6666666666667" class="ct-bar" value="11"></line><line x1="118.125" x2="118.125" y1="320" y2="250.33333333333331" class="ct-bar" value="19"></line><line x1="176.875" x2="176.875" y1="320" y2="257.6666666666667" class="ct-bar" value="17"></line><line x1="235.625" x2="235.625" y1="320" y2="272.3333333333333" class="ct-bar" value="13"></line><line x1="294.375" x2="294.375" y1="320" y2="312.6666666666667" class="ct-bar" value="2"></line><line x1="353.125" x2="353.125" y1="320" y2="279.6666666666667" class="ct-bar" value="11"></line><line x1="411.875" x2="411.875" y1="320" y2="224.66666666666669" class="ct-bar" value="26"></line><line x1="470.625" x2="470.625" y1="320" y2="246.66666666666669" class="ct-bar" value="20"></line><line x1="529.375" x2="529.375" y1="320" y2="221" class="ct-bar" value="27"></line><line x1="588.125" x2="588.125" y1="320" y2="301.6666666666667" class="ct-bar" value="5"></line><line x1="646.875" x2="646.875" y1="320" y2="239.33333333333331" class="ct-bar" value="22"></line><line x1="705.625" x2="705.625" y1="320" y2="305.3333333333333" class="ct-bar" value="4"></line></g><g class="ct-series ct-series-b"><line x1="59.375" x2="59.375" y1="279.6666666666667" y2="257.6666666666667" class="ct-bar" value="6"></line><line x1="118.125" x2="118.125" y1="250.33333333333331" y2="184.33333333333331" class="ct-bar" value="18"></line><line x1="176.875" x2="176.875" y1="257.6666666666667" y2="232" class="ct-bar" value="7"></line><line x1="235.625" x2="235.625" y1="272.3333333333333" y2="239.33333333333331" class="ct-bar" value="9"></line><line x1="294.375" x2="294.375" y1="312.6666666666667" y2="217.33333333333337" class="ct-bar" value="26"></line><line x1="353.125" x2="353.125" y1="279.6666666666667" y2="191.66666666666669" class="ct-bar" value="24"></line><line x1="411.875" x2="411.875" y1="224.66666666666669" y2="213.66666666666669" class="ct-bar" value="3"></line><line x1="470.625" x2="470.625" y1="246.66666666666669" y2="180.66666666666669" class="ct-bar" value="18"></line><line x1="529.375" x2="529.375" y1="221" y2="118.33333333333331" class="ct-bar" value="28"></line><line x1="588.125" x2="588.125" y1="301.6666666666667" y2="224.66666666666669" class="ct-bar" value="21"></line><line x1="646.875" x2="646.875" y1="239.33333333333331" y2="169.66666666666663" class="ct-bar" value="19"></line><line x1="705.625" x2="705.625" y1="305.3333333333333" y2="261.3333333333333" class="ct-bar" value="12"></line></g><g class="ct-series ct-series-c"><line x1="59.375" x2="59.375" y1="257.6666666666667" y2="224.66666666666669" class="ct-bar" value="9"></line><line x1="118.125" x2="118.125" y1="184.33333333333331" y2="147.66666666666663" class="ct-bar" value="10"></line><line x1="176.875" x2="176.875" y1="232" y2="151.33333333333331" class="ct-bar" value="22"></line><line x1="235.625" x2="235.625" y1="239.33333333333331" y2="188" class="ct-bar" value="14"></line><line x1="294.375" x2="294.375" y1="217.33333333333337" y2="133.00000000000006" class="ct-bar" value="23"></line><line x1="353.125" x2="353.125" y1="191.66666666666669" y2="122" class="ct-bar" value="19"></line><line x1="411.875" x2="411.875" y1="213.66666666666669" y2="158.66666666666669" class="ct-bar" value="15"></line><line x1="470.625" x2="470.625" y1="180.66666666666669" y2="89" class="ct-bar" value="25"></line><line x1="529.375" x2="529.375" y1="118.33333333333331" y2="15.666666666666629" class="ct-bar" value="28"></line><line x1="588.125" x2="588.125" y1="224.66666666666669" y2="147.66666666666669" class="ct-bar" value="21"></line><line x1="646.875" x2="646.875" y1="169.66666666666663" y2="107.33333333333331" class="ct-bar" value="17"></line><line x1="705.625" x2="705.625" y1="261.3333333333333" y2="199" class="ct-bar" value="17"></line></g></g><g class="ct-labels"><foreignObject style="overflow: visible;" x="30" y="325" width="58.75" height="20"><span class="ct-label ct-horizontal ct-end" style="width: 59px; height: 20px" xmlns="http://www.w3.org/2000/xmlns/">A</span></foreignObject><foreignObject style="overflow: visible;" x="88.75" y="325" width="58.75" height="20"><span class="ct-label ct-horizontal ct-end" style="width: 59px; height: 20px" xmlns="http://www.w3.org/2000/xmlns/">B</span></foreignObject><foreignObject style="overflow: visible;" x="147.5" y="325" width="58.75" height="20"><span class="ct-label ct-horizontal ct-end" style="width: 59px; height: 20px" xmlns="http://www.w3.org/2000/xmlns/">C</span></foreignObject><foreignObject style="overflow: visible;" x="206.25" y="325" width="58.75" height="20"><span class="ct-label ct-horizontal ct-end" style="width: 59px; height: 20px" xmlns="http://www.w3.org/2000/xmlns/">D</span></foreignObject><foreignObject style="overflow: visible;" x="265" y="325" width="58.75" height="20"><span class="ct-label ct-horizontal ct-end" style="width: 59px; height: 20px" xmlns="http://www.w3.org/2000/xmlns/">E</span></foreignObject><foreignObject style="overflow: visible;" x="323.75" y="325" width="58.75" height="20"><span class="ct-label ct-horizontal ct-end" style="width: 59px; height: 20px" xmlns="http://www.w3.org/2000/xmlns/">F</span></foreignObject><foreignObject style="overflow: visible;" x="382.5" y="325" width="58.75" height="20"><span class="ct-label ct-horizontal ct-end" style="width: 59px; height: 20px" xmlns="http://www.w3.org/2000/xmlns/">G</span></foreignObject><foreignObject style="overflow: visible;" x="441.25" y="325" width="58.75" height="20"><span class="ct-label ct-horizontal ct-end" style="width: 59px; height: 20px" xmlns="http://www.w3.org/2000/xmlns/">H</span></foreignObject><foreignObject style="overflow: visible;" x="500" y="325" width="58.75" height="20"><span class="ct-label ct-horizontal ct-end" style="width: 59px; height: 20px" xmlns="http://www.w3.org/2000/xmlns/">I</span></foreignObject><foreignObject style="overflow: visible;" x="558.75" y="325" width="58.75" height="20"><span class="ct-label ct-horizontal ct-end" style="width: 59px; height: 20px" xmlns="http://www.w3.org/2000/xmlns/">K</span></foreignObject><foreignObject style="overflow: visible;" x="617.5" y="325" width="58.75" height="20"><span class="ct-label ct-horizontal ct-end" style="width: 59px; height: 20px" xmlns="http://www.w3.org/2000/xmlns/">L</span></foreignObject><foreignObject style="overflow: visible;" x="676.25" y="325" width="58.75" height="20"><span class="ct-label ct-horizontal ct-end" style="width: 59px; height: 20px" xmlns="http://www.w3.org/2000/xmlns/">M</span></foreignObject><foreignObject style="overflow: visible;" y="283.3333333333333" x="0" height="36.666666666666664" width="20"><span class="ct-label ct-vertical ct-start" style="height: 37px; width: 20px" xmlns="http://www.w3.org/2000/xmlns/">0</span></foreignObject><foreignObject style="overflow: visible;" y="246.66666666666666" x="0" height="36.666666666666664" width="20"><span class="ct-label ct-vertical ct-start" style="height: 37px; width: 20px" xmlns="http://www.w3.org/2000/xmlns/">10</span></foreignObject><foreignObject style="overflow: visible;" y="210" x="0" height="36.66666666666667" width="20"><span class="ct-label ct-vertical ct-start" style="height: 37px; width: 20px" xmlns="http://www.w3.org/2000/xmlns/">20</span></foreignObject><foreignObject style="overflow: visible;" y="173.33333333333334" x="0" height="36.66666666666666" width="20"><span class="ct-label ct-vertical ct-start" style="height: 37px; width: 20px" xmlns="http://www.w3.org/2000/xmlns/">30</span></foreignObject><foreignObject style="overflow: visible;" y="136.66666666666666" x="0" height="36.666666666666686" width="20"><span class="ct-label ct-vertical ct-start" style="height: 37px; width: 20px" xmlns="http://www.w3.org/2000/xmlns/">40</span></foreignObject><foreignObject style="overflow: visible;" y="100" x="0" height="36.66666666666666" width="20"><span class="ct-label ct-vertical ct-start" style="height: 37px; width: 20px" xmlns="http://www.w3.org/2000/xmlns/">50</span></foreignObject><foreignObject style="overflow: visible;" y="63.333333333333314" x="0" height="36.666666666666686" width="20"><span class="ct-label ct-vertical ct-start" style="height: 37px; width: 20px" xmlns="http://www.w3.org/2000/xmlns/">60</span></foreignObject><foreignObject style="overflow: visible;" y="26.666666666666686" x="0" height="36.66666666666663" width="20"><span class="ct-label ct-vertical ct-start" style="height: 37px; width: 20px" xmlns="http://www.w3.org/2000/xmlns/">70</span></foreignObject><foreignObject style="overflow: visible;" y="-10" x="0" height="36.666666666666686" width="20"><span class="ct-label ct-vertical ct-start" style="height: 37px; width: 20px" xmlns="http://www.w3.org/2000/xmlns/">80</span></foreignObject><foreignObject style="overflow: visible;" y="-40" x="0" height="30" width="20"><span class="ct-label ct-vertical ct-start" style="height: 30px; width: 20px" xmlns="http://www.w3.org/2000/xmlns/">90</span></foreignObject></g></svg></div>
+	            </div>
+	          </div>
+
+   </div>	
+
+   <div class="col-md-6">
+   	<div class="panel">
+            <div class="panel-heading">
+              <h3 class="panel-title">Top 10 Teachers, Students, Programs, Classes</h3>
+            </div>
+            <div class="panel-body">
+              <p>Some default panel content here. Nulla vitae elit libero, a pharetra
+                augue. Aenean lacinia bibendum nulla sed consectetur.</p>
+              <ul class="list-group">
+                <li class="list-group-item">
+                  <div class="media">
+                    <div class="media-left">
+                      <a class="avatar" href="javascript:void(0)">
+                        <img class="img-responsive" src="../../global/portraits/9.jpg" alt="...">
+                      </a>
+                    </div>
+                    <div class="media-body">
+                      <h4 class="media-heading">Willard Wood</h4>
+                      <div>Cras sit amet nibh libero, in gravida nulla. Nulla vel metus.</div>
+                    </div>
+                  </div>
+                </li>
+                <li class="list-group-item">
+                  <div class="media">
+                    <div class="media-left">
+                      <a class="avatar" href="javascript:void(0)">
+                        <img class="img-responsive" src="../../global/portraits/10.jpg" alt="...">
+                      </a>
+                    </div>
+                    <div class="media-body">
+                      <h4 class="media-heading">Ronnie Ellis</h4>
+                      <div>Porta ac consectetur ac. Porta ac consectetur ac.</div>
+                    </div>
+                  </div>
+                </li>
+              </ul>
+            </div>
+          </div>
+   </div>
+</div>

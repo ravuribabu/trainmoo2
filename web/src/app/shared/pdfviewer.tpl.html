@@ -1,0 +1,17 @@
+<div class="page-header padding-left-40 padding-top-10 padding-bottom-0">
+  <h1 class="page-title"></i>{{title}}&nbsp;</h1>
+  <div class="page-header-actions">
+    <button class="btn btn-round btn-primary btn-pill-left" ng-click="goPrevious()">Prev</button>
+    <button class="btn btn-round btn-primary btn-pill-right" ng-click="goNext()">Next</button>
+    <span>Page: </span>
+    <input type="text" min=1 ng-model="pageNum" style="width: 30px">
+    <span> / {{pageCount}}</span>
+  </div>
+
+</div>
+
+<div class="row">
+	<div class="col-md-12">
+ 	 <canvas id="pdf" class="rotate0 canvas" style="padding: 20px"></canvas>
+ 	</div>
+</div>

@@ -1,0 +1,17 @@
+<div class="media" ng-cloak>
+	<a href="#" class="pull-left">
+		<img alt="image" class="img-circle" src="assets/images/avatar-1-small.jpg">
+	</a>
+	<div class="media-body ">
+		<h6>{{msg.author.name}} <small> on {{msg.classes | listToString}}</small>
+			&nbsp;&nbsp;<i class="icon md-assignment-o" area-hidden="true"></i>		
+			&nbsp;<small>Due by: {{msg.dueby | date :  "MMM dd"}}</small>
+		 <small class="pull-right">{{msg.created_at | postTime}}</small></h6>
+	</div>
+
+    <!-- Comments-->
+    <p class="margin-bottom-10">
+			{{msg.text}}
+	</p>
+</div>
+

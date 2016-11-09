@@ -1,0 +1,125 @@
+<div ng-controller="schoolEditController as vm">
+
+<form name="Form" id="form" novalidate ng-submit="form.submit(Form)" >
+
+<div class="page-header padding-left-40 padding-top-10 padding-bottom-0" ng-cloak>
+  <h1 class="page-title"> <i class="icon fa-bank" aria-hidden="true"></i>  {{school.name}}&nbsp;&nbsp;&nbsp;&nbsp;</h1>
+  <button  class="btn btn-raised btn-primary" type="submit"><i class="icon fa-save" aria-hidden="true"></i> Save </button>
+  <span class="text-extra-small" ng-if="!Form.$dirty">&nbsp;&nbsp;&nbsp;&nbsp;All changes are saved</span>
+</div>
+
+<div class="row" ng-cloak>
+  <div class="col-md-12">
+    <div id="panel_edit_account" >
+      <fieldset ng-disabled="disableForm">
+            <div class="row">
+                <div class="col-md-5">
+                    <div class="row">
+                      <div class="col-md-4" style="height: 80px;padding: 0px; overflow:hidden">
+                        <div gallery files="school.avatar" type='image' class="padding-0" single='true' style="max-height: 80px; width: auto;" size='sm'></div>
+                      </div>
+
+                      <div class="col-md-8">
+                        <div class="form-group" ng-class="{'has-error':Form.name.$dirty && Form.name.$invalid, 'has-success':Form.name.$valid}">
+                            <label class="control-label"> Name  <span class="symbol required"></label>
+                            <input type="text" class="form-control underline" id="name" name="name" ng-model="school.name" required >
+                            <span class="error text-small block" ng-if="Form.name.$dirty && Form.name.$error.required">Name is required.</span>
+                        </div>
+                      </div>
+                    </div>
+                      
+                    <div class="form-group" >
+                        <label for="categories" class="control-label">Category</label>
+                        <select id="categories" class="form-control " multiple  ng-model="school.categories" ui-select2 style="width: 100%">
+                          <option ng-repeat="item in vm.categories" ng-bind="item.value" value="{{item.value}}"></option>
+                        </select>
+                        <p class="help-block text-small">select 3 categories</p>
+                    </div>
+                    
+
+                    <div class="form-group" >
+                        <label for="trainingstyle" class="control-label">Medium</label>
+                        <select id="trainingstyle" class="form-control " multiple ng-model="school.medium" ui-select2 style="width: 100%">
+                          <option ng-repeat="option in vm.mediums">{{option.value}}</option>
+                        </select>
+                        <p class="help-block text-small">select 3 main mediums of teaching</p>
+                    </div>
+                    
+
+                    <div class="form-group">
+                        <label class="control-label"> Phone</label>
+                        <input type="text" class="form-control" id="phone" name="phone"  ui-mask="(999) 999-9999"  ng-model="school.phone">
+                        <p class="help-block text-small">(999) 999.9999</p>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="control-label"> Website</label>
+                        <input type="text" class="form-control underline" ng-model="school.website"  >
+                        <p class="help-block text-small">www.myschool.com</p>
+                    </div>
+
+                </div>
+                <div class="col-md-offset-1 col-md-5" ng-cloak>
+                    <div class="height-250 margin-top-20 padding-20" style="border: 2px solid #e4eaec;border-radius: 5px;">                          
+                      <script type="text/ng-template" id="customTemplate.html">
+                        <a>
+
+                            <img ng-src="http://upload.wikimedia.org/wikipedia/commons/thumb/{{match.model.flag}}" style="float: left;" width="32" height="32">
+                            <span ng-bind-html="match.label | uibTypeaheadHighlight:query"></span><br>
+                            <span class="text-small">State of champions</span>
+                        </a>
+                      </script>
+                      <pre>Model: {{selected | json}}</pre>
+                      <input type="text" ng-model="customSelected" placeholder="Custom template" uib-typeahead="state as state.name for state in statesWithFlags  | filter:{name:$viewValue} | limitTo:8" typeahead-template-url="customTemplate.html" class="form-control" typeahead-show-hint="true"  typeahead-on-select="itemSelected($item, $model, $label, $event);customSelected=''" typeahead-min-length="2" typeahead-wait-ms="500">
+
+                      <ul>
+                        <li ng-repeat="value in selectedStates">
+                          <div>
+                              <img ng-src="http://upload.wikimedia.org/wikipedia/commons/thumb/{{match.model.flag}}" style="float: left;" width="32" height="32">
+                              <span ng-bind-html="match.label | uibTypeaheadHighlight:query"></span><br>
+                              <span class="text-small">State of champions</span>
+                          </div>
+                        </li>
+                      </ul>
+
+                    </div>
+                    <div class="height-200 margin-top-20 padding-20" style="border: 2px solid #e4eaec;border-radius: 5px;">                          
+                      <h3>Contacts</h3>
+
+                    </div>
+                  
+                </div>
+            </div>
+
+            <div class="row">
+
+              <div class="col-md-12 margin-top-20">
+                 <div class="form-group" >
+                          <label class="control-label "> About {{school.name}} </label>
+                          <div id="react" draft content="school.profile" readonly="true"> </div>
+                  </div>
+              </div>            
+              <div class="col-md-12 margin-top-20" >
+              <div class="form-group" >
+                      <label class="control-label "> Location </label>
+                      <div class="gmap height-300" placeid="school.placeid" address="school.address" ng-cloak></div>
+              </div>
+              </div>
+              <div class="col-md-12 margin-top-20">
+                <div gallery files="school.gallery" type='image' gallery-title="Photo Gallery"></div>
+              </div>
+              
+              <div class="col-md-12 margin-top-20">
+                <div gallery files="school.attachments" type='pdf' gallery-title="Additional Information"></div>
+              </div>
+
+      </fieldset>
+       
+    </div>
+  </div>
+</div>
+
+</form>
+
+</div>
+

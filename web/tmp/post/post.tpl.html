@@ -1,0 +1,245 @@
+<style type="text/css">
+    .app-message .page{height:-webkit-calc(100% - 44px);height:calc(100% - 44px)}.app-message .page-main{height:100%}.app-message .page-aside .form-control{border-radius:0;border-width:0 0 1px 0;border-color:rgba(0,0,0,.06);padding:10px 60px 10px 30px;height:56px}.app-message .page-aside .input-search-btn{padding-right:30px;border-radius:0}.app-message .page-aside-inner{height:100%}.app-message-list{height:-webkit-calc(100% - 56px);height:calc(100% - 56px)}.app-message-list .list-group .list-group-item{border-bottom:0;border-radius:0;padding:16px 30px;white-space:nowrap;z-index:0}.app-message-list .list-group .list-group-item.active,.app-message-list .list-group .list-group-item:hover{background-color:#e8f1f8}.app-message-list .list-group .list-group-item.active:after{width:1px;position:absolute;content:' ';height:100%;right:0;top:0;background:#62a8ea}.app-message-list .list-group .list-group-item .media-time{color:#a3afb7}.app-message-chats{padding:20px 30px;overflow-y:scroll;text-align:center;height:-webkit-calc(100% - 96px);height:calc(100% - 96px);background-color:#fff}.app-message-chats>.btn{color:#89bceb}.app-message-chats>.btn:hover{color:#76838f}.app-message-chats .chats{padding:0}.app-message-chats .chats .chat-avatar .avatar{width:60px;margin-top:-10px}.app-message-chats .chats .time{color:#a3afb7;font-size:12px;text-align:center;margin:40px 0}.app-message-input{position:relative;}.app-message-input .message-input{position:relative}.app-message-input .message-input textarea{height:36px;resize:none;max-height:100px;padding-right:110px}.app-message-input .message-input-actions{position:absolute;bottom:0;right:0}.app-message-input .message-input-actions input{display:none}.app-message-input .message-input-btn{position:absolute;bottom:30px;right:30px}@media (max-width:1199px){.app-message .page-aside .list-group-item{padding:14px 16px;font-size:12px}.app-message .page-aside .list-group-item h4{font-size:12px}.app-message .page-aside .list-group-item .avatar{width:34px}.app-message .page-aside .list-group-item .badge{padding:1px 4px}}@media (max-width:480px){.app-message .page{height:-webkit-calc(100% - 66px);height:calc(100% - 66px)}}
+
+
+</style>
+
+<form  name="Form" id="form1" novalidate ng-submit="form.submit(Form)" >
+    <div class="panel  margin-bottom-10" ng-cloak>
+        <div class="panel-body bg-white padding-10">
+            <div class="media">
+                <div class="media-left">
+                    <a href="#" class="pull-left">
+                        <img alt="image" class="img-circle" ng-src="/api/img/download/125025-santhi-ramjpeg" style="width:40px;">
+                    </a>
+                </div>
+                <div class="media-body app-message-input">
+                    <div class="message-input">
+                      <textarea class="form-control" rows="4" style="overflow: hidden; word-wrap: break-word; height: 70px;" placeholder="Enter your update.." ng-model="post.text" required> </textarea>
+                      <div class="message-input-actions btn-group">
+                        <a class="btn btn-pure btn-icon btn-default" type="button">
+                          <i class="icon wb-emoticon" aria-hidden="true"></i>
+                        </a>
+                        <a class="btn btn-pure btn-icon btn-default" type="button" ng-click="uploadImages()">
+                          <i class="icon wb-image" aria-hidden="true"></i>
+                        </a>
+                        <a class="btn btn-pure btn-icon btn-default" type="button" ng-click="uploadFiles()">
+                          <i class="icon wb-paperclip" aria-hidden="true"></i>
+                        </a>
+                        <a class="btn btn-pure btn-icon btn-default" type="button" href="app/blog" >
+                          <i class="icon wb-pencil" aria-hidden="true"></i>
+                        </a>
+                        
+                        <input id="messageImage" type="file" name="messageImage">
+                        <input id="messageFile" type="file" name="messageFile">
+                      </div>
+                    </div>
+                </div>
+            </div>
+
+            <div>
+                <div flow-init flow-name="obj.flowImages"
+                                                 flow-file-added="!!{png:1,gif:1,jpg:1,jpeg:1}[$file.getExtension()]" 
+                                                 flow-file-success="fileSuccess( $file, $message, $flow )"
+                                                 flow-file-error="fileError( $file, $message, $flow )"
+                                                 ng-show="uploadImage">
+                        <div class="drop padding-10" flow-drop>
+                            <span class="btn btn-sm btn-round btn-info" flow-btn>Upload Image</span>
+                            <span class="btn btn-sm btn-round btn-info" flow-btn flow-directory ng-show="$flow.supportDirectory">Upload Folder of Images</span>
+                            <b>OR</b>
+                            Drag And Drop your images here
+                            <span class="btn btn-danger pull-right"  ng-click="cancelUpload()"> <i class="fa fa-times"></i> </span>
+                        </div>
+                        <div class="row">
+                            <div ng-repeat="file in $flow.files" class="gallery-box">
+                                <div class="col-md-3 col-sm-1">
+                                    
+                                    <div class="user-image no-padding"  class="alert" flow-drop flow-drag-enter="style={border:'4px solid green'}" flow-drag-leave="style={}"
+                ng-style="style">
+                                        <div class="thumbnail">
+                                            <img flow-img="file">
+                                            <div class="caption">
+                                                <strong>{{file.name}}</strong>
+                                            </div>
+
+                                            <div class="user-image-buttons" >
+                                                <span class="btn btn-danger" ng-click="file.cancel()"> <i class="fa fa-times"></i> </span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div flow-init flow-name="obj.flowFiles"
+                         flow-file-added="!!{pdf:1}[$file.getExtension()]"
+                         flow-file-success="fileSuccess( $file, $message, $flow )"
+                         flow-file-error="fileError( $file, $message, $flow )"
+                         ng-show="uploadFile">
+                      <div class="drop padding-10" flow-drop ng-class="dropClass">
+                        <span class="btn btn-sm btn-round btn-info" flow-btn>Upload File</span>
+                        <span class="btn btn-sm btn-round btn-info" flow-btn flow-directory ng-show="$flow.supportDirectory">Upload Folder</span>
+                        <b>OR</b>
+                        Drag And Drop your file here
+                        <span class="btn btn-danger pull-right"  ng-click="cancelUpload()"> <i class="fa fa-times"></i> </span>
+                      </div>
+
+
+                      <div class="row">
+                        <div ng-repeat="file in $flow.files" class="transfer-box">
+                            <div class="col-md-3 col-xs-1">
+                                <div class="thumbnail">
+                                    <div class="caption">
+                                        <strong>{{file.relativePath}} ({{file.size}}bytes)</strong>
+                                        <div class="progress progress-striped" ng-class="{active: file.isUploading()}">
+                                            <div class="progress-bar" role="progressbar"
+                                                 aria-valuenow="{{file.progress() * 100}}"
+                                                 aria-valuemin="0"
+                                                 aria-valuemax="100"
+                                                 ng-style="{width: (file.progress() * 100) + '%'}">
+                                              <span class="sr-only">{{file.progress()}}% Complete</span>
+                                            </div>
+                                          </div>
+                                          <div class="btn-group">
+                                            <a class="btn btn-o btn-danger" ng-click="file.cancel()">
+                                              Cancel
+                                            </a>
+                                          </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                      </div>
+                    </div>
+            </div>
+
+            <div class="margin-top-10 col-xs-12 padding-left-20">
+              <div class="row"  >
+                <div class="col-xs-8">
+                     <small><b>Tags:</b></small>
+                     <a class="btn btn-pure btn-icon btn-default" type="button" ng-click="showSettings=!showSettings" >
+                          <i class="icon wb-pencil" aria-hidden="true"></i>
+                      </a>
+                      <span class="label label-round label-default label-md label-outline margin-5" ng-repeat="filter in tag.crumbs()" style="display: inline-block;">
+                        {{filter.value}}&nbsp;
+                        <a href="#" ng-click="tag.removeCrumb(filter.name, filter.value)"><i class="icon wb-close"></i></a>
+                      </span> 
+                </div>
+
+                <div class="col-xs-4">
+                  <button class="btn btn-default btn-sm btn-round btn-outline" type="submit">Cancel</button>
+                  <button class="btn btn-outline btn-primary btn-round " type="submit">Post</button>
+                </div>
+
+                <div class="col-xs-12 padding-bottom-10 " >  
+                 
+                  <div class="panel " ng-show="showSettings">
+                    <div class="panel-body padding-10" style="font-size:12px;height:200px;">
+                      <div class="col-xs-4">
+                        <h6>Programs ({{tag.programs.length}})</h6>
+                        <div style="height:150px;overflow-y: scroll;">
+                          <div class="checkbox-custom checkbox-success">
+                            <input type="checkbox" id="allPrograms" ng-model="tag.allPrograms.checked" ng-click="tag.selectAllPrograms()">
+                            <label for="allPrograms">
+                              <strong>All<a href="#" ng-click="selectProgram()"><i class="icon wb-arrow-right padding-left-20" aria-hidden="true"></i></a>
+                              </label></strong>
+                            </label>
+                          </div>
+                          <div class="checkbox-custom checkbox-success" ng-repeat="program in tag.programs" >
+                              <input type="checkbox" id="{{program.name}}" ng-model="program.checked" ng-click="tag.update()" ng-disabled="program.disabled" >
+                              <label for="{{program.name}}">
+                                  {{program.name}} <a href="#" ng-click="selectProgram(program.name)"><i class="icon wb-arrow-right padding-left-20" aria-hidden="true"></i></a>
+                              </label>
+                          </div>
+                        </div>
+                      </div>
+                      <div class="col-xs-4" >
+                        <h6>Classes ({{tag.classes.length}})</h6>
+                        <div style="height:150px;overflow-y: scroll;">
+                          <div class="checkbox-custom checkbox-success" >
+                            <input type="checkbox" id="allClasses" ng-model="tag.allClasses.checked" ng-click="tag.selectAllClasses()" ng-disabled="tag.allPrograms.checked">
+                            <label for="allClasses">
+                              <strong>All</strong>
+                            </label>
+                          </div>
+                          <div class="checkbox-custom checkbox-success" ng-repeat="class in tag.classes" ng-show="class.show">
+                              <input type="checkbox" id="{{class.name}}" ng-model="class.checked" ng-click="tag.update()"  ng-disabled="class.disabled">
+                              <label for="{{class.name}}">
+                                  {{class.name}}
+                              </label>
+                          </div>
+                        </div>
+                      </div>
+                      <div class="col-xs-4" >
+                        <h6>Post Type</h6>
+                        <div style="height:150px;overflow-y: scroll;">
+                          <div class="radio-custom radio-success" ng-repeat="postType in tag.types" >
+                            <input type="radio" ng-model="post.type" ng-value="postType.name" id="{{postType.name}}" ng-click="tag.selectType(postType.name)"/>
+                            <label for="{{postType.name}}">{{postType.name}}</label>
+                          </div>
+                          <div class="form-group" ng-show="tag.getSelectedType() === 'assignment'">
+                            <label for="dueDate">Due By:</label>
+                            <input type="text" class="form-control input-sm" id="dueDate" ng-model="tag.dueby.value" ng-change="tag.update()" datepicker>
+                          </div> 
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+
+                  <div class="btn-group padding-left-10 padding-right-10" ng-show="isStudent">
+                      <a class="btn btn-outline btn-xs dropdown-toggle" data-toggle="dropdown" aria-expanded="false">
+                        Assignment
+                        <span class="caret"></span>
+                      </a>
+                      <div class="dropdown-menu bullet"  role="menu">
+                          <div class="panel">
+                           
+                            <div class="panel-body padding-10">
+                              <ul class="list-inline">
+                                <li role="presentation">
+                                    <div class="radio-custom radio-primary">
+                                      <input type="radio" id="inputRadiosUnchecked" checked="" name="inputRadios" />
+                                      <label for="inputRadiosUnchecked">Assignment 1</label>
+                                    </div>
+                                  </li>
+                                  <li role="presentation">
+                                    <div class="radio-custom radio-primary">
+                                      <input type="radio" id="inputRadiosUnchecked" name="inputRadios" />
+                                      <label for="inputRadiosUnchecked">Assignment 2</label>
+                                    </div>
+                                  </li>
+                                  <li role="presentation">
+                                    <div class="radio-custom radio-primary">
+                                      <input type="radio" id="inputRadiosUnchecked" name="inputRadios" />
+                                      <label for="inputRadiosUnchecked">Assignment 3</label>
+                                    </div>
+                                  </li>
+                                  <li role="presentation">
+                                    <div class="radio-custom radio-primary">
+                                      <input type="radio" id="inputRadiosUnchecked" name="inputRadios" />
+                                      <label for="inputRadiosUnchecked">Assignment 4</label>
+                                    </div>
+                                  </li>
+                                </ul>
+                            </div>
+                          </div>
+                      </div>
+                  </div>
+
+                  <div class="form-group" ng-show="isStudent">
+                    <div class="checkbox-custom checkbox-default">
+                      <input type="checkbox" id="inputInlineRemember" name="inputCheckboxRemember" checked
+                      autocomplete="off" />
+                      <label for="inputInlineRemember">To teacher</label>
+                    </div>
+                  </div>
+
+                </div>
+
+                
+              </div>
+
+            </div>
+    </div>
+</form>

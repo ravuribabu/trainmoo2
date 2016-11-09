@@ -1,0 +1,89 @@
+<style type="text/css">
+    .app-message .page{height:-webkit-calc(100% - 44px);height:calc(100% - 44px)}.app-message .page-main{height:100%}.app-message .page-aside .form-control{border-radius:0;border-width:0 0 1px 0;border-color:rgba(0,0,0,.06);padding:10px 60px 10px 30px;height:56px}.app-message .page-aside .input-search-btn{padding-right:30px;border-radius:0}.app-message .page-aside-inner{height:100%}.app-message-list{height:-webkit-calc(100% - 56px);height:calc(100% - 56px)}.app-message-list .list-group .list-group-item{border-bottom:0;border-radius:0;padding:16px 30px;white-space:nowrap;z-index:0}.app-message-list .list-group .list-group-item.active,.app-message-list .list-group .list-group-item:hover{background-color:#e8f1f8}.app-message-list .list-group .list-group-item.active:after{width:1px;position:absolute;content:' ';height:100%;right:0;top:0;background:#62a8ea}.app-message-list .list-group .list-group-item .media-time{color:#a3afb7}.app-message-chats{padding:20px 30px;overflow-y:scroll;text-align:center;height:-webkit-calc(100% - 96px);height:calc(100% - 96px);background-color:#fff}.app-message-chats>.btn{color:#89bceb}.app-message-chats>.btn:hover{color:#76838f}.app-message-chats .chats{padding:0}.app-message-chats .chats .chat-avatar .avatar{width:60px;margin-top:-10px}.app-message-chats .chats .time{color:#a3afb7;font-size:12px;text-align:center;margin:40px 0}.app-message-input{position:relative;}.app-message-input .message-input{position:relative}.app-message-input .message-input textarea{height:36px;resize:none;max-height:100px;padding-right:110px}.app-message-input .message-input-actions{position:absolute;bottom:0;right:0}.app-message-input .message-input-actions input{display:none}.app-message-input .message-input-btn{position:absolute;bottom:30px;right:30px}@media (max-width:1199px){.app-message .page-aside .list-group-item{padding:14px 16px;font-size:12px}.app-message .page-aside .list-group-item h4{font-size:12px}.app-message .page-aside .list-group-item .avatar{width:34px}.app-message .page-aside .list-group-item .badge{padding:1px 4px}}@media (max-width:480px){.app-message .page{height:-webkit-calc(100% - 66px);height:calc(100% - 66px)}}
+
+     .commentOnFocus {
+        overflow: hidden; 
+        word-wrap: break-word; 
+        height: 70px !important;
+      }
+
+      .commentNotFocus {
+        overflow: hidden; 
+        word-wrap: break-word; 
+        height: 40px !important;
+      }
+
+</style>
+
+<form  name="Form" id="form1" novalidate ng-submit="form.submit(Form)">
+    <div class="panel  margin-bottom-10" ng-cloak>
+        <div class="panel-body padding-10">
+                <div class="app-message-input">
+
+                    <div class="message-input">
+                      <comment-editor id="react" content="post.text" readonly="false" ng-click="vm.postSelected=true"> </comment-editor>
+                      <div class="message-input-actions btn-group" style="z-index: 1000;">
+                        <a class="btn btn-pure btn-icon btn-default" type="button">
+                          <i class="icon wb-emoticon" aria-hidden="true"></i>
+                        </a>
+                        <a class="btn btn-pure btn-icon btn-default" type="button" ng-click="uploadImages()">
+                          <i class="icon wb-image" aria-hidden="true"></i>
+                        </a>
+                        <a class="btn btn-pure btn-icon btn-default" type="button" ng-click="uploadFiles()">
+                          <i class="icon wb-paperclip" aria-hidden="true"></i>
+                        </a>
+                        <a class="btn btn-pure btn-icon btn-default" type="button" ui-sref="app.blog({postid: 1})" ng-if="!vm.reply">
+                          <i class="icon wb-pencil" aria-hidden="true"></i>
+                        </a>
+                        
+                        <input id="messageImage" type="file" name="messageImage">
+                        <input id="messageFile" type="file" name="messageFile">
+                      </div>
+                    </div>
+                </div>
+
+            <div class="col-md-12 padding-right-0 padding-left-0" style="margin-top: 10px;" ng-if="vm.postSelected" >
+
+              <div class="col-md-6" style="text-align: left; display: inline-block;" >
+                    <div style="display: inline-block; float: left; width: 120px;" class="btn" ng-if="!vm.reply">
+                      <div class="dropdown"  >
+                        <a class="dropdown-toggle inline-block" data-toggle="dropdown" href="#" aria-expanded="true" style="color: #62a8ea;">{{post.type}}<span class="caret"></span></a>
+                        <ul class="dropdown-menu animation-scale-up animation-top-right animation-duration-250" role="menu">
+                          <li role="presentation"><a href="javascript:void(0)" ng-click="post.type = 'Assignment'">Assignment</a></li>
+                          <li role="presentation"><a href="javascript:void(0)" ng-click="post.type = 'Notification'">Notification</a></li>
+                          <li role="presentation"><a href="javascript:void(0)" ng-click="post.type = 'Blog'">Blog</a></li>
+                          <li role="presentation"><a href="javascript:void(0)" ng-click="post.type = 'Message'">Message</a></li>
+                        </ul>
+                      </div>
+                    </div>
+
+
+                    <div style="display: inline-block; float: left; width: 200px;" ng-if="post.type === 'Assignment'">
+                      <datepicker date-format="MM/dd/yyyy" selector="form-control" >
+                          <div class="input-group">
+                              <input class="form-control" placeholder="Due by.." ng-model="post.dueby" />
+                              <span class="input-group-addon" style="cursor: pointer">
+                                <i class="fa fa-lg fa-calendar"></i>
+                              </span>
+                          </div>
+                      </datepicker>
+                    </div>
+              </div>
+              
+              <div class="col-md-6" style="text-align: right;">
+                <button class="btn btn-default btn-sm btn-raised" ng-click="vm.cancel()" style="width: 100px;">Cancel</button>
+                <button class="btn btn-default btn-sm btn-raised btn-primary " type="submit" style="width: 100px;">Post</button>
+              </div>
+              
+            </div>
+
+            <div class="col-md-12 margin-top-20" ng-if="uploadImage">
+              <div gallery files="post.files" type='image' gallery-title="Attach Pictures" ></div>
+            </div>
+            
+            <div class="col-md-12 margin-top-20" ng-if="uploadFile">
+              <div gallery files="post.files" type='pdf' gallery-title="Attach Files(Pdfs)"></div>
+            </div>
+
+    </div>
+</form>

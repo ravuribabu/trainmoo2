@@ -1,0 +1,59 @@
+<div class="comment media" ng-cloak style="width: 100%">
+	<a href="#" class="media-left">
+		<img alt="image" class="avatar avatar-lg" src="assets/images/avatar-1-small.jpg" >
+	</a>
+	<div class="media-body ">
+		<div class="comment-body">
+			<a href="#" class="comment-author">{{msg.author.name}}</a> <small ng-if="msg.type != 'Reply'">  {{msg.classes | listToString}}</small>
+			
+			<div class="comment-meta">
+				<span class="date"> {{msg.created_at | postTime}}</span>&nbsp;&nbsp;
+				<span class="label" 
+					ng-class="{'label-primary' : msg.type === 'Message', 'label-danger' : msg.type === 'Assignment', 'label-warning' : msg.type === 'Notification'}" 
+					ng-if="msg.type != 'Reply'">
+					{{msg.type}}
+				</span>	
+				<span class="label label-info margin-left-10" ng-if="msg.type === 'Assignment'">
+					Due By: {{msg.dueby | date :  "MMM dd"}}
+				</span>
+			</div>
+
+			<div class="comment-header-actions" >
+				<a href="#"><i class="icon fa-bookmark-o"></i> </a>
+				<a href="#"><i class="icon fa-star-o"></i> </a>
+			</div>
+
+			<comment-editor id="react" content="msg.text" readonly="true" class="comment-content"> </comment-editor>
+
+			<div gallery files="msg.files" readonly="true" ng-if="msg.files && msg.files.length > 0"></div>
+
+			<div class="comment-actions pull-left">
+				<a href="javascript:void(0)" ng-click="like(msg._id)">Like</a>
+				<a href="javascript:void(0)" ng-click="showReplies=!showReplies">Reply</a>
+				<a href="javascript:void(0)">
+					<i class="icon md-favorite"></i>
+					<span ng-if='msg.likes.length > 0'>{{msg.likes.length}}</span>
+				</a>
+				<a href="javascript:void(0)">
+					<i class="icon md-comment"></i>
+					<span ng-if='msg.comments > 0'>{{msg.comments}}</span>
+				</a>
+			</div>
+
+			<div class="comment-reply">
+				<post ng-if="showReplies" parentid="msg._id" type="reply"></post>
+			</div>
+
+		</div>
+
+		
+
+		<div class="comments">
+			<comment msg="reply" ng-repeat="reply in replies"></comment>
+		</div>
+	</div>
+
+    <!-- Comments-->
+    
+</div>
+

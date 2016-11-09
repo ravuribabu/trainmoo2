@@ -1,0 +1,105 @@
+<link rel="stylesheet" href="assets/bower_components/ckeditor/contents.css">
+
+
+
+<div class="container-fluid container-fullw">
+	<form name="Form" id="form1" novalidate ng-submit="form.submit(Form)" >
+		
+		<div flow-init flow-name="obj.flow"
+	             flow-file-added="!!{png:1,gif:1,jpg:1,jpeg:1}[$file.getExtension()]"
+	             flow-file-success="fileSuccess( $file, $message, $flow )"
+                             flow-file-error="fileError( $file, $message, $flow )" class="border-1">
+	            
+	            <div class="drop" flow-drop ng-class="dropClass">
+	                <span class="btn btn-default" flow-btn>Upload Image</span>
+	            </div>
+
+	            <br/>
+	            <div class="row">
+	                <div ng-repeat="file in $flow.files" class="gallery-box">
+	                    <div class="col-md-12 col-sm-12">
+	                        
+	                        <div class="user-image no-padding"  class="alert" flow-drop flow-drag-enter="style={border:'4px solid green'}" flow-drag-leave="style={}"
+	ng-style="style">
+	                            <div>
+		                             <img flow-img="file" class="img-fluid">
+		                               
+		                            <div class="user-image-buttons" >
+		                                <span class="btn btn-danger" ng-click="file.cancel()"> <i class="fa fa-times"></i> </span>
+		                            </div>
+	                        	</div>
+	                    	</div>
+	               		</div>
+	            	</div>
+	        	</div>
+	    </div>
+
+
+
+		<div class="form-group">
+			<input type="text " style="font-size:30px;" class="form-control" id="title" name="title" ng-model="post.title" placeholder="Write your Headline"></input>
+		</div>
+	    <div class="row">
+	        <div class="col-md-12">
+	            <div class="panel panel-white">
+	                <div class="panel-body">
+	                     <div>
+	                        <div ckeditor="options" ng-model="post.text" ready="onReady()" style="height:300px;"></div>
+	                    </div>
+	                </div>
+	            </div>
+	        </div>
+	    </div>
+        <div class="col-md-12">
+       		 <button class="btn btn-primary pull-right" type="submit">
+				Save <i class="fa fa-arrow-circle-down"></i>
+			</button>	&nbsp;&nbsp;&nbsp;
+			<button class="btn btn-primary pull-right" type="submit">
+				Publish <i class="fa fa-arrow-circle-right"></i>
+			</button>
+		</div>
+
+ 	</form>
+</div>
+
+<script type="text/ng-template" id="uploadImage.html">
+		<div class="modal-header">
+		    <h3 class="modal-title">{{title}}</h3>
+		</div>
+		<div class="modal-body">
+			<div flow-init flow-name="obj.flow"
+		             flow-file-added="!!{png:1,gif:1,jpg:1,jpeg:1}[$file.getExtension()]"
+		             flow-file-success="fileSuccess( $file, $message, $flow )"
+                                 flow-file-error="fileError( $file, $message, $flow )">
+		            <div class="drop" flow-drop ng-class="dropClass">
+		                <span class="btn btn-default" flow-btn>Upload Image</span>
+		            </div>
+
+		            <br/>
+		            <div class="row">
+		                <div ng-repeat="file in $flow.files" class="gallery-box">
+		                    <div class="col-md-3 col-sm-1">
+		                        
+		                        <div class="user-image no-padding"  class="alert" flow-drop flow-drag-enter="style={border:'4px solid green'}" flow-drag-leave="style={}"
+		ng-style="style">
+		                            <div class="thumbnail">
+		                                <img flow-img="file">
+		                                <div class="caption">
+		                                    <strong>{{file.name}}</strong>
+		                            </div>
+
+		                            <div class="user-image-buttons" >
+		                                <span class="btn btn-danger" ng-click="file.cancel()"> <i class="fa fa-times"></i> </span>
+		                            </div>
+		                        </div>
+		                    </div>
+		                </div>
+		            </div>
+		        </div>
+		    </div>
+		</div>
+		<div class="modal-footer">
+		    <button class="btn btn-primary" type="button" ng-click="ok()">OK</button>
+		    <button class="btn btn-warning" type="button" ng-click="cancel()">Cancel</button>
+		</div>
+</script>

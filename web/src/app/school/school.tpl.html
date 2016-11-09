@@ -1,0 +1,286 @@
+<style type="text/css">
+	.highlight:hover {
+	  /*background-color: #e3f2fd !important;*/
+	  box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+	}
+
+	.icon-wrap {
+	  color: inherit; /* blue colors for links too */
+  	  text-decoration: inherit; /* no underline */
+
+	  margin: 5px 5px;
+	  text-align: center;
+	  display: inline-block;
+	}
+	.icon-wrap:hover {
+		color: inherit; /* blue colors for links too */
+  	  text-decoration: inherit; /* no underline */
+	  color: #fff;
+	  background-color: #62a8ea;
+	}
+
+	[ng\:cloak], [ng-cloak], .ng-cloak {
+	    display: none !important;
+	  }
+</style>
+
+<div class="page-header padding-left-40 padding-top-10 padding-bottom-0 ">
+    <span class="page-title"><i class="icon fa-bank" aria-hidden="true"></i>Kushi Painting School</span> &nbsp;&nbsp;&nbsp;<button type="button" class="btn btn-raised btn-info  btn-sm">Programs <span class="badge">1</span> </button>&nbsp;&nbsp;&nbsp;<button type="button" class="btn btn-raised btn-info  btn-sm">Classes <span class="badge">2</span> </button>
+
+    <div class="page-header-actions">
+    	<button type="button" class="btn btn-raised  btn-default btn-sm" ui-sref="app.appt.schoolusers({schoolid: schoolid})" ><i class="icon fa-users" aria-hidden="true"></i> </button>
+        <button type="button" class="btn btn-raised  btn-default  btn-sm" ui-sref="app.appt.schoolEdit" ><i class="icon fa-edit" aria-hidden="true"></i> </button>
+	    <button type="button" class="btn btn-raised btn-default  btn-sm" ui-sref="app.appt.program({schoolid: schoolid, classid: ''})"><i class="icon fa-plus" aria-hidden="true"></i> Program </button>
+	    <button type="button" class="btn btn-raised btn-default  btn-sm" ui-sref="app.appt.class({schoolid: schoolid, classid: ''})"><i class="icon fa-plus" aria-hidden="true"></i> Class </button>
+    </div>
+</div>
+
+
+<!-- TABLE -->
+<div class="row margin-10"> 
+	<div class="col-md-12">
+		<div class="panel panel-white no-radius no-margin">
+			<div class="panel-body app-mail-box">
+				<table class="table no-margin">
+					<tbody>
+						<tr ng-repeat="clazz in classes" ng-cloak>
+							<td class="max-width-100 hidden-xs">
+								<div class="icons-effect padding-10">
+									<img src="assets/images/avatar-1-small.jpg" class="img-rounded img-responsive" style="height: 70px;" alt="">
+								</div>
+							</td>
+							<td>
+								<div class="padding-10">
+									<div class="title">
+										<a ui-sref="app.appt.program({schoolid: schoolid, classid: clazz._id})" ng-if="!clazz.program"> <strong style="margin-right: 20px">{{clazz.name}}</strong> <span class="label label-info">Program </span></a> 
+										<a ui-sref="app.appt.class({schoolid: schoolid, classid: clazz._id})" ng-if="clazz.program"><strong style="margin-right: 20px">{{clazz.name}}</strong><span class="label label-info">Class </span> </a> 
+
+									</div>
+									<span class="abstract">Reiciendis iactant eligendi. Vestrae </span>
+									<div class="abstract">
+										<a href="#" class="margin-right-10 ">
+											<i class="fa fa-user "></i> Rambabu Ravuri
+										</a>
+										<span class='time'><i class="fa fa-clock-o "></i>10-11am Mon-Tue-Fri</span>
+									</div>									
+								</div>
+							</td>
+							<td class="hidden-xs">
+								<div class="block padding-10">
+											<a ui-sref="app.appt.classusers({schoolid: schoolid, classid: clazz._id})" class="margin-right-10 text-small block">
+												<i class="fa fa-users"></i> Users
+											</a>
+											<a href="#" class="margin-right-10 block  text-small">
+												<i class="fa fa-bar-chart "></i> Grades 
+											</a>
+											
+											<a href="#" class="block  text-small">
+												<i class="fa fa-money "></i> Payment
+											</a>
+											
+											<a href="#" class="block  text-small">
+												<i class="fa fa-calendar "></i> Time table
+											</a>
+
+										</div>
+							</td>
+							<td class="visible-lg">
+							 <div class="padding-10">
+								<div class="col-xs-4 text-center">
+									<div class="counter">
+										<div class="counter-label">Students</div>
+										<div class="counter-number">200</div>
+									</div>
+								</div>
+								<div class="col-xs-4 no-padding text-center">
+									<div class="counter">
+										<div class="counter-label">Classes</div>
+										<div class="counter-number">200</div>
+									</div>
+								</div>
+								<div class="col-xs-4 no-padding text-center">
+									<div class="counter">
+										<div class="counter-label">Posts</div>
+										<div class="counter-number">200</div>
+									</div>
+								</div>
+							  </div>
+							</td>
+						</tr>
+						
+					</tbody>
+				</table>
+			</div>
+			<div class="panel-footer no-border">
+				<p class="no-margin">
+					<a href="#"><i class="fa fa-arrow-circle-o-down text-green"></i></a>
+					<span class="text-light margin-left-10">Show more details </span>
+				</p>
+			</div>
+		</div>
+	</div>
+</div>
+
+
+<!-- 
+
+<div class="row margin-20" ng-cloak> 
+	<div class="col-md-3" ng-repeat="i in [1, 2 , 3 ]" >
+
+		<div class="widget widget-shadow highlight" >
+			<div class="widget-body padding-20">
+				<a class="avatar pull-left margin-right-20" href="javascript:void(0)">
+					<img src="assets/images/avatar-1-small.jpg" alt="">
+				</a>
+				<div style="overflow:hidden;">
+					<div class="font-size-18 margin-bottom-5">Bodybuilding 101 &nbsp;&nbsp;&nbsp;<span class="pull-right"><i class="icon fa-edit" aria-hidden="true"></i>&nbsp;&nbsp;<i class="icon fa-plus" aria-hidden="true"></i></span> </div>
+					<div class="font-size-12 margin-bottom-10">Rambabu Ravuri &nbsp;&nbsp;&nbsp;&nbsp; Mon, Tue 10-11AM</div>			    
+				</div>
+
+		  		<p>
+		            Reiciendis iactant eligendi. Vestrae 
+		          </p>
+		         <p ><a href="#" class="icon-wrap"> <i class="icon fa-book" aria-hidden="true"></i>&nbsp;&nbsp;<span>Syllabus</span></a>&nbsp;&nbsp;
+		         	<a href="#" class="icon-wrap"> <i class="icon fa-money" aria-hidden="true"></i>&nbsp;&nbsp;<span>Payment</span></a> &nbsp;&nbsp;
+		         	<a href="#" class="icon-wrap"> <i class="icon fa-bar-chart" aria-hidden="true"></i>&nbsp;&nbsp;<span>Grades</span></a> &nbsp;&nbsp;
+				<a href="#" class="icon-wrap"> <i class="icon fa-location-arrow" aria-hidden="true"></i>&nbsp;&nbsp;<span>Bellandur</span></a>&nbsp;&nbsp;
+				<a href="#" class="icon-wrap"> <i class="icon fa-tags" aria-hidden="true"></i>&nbsp;&nbsp;<span>Fitness, Bodybuilding</span></a>&nbsp;&nbsp;
+				<a href="#" class="icon-wrap"> <i class="icon fa-bank" aria-hidden="true"></i>&nbsp;&nbsp;<span>In Class</span></a> </p>
+
+
+			</div>
+
+			<div class="widget-footer padding-10" style="height:70px;background-color: #e4eaec;">
+			    <div class="row">
+			    	<div class="col-xs-3 ">
+			    		<div class="counter">
+	                    <span class="counter-number">10</span>
+	                    <div class="counter-label "><a ui-sref="app.classes({programid: '{{program._id}}'})">Classes</a></div>
+	                  </div>
+			    	</div>
+			    	<div class="col-xs-3 ">
+			    		<div class="counter">
+	                    <span class="counter-number">11</span>
+	                    <div class="counter-label "><a ui-sref="app.classusers({classid: '{{program._id}}'})">Students</a></div>
+	                  </div>
+			    	</div>
+			    	<div class="col-xs-3 ">
+			    		<div class="counter">
+	                    <span class="counter-number">22</span>
+	                    <div class="counter-label "><a ui-sref="app.classevents({classid: '{{program._id}}'})">Events</a></div>
+	                  </div>
+			    	</div>
+			    	<div class="col-xs-3 ">
+			    		<div class="counter">
+	                    <span class="counter-number">2</span>
+	                    <div class="counter-label "><a href="/app/wall">Posts</a></div>
+	                  </div>
+			    	</div>
+			    </div>
+			</div>	
+
+		</div>
+	</div>
+</div>
+
+
+<div class="page-profile" ng-cloak>
+
+<div class="modal fade modal-fill-in">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">×</span>
+        </button>
+        <h4 class="modal-title" id="exampleFillInModalTitle">Set The Messages</h4>
+      </div>
+      <div class="modal-body">
+        <form>
+          <div class="row">
+            <div class="col-lg-4 form-group">
+              <input type="text" class="form-control" name="firstName" placeholder="First Name">
+            </div>
+            <div class="col-lg-4 form-group">
+              <input type="email" class="form-control" name="lastName" placeholder="Last Name">
+            </div>
+            <div class="col-lg-4 form-group">
+              <input type="email" class="form-control" name="email" placeholder="Your Email">
+            </div>
+            <div class="col-lg-12">
+              <textarea class="form-control" rows="5" placeholder="Type your message"></textarea>
+            </div>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>
+	<div class="page">
+		<div class="page-header  padding-bottom-10" >
+          <ol class="breadcrumb">
+            <li><a href="/app/wall">Home</a></li>
+            <li  ng-if="isClass"><a href="/app/classes">Programs</a></li>
+          </ol>
+          <h1 class="page-title">{{title}}</h1>
+         </div>
+
+	    <div class="page-content container-fluid padding-left-5 padding-right-5 padding-top-20">
+			<div class="row">
+				<div class="col-md-3 col-sm-4 col-xs-12"  ng-repeat="program in classes">
+					<div class="panel  box margin-10" style="height:300px;">
+						<div class="panel-heading padding-10" style="height:80px;">
+							<div class="panel-title padding-5" ><h5 class="margin-bottom-0">{{program.name}} </h5><span class="label label-sm label-round label-info">{{program.status}}</span></div>
+							<div class="panel-actions">
+								<a class="text-action" ui-sref="app.class({ classid: '{{program._id}}', type: 'program'})"><i class="icon wb-edit" aria-hidden="true"></i></a>
+							</div>
+						</div> 
+							
+						<div class="panel-body padding-10" style="min-height: 150px;max-height: 150px;overflow-y: scroll;">
+							<div responsive-text text="program.details" style="min-height:50px;"></div> 
+							<p><i class="icon fa-location-arrow" aria-hidden="true"></i>&nbsp;&nbsp;<span ng-if="program.location">{{program.location}}</span></p>
+							<p><i class="icon fa-tags" aria-hidden="true"></i>&nbsp;&nbsp;<span ng-if="program.categories">{{program.categories}}</span></p>
+							<p ><i class="icon fa-bank" aria-hidden="true"></i>&nbsp;&nbsp;<span ng-if="program.style">{{program.style}}</span></p>
+							
+					    </div>	
+					    <div class="panel-footer padding-10" style="height:70px; background-color: #e4eaec;">
+						    <div class="row">
+						    	<div class="col-xs-3 ">
+						    		<div class="counter">
+				                    <span class="counter-number">{{program.classes}}</span>
+				                    <div class="counter-label "><a ui-sref="app.classes({programid: '{{program._id}}'})">Classes</a></div>
+				                  </div>
+						    	</div>
+						    	<div class="col-xs-3 ">
+						    		<div class="counter">
+				                    <span class="counter-number">{{program.students}}</span>
+				                    <div class="counter-label "><a ui-sref="app.classusers({classid: '{{program._id}}'})">Students</a></div>
+				                  </div>
+						    	</div>
+						    	<div class="col-xs-3 ">
+						    		<div class="counter">
+				                    <span class="counter-number">{{program.events}}</span>
+				                    <div class="counter-label "><a ui-sref="app.classevents({classid: '{{program._id}}'})">Events</a></div>
+				                  </div>
+						    	</div>
+						    	<div class="col-xs-3 ">
+						    		<div class="counter">
+				                    <span class="counter-number">{{program.posts}}</span>
+				                    <div class="counter-label "><a href="/app/wall">Posts</a></div>
+				                  </div>
+						    	</div>
+						    </div>
+						</div>					
+					</div>
+				</div>
+			</div>
+	
+		</div>
+		<div class="site-action">
+		    <a type="button" class="site-action-toggle btn-raised btn btn-success btn-floating" ui-sref="app.class({type:'{{type}}', programid: '{{programid}}'})">
+		      <i class="front-icon wb-plus animation-scale-up" aria-hidden="true"></i>
+		    </a>
+		</div>
+	</div>
+</div>
+ -->

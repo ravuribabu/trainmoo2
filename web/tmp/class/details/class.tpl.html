@@ -1,0 +1,184 @@
+<div class="page-profile">
+    <div class="page">
+        <div class="page-header  padding-bottom-10">
+          <ol class="breadcrumb">
+            <li><a href="/app/wall">Home</a></li>
+            <li><a href="/app/classes">{{title}}</a></li>
+          </ol>
+          <h1 class="page-title">{{title}}</h1>
+         </div>
+
+        <div class="page-content container-fluid padding-left-5 padding-right-5 padding-top-20">
+
+
+            <div class="panel panel-white no-border  no-padding no-margin">
+                <div class="panel-body no-padding">
+                    <div class="row">
+                        <div class="col-md-12">
+                            <div id="panel_edit_account" >
+                                    <form name="Form" id="form1" novalidate ng-submit="form.submit(Form)" >
+                                            <fieldset ng-disabled="disableForm">
+                                                <legend>
+                                                    {{title}} Info
+                                                </legend>
+                                                <div class="row">
+                                                    <div class="col-md-5">
+                                                        <div class="form-group" ng-class="{'has-error':Form.name.$dirty && Form.name.$invalid, 'has-success':Form.name.$valid}">
+                                                            <label class="control-label"> Name  <span class="symbol required"></label>
+                                                            <input type="text" class="form-control underline" id="name" name="name" ng-model="formData.name" required >
+                                                            <span class="error text-small block" ng-if="Form.name.$dirty && Form.name.$error.required">Name is required.</span>
+                                                        </div>
+                                                        <div class="form-group" ng-class="{'has-error':Form.program.$dirty && Form.program.$invalid, 'has-success':Form.program.$valid}" ng-if="type === 'Class'" >
+                                                            <label for="program" class="control-label">Program<span class="symbol required"></label>
+                                                            <select id="program" title='Choose one of the following...'  class="form-control " name="program" ng-model="formData.program"  selectpicker>
+                                                                    <option>Program 1</option>
+                                                                    <option>Program 2</option>
+                                                                    <option>Program 3</option>
+                                                                    <option>Program 4</option>
+                                                            </select>
+                                                            <span class="error text-small block" ng-if="Form.program.$dirty && Form.program.$error.required">Program is required.</span>
+                                                        </div>
+                                                        
+                                                        <div class="form-group">
+                                                            <label class="control-label"> {{type}} Details</label>
+                                                            <textarea class="form-control autosize area-animated" ng-model="formData.details" id="details" name="details"></textarea>
+                                                            
+                                                        </div>
+
+                                                        <div class="row">   
+                                                            <div class="col-xs-6">
+                                                                <div class="form-group">
+                                                                    <label>
+                                                                        Start  
+                                                                    </label>
+                                                                    <div class="input-group input-group-icon">
+                                                                        <span class="input-group-addon">
+                                                                          <span class="icon wb-calendar" aria-hidden="true"></span>
+                                                                        </span>
+                                                                        <input type="text" class="form-control underline" ng-click="startOpen = !startOpen" show-weeks="false" uib-datepicker-popup="dd-MMMM-yyyy" ng-model="formData.start" is-open="startOpen" ng-init="startOpen = false" max-date="formData.end" close-text="Close" />
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+
+                                                            <div class="col-xs-6">
+                                                                <div class="form-group">
+                                                                    <label>
+                                                                        End  
+                                                                    </label>
+                                                                    <div class="input-group input-group-icon">
+                                                                        <span class="input-group-addon">
+                                                                          <span class="icon wb-calendar" aria-hidden="true"></span>
+                                                                        </span>
+                                                                        <input type="text" class="form-control underline" ng-click="endOpen = !endOpen" show-weeks="false" uib-datepicker-popup="dd-MMMM-yyyy" ng-model="formData.end" is-open="endOpen" ng-init="endOpen = false" min-date="formData.start" close-text="Close" />
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                            
+                                                        </div>
+                                                        
+                                                        <div class="row">
+                                                            <div class="form-group col-xs-6">
+                                                                <label class="control-label"> Capacity</label>
+                                                                <input type="number" class="form-control underline" id="capacity" name="capacity"  ng-model="formData.capacity" >
+                                                                
+                                                            </div>
+                                                            <div class="form-group col-xs-6">
+                                                                <label for="status" class="control-label">Status</label>
+
+                                                                <select id="status" title='Choose one of the following...' class="form-control "  ng-model="formData.status" selectpicker>
+                                                                        <option>Not Started</option>
+                                                                        <option>In Progress</option>
+                                                                        <option >Completed</option>
+                                                                        <option>Abondoned</option>
+                                                                </select>
+                                                            </div>
+                                                            
+                                                        </div>
+                                                        
+                                                        <div class="form-group">
+                                                            <label class="control-label"> Requirements</label>
+                                                            <textarea class="form-control autosize area-animated msd-elastic: \n;" ng-model="formData.requirements" placeholder="Any prior talents your students should have? " id="requirements" name="requirements"></textarea>
+                                                        </div>
+
+                                                        
+                                                    </div>
+                                                    <div class="col-md-offset-1 col-md-5">
+                                                        <div class="form-group">
+                                                            <label class="control-label"> Location</label>
+                                                            <input type="text" class="form-control underline" name="address" ng-model="formData.address"  >
+                                                        </div>
+                                                        <div class="row" >
+                                                            <div class="col-md-4">
+                                                                <div class="form-group">
+                                                                    <label class="control-label"> Zip Code </label>
+                                                                    <input class="form-control underline" type="number" name="zipcode" id="zipcode"  ng-model="formData.zipcode" >
+                                                                    
+                                                                </div>
+                                                            </div>
+                                                            <div class="col-md-8" >
+                                                                <div class="form-group">
+                                                                    <label class="control-label"> City </label>
+                                                                    <input class="form-control underline tooltips" type="text" data-original-title="We'll display it when you write reviews" data-rel="tooltip"  title="" data-placement="top" name="city" id="city"  ng-model="formData.city" >
+                                                                    
+                                                                </div>
+                                                            </div>
+                                                        </div>
+
+                                                        <div class="form-group">
+                                                            <label class="control-label"> Cost (INR) </label>
+                                                            <input type="Number" class="form-control" id="cost" name="cost"  ng-model="formData.cost">
+                                                        </div>
+                                                        
+
+                                                        <div class="form-group" >
+                                                            <label for="categories" class="control-label">Training Category</label>
+                                                            <select id="categories" class="form-control " multiple  ng-model="formData.categories" ui-select2 >
+                                                                    <option>fitness</option>
+                                                                    <option>bodybuilding</option>
+                                                                    <option >IT</option>
+                                                                    <option>Communication</option>
+                                                            </select>
+                                                            
+                                                        </div>
+
+                                                        <div class="form-group" >
+                                                            <label for="trainingstyle" class="control-label">Training Style</label>
+                                                            <select id="trainingstyle" class="form-control " multiple ng-model="formData.trainingstyle" ui-select2 >
+                                                                    <option>In class</option>
+                                                                    <option>Online</option>
+                                                                    <option>Personal</option>
+                                                            </select>
+                                                            
+                                                        </div>
+                                                        
+                                                        
+                                                    </div>
+                                                </div>
+                                            </fieldset>
+
+
+                                            <div class="row">
+                                                <div class="col-md-8">
+                                                    <p>
+                                                        By clicking UPDATE, you are agreeing to the Policy and Terms &amp; Conditions.
+                                                    </p>
+                                                </div>
+                                                <div class="col-md-4">
+                                                    <button class="btn btn-primary pull-right" type="submit">
+                                                        Update <i class="fa fa-arrow-circle-right"></i>
+                                                    </button>
+                                                </div>
+                                            </div>
+
+
+                                        </form>
+                                    </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+
+    </div>
+</div>

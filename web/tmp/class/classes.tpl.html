@@ -1,0 +1,76 @@
+<style type="text/css">
+	.highlight:hover {
+	  /*background-color: #e3f2fd !important;*/
+	  box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+	}
+</style>
+
+
+<div class="page-profile" ng-cloak>
+	<div class="page">
+		<div class="page-header  padding-bottom-10" >
+          <ol class="breadcrumb">
+            <li><a href="/app/wall">Home</a></li>
+            <li  ng-if="isClass"><a href="/app/classes">Programs</a></li>
+          </ol>
+          <h1 class="page-title">{{title}}</h1>
+         </div>
+
+	    <div class="page-content container-fluid padding-left-5 padding-right-5 padding-top-20">
+			<div class="row">
+				<div class="col-md-3 col-sm-4 col-xs-12"  ng-repeat="program in classes">
+					<div class="panel  box margin-10" style="height:300px;">
+						<div class="panel-heading padding-10" style="height:80px;">
+							<div class="panel-title padding-5" ><h5 class="margin-bottom-0">{{program.name}} </h5><span class="label label-sm label-round label-info">{{program.status}}</span></div>
+							<div class="panel-actions">
+								<a class="text-action" ui-sref="app.appt.class({ classid: '{{program._id}}', type: 'program'})"><i class="icon wb-edit" aria-hidden="true"></i></a>
+							</div>
+						</div> 
+							
+						<div class="panel-body padding-10" style="min-height: 150px;max-height: 150px;overflow-y: scroll;">
+							<!-- <div responsive-text text="program.details" style="min-height:50px;"></div> -->
+							<p><i class="icon fa-location-arrow" aria-hidden="true"></i>&nbsp;&nbsp;<span ng-if="program.location">{{program.location}}</span></p>
+							<p><i class="icon fa-tags" aria-hidden="true"></i>&nbsp;&nbsp;<span ng-if="program.categories">{{program.categories}}</span></p>
+							<p ><i class="icon fa-bank" aria-hidden="true"></i>&nbsp;&nbsp;<span ng-if="program.style">{{program.style}}</span></p>
+							
+					    </div>	
+					    <div class="panel-footer padding-10" style="height:70px; background-color: #e4eaec;">
+						    <div class="row">
+						    	<div class="col-xs-3 ">
+						    		<div class="counter">
+				                    <span class="counter-number">{{program.classes}}</span>
+				                    <div class="counter-label text-small"><a ui-sref="app.appt.classes({programid: '{{program._id}}'})">Classes</a></div>
+				                  </div>
+						    	</div>
+						    	<div class="col-xs-3 ">
+						    		<div class="counter">
+				                    <span class="counter-number">{{program.students}}</span>
+				                    <div class="counter-label text-small"><a ui-sref="app.appt.classusers({classid: '{{program._id}}'})">Students</a></div>
+				                  </div>
+						    	</div>
+						    	<div class="col-xs-3 ">
+						    		<div class="counter">
+				                    <span class="counter-number">{{program.events}}</span>
+				                    <div class="counter-label text-small"><a ui-sref="app.appt.classevents({classid: '{{program._id}}'})">Events</a></div>
+				                  </div>
+						    	</div>
+						    	<div class="col-xs-3 ">
+						    		<div class="counter">
+				                    <span class="counter-number">{{program.posts}}</span>
+				                    <div class="counter-label text-small"><a href="/app/wall">Posts</a></div>
+				                  </div>
+						    	</div>
+						    </div>
+						</div>					
+					</div>
+				</div>
+			</div>
+	
+		</div>
+		<div class="site-action">
+		    <a type="button" class="site-action-toggle btn-raised btn btn-success btn-floating" ui-sref="app.appt.class({type:'{{type}}', programid: '{{programid}}'})">
+		      <i class="front-icon wb-plus animation-scale-up" aria-hidden="true"></i>
+		    </a>
+		</div>
+	</div>
+</div>

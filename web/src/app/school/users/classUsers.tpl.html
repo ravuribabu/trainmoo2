@@ -1,0 +1,72 @@
+<style type="text/css">
+  .list-group .list-group-item:hover {
+    background-color: #FAFAFA !important;
+  }
+</style>
+
+<script type="text/ng-template" id="customTemplate.html">
+  <a href="#" class="padding-5"> 
+    <div class="media">
+      <div class="media-left">
+        <span class="avatar avatar-online">
+          <img src="assets/images/avatar-1-small.jpg" alt="">
+        </span>
+      </div>
+      <div class="media-body">
+        <h5 class="list-group-item-heading">
+          <span ng-bind-html="match.label | uibTypeaheadHighlight:query"></span>
+        </h5>
+        <p class="list-group-item-text ng-binding">State of champions</p>
+      </div>
+    </div>
+  </a>
+</script>
+
+<div class="page-header padding-left-40 padding-top-10 padding-bottom-0 ">
+  <h1 class="page-title"><i class="icon fa-users" aria-hidden="true"></i>Users</h1>&nbsp;&nbsp;&nbsp;<button type="button" class="btn btn-raised btn-info  btn-sm">Students <span class="badge">10</span> </button>&nbsp;&nbsp;&nbsp;<button type="button" class="btn btn-raised btn-info  btn-sm">Teachers <span class="badge">2</span> </button>&nbsp;&nbsp;&nbsp;<button type="button" class="btn btn-raised btn-info  btn-sm">Parents <span class="badge">10</span> </button>&nbsp;&nbsp;&nbsp;<button type="button" class="btn btn-raised btn-info  btn-sm">Admins <span class="badge">2</span> </button>
+  <div class="page-header-actions">
+    <button type="button" class="btn btn-raised  btn-default btn-sm" ng-click="add('teacher')" ><i class="icon fa-plus" aria-hidden="true" ></i>Add</button>
+  </div>
+</div>
+<div class="row margin-10">
+  <div class="col-md-12 col-xs-12">
+    <div class="panel"  >
+
+      <div class="panel-body padding-10" >
+        
+        <div class="row">
+          <div class="col-md-4 text-left">     
+           <input type="text" ng-model="customSelected" placeholder="Add user to class " uib-typeahead="user as user.firstname for user in vm.schoolusers  | filter:{firstname:$viewValue} | limitTo:8" typeahead-template-url="customTemplate.html" class="form-control" typeahead-show-hint="true"  typeahead-on-select="itemSelected($item, $model, $label, $event);customSelected=''" typeahead-min-length="2" typeahead-wait-ms="100" width="200px" />
+          </div>  
+        </div>
+
+        <ul class="list-group list-group-full">
+          <li class="list-group-item padding-10"  ng-repeat="user in vm.users | filter:search" ng-cloak>
+            <div class="media">
+              <div class="media-left">
+                <span class="avatar avatar-online">
+                  <img src="assets/images/avatar-1-small.jpg" alt="">
+                </span>
+              </div>
+              <div class="media-body">
+                <h5 class="list-group-item-heading">
+                  <span class="pull-right">
+                    <a class="text-action" href="#"><i class="icon wb-pencil" aria-hidden="true" ng-click="edit(user)" ></i></a>
+                    <a class="text-action" href="#"><i class="icon fa-remove" aria-hidden="true" ng-click="delete(user)" ></i></a>
+                    <a class="text-action" href="#"><i class="icon wb-payment" aria-hidden="true"></i></a>
+                  </span>
+                  {{user.lastname + ' ' + user.firstname}} &nbsp;&nbsp;&nbsp;&nbsp;<span class="label label-info">{{user.type}} </span></a> 
+                </h5>
+                <p class="list-group-item-text">{{user.email}}</p>
+              </div>
+            </div>
+          </li>
+        </ul>
+
+
+
+      </div>
+    </div>
+  </div>
+</div>
+

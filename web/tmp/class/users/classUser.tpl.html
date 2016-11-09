@@ -1,0 +1,72 @@
+<div class="modal-header">
+    <h3 class="modal-title" id="modal-title">Student</h3>
+</div>
+
+<form name="Form" id="form" novalidate ng-submit="form.submit(Form)" >
+
+<div class="modal-body">
+    <fieldset>
+      <legend>Class User</legend>
+      <div class="form-group">
+          <label>
+              Program
+          </label>
+          <input type="text"  class="form-control" name="program_name" ng-model="user.program.name" required readonly> 
+      </div>
+
+      <div class="form-group" ng-if="$scope.addToClass">
+          <label>
+              Class
+          </label>
+          <input type="text"  class="form-control" ng-model="user.class.name" >
+      </div>
+
+      <div class="form-group" ng-class="{'has-error':Form.email.$dirty && Form.email.$invalid, 'has-success':Form.email.$valid}">
+          <label>
+              Email<span class="symbol required">
+          </label>
+          <input type="email"  class="form-control" name="email" ng-model="user.email" required>
+          <span class="error text-small block" ng-if="Form.email.$dirty && Form.email.$error.required">Email is required.</span>
+      </div>
+      <div class="row">
+        <div class="col-xs-6">
+          <div class="form-group" ng-class="{'has-error':Form.firstname.$dirty && Form.firstname.$invalid, 'has-success':Form.firstname.$valid}">
+              <label>
+                  First Name<span class="symbol required">
+              </label>
+              <input type="text"  class="form-control" ng-model="user.firstname" name="firstname" required>
+              <span class="error text-small block" ng-if="Form.firstname.$dirty && Form.firstname.$error.required">Firstname is required.</span>
+          </div>
+        </div>
+        <div class="col-xs-6">
+          <div class="form-group" ng-class="{'has-error':Form.lastname.$dirty && Form.lastname.$invalid, 'has-success':Form.lastname.$valid}">
+              <label>
+                  Last Name<span class="symbol required">
+              </label>
+              <input type="text" class="form-control" ng-model="user.lastname" name="lastname" required>
+              <span class="error text-small block" ng-if="Form.lastname.$dirty && Form.lastname.$error.required">Lastname is required.</span>
+          </div>
+        </div>
+      </div>
+      
+      <div class="form-group form-material"  ng-class="{'has-error':Form.role.$dirty && Form.role.$invalid, 'has-success':Form.role.$valid}">
+        <label class="pull-left">Add as &nbsp;<span class="symbol required"></label>
+        <div class="radio-custom radio-success inline small" ng-repeat="userType in ['teacher', 'admin', 'student', 'parent']" >
+          <input type="radio" ng-model="user.type" ng-value="userType" id="{{userType}}" checked="false" name="role" />
+          <label for="{{userType}}">{{userType}}</label>
+        </div>
+        <span class="error text-small block" ng-if="Form.role.$dirty && Form.role.$error.required">Role is required.</span>
+      </div>
+    </fieldset>
+  
+  </div>
+  <div class="modal-footer">
+      <button class="btn btn-primary btn-outline btn-round" type="submit">
+          Ok
+      </button>
+      <button class="btn btn-default btn-outline btn-round" ng-click="cancel()">
+          Cancel
+      </button>
+  </div>
+
+</form>

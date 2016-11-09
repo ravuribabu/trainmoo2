@@ -1,0 +1,24 @@
+<div class="media" ng-cloak>
+	<a href="#" class="pull-left">
+		<img alt="image" class="img-circle" src="assets/images/avatar-1-small.jpg">
+	</a>
+	<div class="media-body ">
+		<h6>{{msg.author.name}} <small> on {{msg.classes | listToString}}</small>
+			&nbsp;&nbsp;<i class="icon md-cast" area-hidden="true"></i>		
+		 <small class="pull-right">{{msg.created_at | postTime}}</small></h6>
+	</div>
+
+    <div class="margin-top-10 margin-bottom-10">
+		<div class="media">
+			<a href="/app/blog/read/{{msg._id}}" class="pull-left"> <img ng-src="{{getFirstImageSrc(msg.text)}}" alt="" class="media-object" style="width:150px;"> </a>
+	        <div class="media-body">
+	            <h4 class="media-heading">{{msg.title}}</h4>
+	            {{msg.text | stripHtml}}
+	        </div>
+		</div>
+	</div>
+</div>
+
+
+
+

@@ -1,0 +1,191 @@
+<div ng-controller="classEditController as vm">
+
+<form name="Form" id="form" novalidate ng-submit="form.submit(Form)" >
+
+<div class="page-header padding-left-40 padding-top-10 padding-bottom-0">
+  <h1 class="page-title"> <i class="icon fa-language" aria-hidden="true"></i>  {{class.name}}&nbsp;&nbsp;&nbsp;&nbsp;</h1>
+  <button  class="btn btn-raised btn-primary" type="submit"><i class="icon fa-save" aria-hidden="true"></i> Save </button>
+  <span class="text-extra-small" ng-if="!Form.$dirty">&nbsp;&nbsp;&nbsp;&nbsp;All changes are saved</span>
+</div>
+
+<div class="row">
+  <div class="col-md-12">
+    <div id="panel_edit_account" >
+      <fieldset ng-disabled="disableForm">
+            <div class="row">
+                <div class="col-md-5">
+
+                    <div class="form-group" ng-class="{'has-error':Form.name.$dirty && Form.name.$invalid, 'has-success':Form.name.$valid}">
+                        <label class="control-label"> Name  <span class="symbol required"></label>
+                        <input type="text" class="form-control underline" id="name" name="name" ng-model="class.name" required >
+                        <span class="error text-small block" ng-if="Form.name.$dirty && Form.name.$error.required">Name is required.</span>
+                    </div>
+
+                    <div class="form-group" ng-if="vm.isClass">
+                        <label for="trainingstyle" class="control-label">Program</label>
+                        <select id="trainingstyle" class="form-control " ng-model="class.program" ui-select2 style="width: 100%">
+                          <option ng-repeat="p in vm.programs" value="{{p._id}}" >{{p.name}}</option>
+                        </select>
+                    </div>
+
+
+                      
+                    <div class="form-group" >
+                        <label for="categories" class="control-label">Category</label>
+                        <select id="categories" class="form-control " multiple  ng-model="class.categories" ui-select2 style="width: 100%">
+                          <option ng-repeat="item in vm.categories" ng-bind="item.value" value="{{item.value}}"></option>
+                        </select>
+                        <p class="help-block text-small">select 3 categories</p>
+                    </div>
+                    
+
+                    <div class="form-group" >
+                        <label for="trainingstyle" class="control-label">Medium</label>
+                        <select id="trainingstyle" class="form-control " multiple ng-model="class.medium" ui-select2 style="width: 100%">
+                          <option ng-repeat="option in vm.mediums">{{option.value}}</option>
+                        </select>
+                        <p class="help-block text-small">select 3 main mediums of teaching</p>
+                    </div>
+                    
+
+                    <div class="form-group">
+                        <label class="control-label"> Phone <i class="icon fa-phone" aria-hidden="true"></i> </label>
+                        <input type="text" class="form-control" id="phone" name="phone"  ui-mask="(999) 999-9999"  ng-model="class.phone">
+                        <p class="help-block text-small">(999) 999.9999</p>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="control-label"> Website </label>
+                        <input type="text" class="form-control" ng-model="class.website"  >
+                        <p class="help-block text-small">www.myclass.com</p>
+                    </div>
+
+                </div>
+                <div class="col-md-offset-1 col-md-5" ng-cloak>
+
+                    <div class="row">
+                        <div class="col-md-5">
+                          <div class="form-group">
+                              <label class="control-label"> Capacity </label>
+                              <select id="classCapacity" class="form-control " ng-model="class.capacity" ui-select2 style="width: 100%">
+                                <option ng-repeat="option in vm.classCapacity">{{option.value}}</option>
+                              </select>
+                          </div>
+                        </div>
+                        <div class="col-md-offset-1 col-md-5">
+                          <div class="form-group">
+                              <label class="control-label"> Cost <i class="icon fa-money" aria-hidden="true"></i> </label>
+                              <input type="text" class="form-control underline" ng-model="class.cost"  >
+                          </div>
+                        </div>
+                    </div>
+                    
+                    <div class="row">
+                      <div class="col-md-5">
+                        <div class="form-group">
+                            <label class="control-label"> Start </label>
+                            <datepicker date-format="MM/dd/yyyy" selector="form-control">
+                                <div class="input-group">
+                                    <input class="form-control" placeholder="Choose a date" ng-model="class.start" />
+                                    <span class="input-group-addon" style="cursor: pointer">
+                                     <i class="fa fa-lg fa-calendar"></i>
+                                    </span>
+                                </div>
+                            </datepicker>
+                        </div>
+                      </div>
+                      <div class="col-md-offset-1 col-md-5">
+                        <div class="form-group">
+                            <label class="control-label"> End </label>
+                            <datepicker date-format="MM/dd/yyyy" selector="form-control">
+                                <div class="input-group">
+                                    <input class="form-control" placeholder="Choose a date" ng-model="class.end" />
+                                    <span class="input-group-addon" style="cursor: pointer">
+                                     <i class="fa fa-lg fa-calendar"></i>
+                                    </span>
+                                </div>
+                            </datepicker>
+                        </div>
+                      </div>
+                    </div>
+                    
+                    <div class="height-200 margin-top-20 padding-20" style="border: 2px solid #e4eaec;border-radius: 5px;">                          
+                      <h3>Contacts</h3>
+                    </div>
+                  
+                </div>
+            </div>
+
+            <div class="row">
+              <div class="col-md-12 margin-top-20">
+                 <div class="form-group" >
+                          <label class="control-label "> About {{class.name}} </label>
+                          <div id="react" draft content="class.profile"> </div>
+                  </div>
+              </div>            
+
+
+
+
+
+              <div class="col-md-12 margin-top-20" ng-init="sectionAdd=false">  
+                  <label class="control-label "> Curriculum </label><br>
+                  <div class="panel panel-bordered" style="border: 1px solid #e4eaec; border-radius: 5px;">
+                    <div class="panel-body padding-10" style=" min-height: 200px;" id="classSections">
+                      <ul class="list-group list-group-full">
+                        <li class="list-group-item padding-right-40" ng-repeat="section in class.sections">
+                          <div ng-if="section.edit" class="padding-10">
+                            <input type="text" ng-model="section.title" class="form-control" placeholder="Enter section title" /><br>
+                            <textarea rows="4" ng-model="section.summary" class="form-control" style="width: 100%" placeholder="Section details"></textarea> <br>
+                            <button class="btn btn-primary btn-round" ng-click="section.edit = false">DONE</button> 
+                          </div>
+                          <div ng-if="!section.edit">
+                            <h5 style="display: inline-block;"> {{section.title}} </h5><div style="display: inline-block; " class="pull-right"> <a href="#" ng-click="section.edit = true"><i class="icon fa-edit" aria-hidden="true" ></i></a> &nbsp;&nbsp;<a href="#" ng-click="removeSection(section.seq)"> <i class="icon fa-remove" aria-hidden="true"></i></a></div>
+                            <p class="padding-left-10" style="white-space: pre-wrap;">{{section.summary}}</p>
+                          </div>
+                        </li>
+                      </ul>
+                    </div>
+
+                    <div class="panel-footer padding-left-10">
+                      <div ng-if="!sectionAdd"><button class="btn btn-primary btn-round" ng-click="showAddSection()">Create Section</button> &nbsp;&nbsp;<span class=" label label-round label-success" ng-if="showSuccess"> {{successMessage}} </span>  </div>
+                      <div ng-if="sectionAdd" class="padding-10">
+                        <h5>New Section</h5>
+                        <input type="text" ng-model="newSection.title" class="form-control" placeholder="Enter section title" /><br>
+                        <textarea rows="4" ng-model="newSection.summary" class="form-control" style="width: 100%" placeholder="Section details"></textarea> <br>
+                        <button class="btn btn-primary btn-round" ng-click="addNewSection()">ADD</button> <button class="btn btn-default btn-round" ng-click="hideAddSection()">Cancel</button>
+                      </div>
+                    </div>
+
+                  </div>
+              </div>
+
+
+
+
+
+
+              <div class="col-md-12 margin-top-20" >
+                <div class="form-group" >
+                        <label class="control-label "> Location </label>
+                        <div class="gmap height-300" placeid="class.placeid" address="class.address" ng-cloak></div>
+                </div>
+              </div>
+              <div class="col-md-12 margin-top-20">
+                <div gallery files="class.gallery" type='image' gallery-title="Photo Gallery"></div>
+              </div>
+              
+              <div class="col-md-12 margin-top-20">
+                <div gallery files="class.attachments" type='pdf' gallery-title="Additional Information"></div>
+              </div>
+
+      </fieldset>
+       
+    </div>
+  </div>
+</div>
+
+</form>
+
+</div>
+

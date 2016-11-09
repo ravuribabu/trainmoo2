@@ -1,0 +1,78 @@
+<style type="text/css">
+  .list-group .list-group-item:hover {
+    background-color: #FAFAFA !important;
+  }
+</style>
+
+<div class="page-profile">
+    <div class="page">
+        <div class="page-header  padding-bottom-10" >
+          <ol class="breadcrumb">
+            <li><a href="/app/wall">Home</a></li>
+            <li><a href="/app/classes">Programs</a></li>
+          </ol>
+          <h1 class="page-title">Users</h1>
+         </div>
+         <div class="page-content container-fluid padding-left-5 padding-right-5 padding-top-20">
+            <div class="col-md-6 col-xs-12 masonry-item">
+              <!-- Panel Message -->
+              <div class="panel" id="messge" >
+                <div class="panel-heading" >  
+                  <h3 class="panel-title">Users for {{clazz.name}}</h3>
+                  <div class="panel-actions">
+                    <div class="input-search input-group-sm">
+                      <button type="submit" class="input-search-btn">
+                        <i class="icon wb-search" aria-hidden="true"></i>
+                      </button>
+                      <input type="text" class="form-control" ng-model="search" placeholder="Search...">
+                    </div>
+                  </div>
+                  
+                </div>
+                <div class="panel-heading">
+                  <ul class="nav nav-tabs nav-tabs-line" data-plugin="nav-tabs" role="tablist">
+                    <li class="active" role="presentation"><a href="#" data-toggle="tab" ng-click="filterUser('student')" ><i class="icon wb-users" aria-hidden="true"></i>Students</a></li>
+                    <li role="presentation"><a href="#" data-toggle="tab" ng-click="filterUser('parent')"><i class="icon wb-users" aria-hidden="true"></i>Parents</a></li>
+                    <li role="presentation"><a href="#" data-toggle="tab" ng-click="filterUser('teacher')"><i class="icon wb-users" aria-hidden="true"></i>Teachers</a></li>
+                    <li role="presentation"><a href="#" data-toggle="tab" ng-click="filterUser('admin')"><i class="icon wb-users" aria-hidden="true"></i>Admins</a></li>
+                    
+                  </ul>
+                </div>
+
+                <div class="panel-body padding-0" style="height:600px;overflow-y:scroll;">
+                  <ul class="list-group list-group-full">
+                    <li class="list-group-item padding-5"  ng-repeat="user in selectedUsers | filter:search" >
+                      <div class="media">
+                        <div class="media-left">
+                          <span class="avatar avatar-online">
+                            <img src="assets/images/avatar-2.jpg" alt="">
+                          </span>
+                        </div>
+                        <div class="media-body">
+                          <h5 class="list-group-item-heading">
+                            <span class="pull-right">
+                              <a class="text-action" href="#"><i class="icon wb-pencil" aria-hidden="true" ng-click="edit(user)" ></i></a>
+                              <a class="text-action" href="#"><i class="icon wb-payment" aria-hidden="true"></i></a>
+                              <a class="text-action" href="#"><i class="icon wb-chat" aria-hidden="true"></i></a>
+                              <a class="text-action" href="#"><i class="icon fa-code" aria-hidden="true"></i></a>
+                            </span>
+                            {{user.lastname + ' ' + user.firstname}}
+                          </h5>
+                          <p class="list-group-item-text">{{user.email}}</p>
+                        </div>
+                      </div>
+                    </li>
+                  </ul>
+                </div>
+              </div>
+              <!-- End Panel Message -->
+            </div>
+          
+         </div>
+         <div class="site-action">
+            <a type="button" class="site-action-toggle btn-raised btn btn-success btn-floating" ng-click="add('teacher')">
+              <i class="front-icon wb-plus animation-scale-up" aria-hidden="true"></i>
+            </a>
+        </div>
+    </div>
+</div>  

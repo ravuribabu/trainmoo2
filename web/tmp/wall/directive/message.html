@@ -1,0 +1,70 @@
+<comment msg="msg" ng-if="msg.type === 'comment'"></comment>
+<notification msg="msg" ng-if="msg.type === 'notification'"></notification>
+<assignment msg="msg" ng-if="msg.type === 'assignment'"></assignment>
+<blog msg="msg" ng-if="msg.type === 'blog'"></blog>
+
+<slick settings="slickConfig" class="slider no-padding" ng-show="msg.files && msg.files.length > 0">
+			<div ng-repeat="picture in msg.files" class="padding-10">
+		            <div class="user-image no-padding">
+		            		<a href="#" ng-click="showCarousal(msg, picture)">
+		                        <div class="thumbnail  margin-0">
+		                            <img ng-src="/api/img/download/thumbnail/{{picture.fileid }}_thumb.{{picture.type==='pdf'?'png':picture.type}}">
+		                            <div class="caption">
+		                                {{picture.fileName}}
+		                        	</div>
+	                        	</div>
+	                        </a>
+	                </div>
+	                
+		    </div>
+</slick>
+	
+<div class="widget-actions pull-left small">
+	<a href="javascript:void(0)" ng-click="like(msg._id)">Like</a>
+	<a href="javascript:void(0)" ng-click="showReplies=!showReplies">Reply</a>
+	<a href="javascript:void(0)">
+		<i class="icon md-favorite"></i>
+		<span ng-show='msg.likes.length > 0'>{{msg.likes.length}}</span>
+	</a>
+	<a href="javascript:void(0)">
+		<i class="icon md-comment"></i>
+		<span ng-show='msg.comments > 0'>{{msg.comments}}</span>
+	</a>
+</div>
+</div>
+
+<div class="col-md-12 margin-right-0 padding-right-0">
+	<!-- REPLIES -->
+	<post ng-show="showReplies" parentid="msg._id"></post>
+	<div class="padding-left-60 padding-top-30 padding-bottom-5 " style="border: 0 none;" ng-repeat="reply in replies" >
+			<message msg="reply"></message>
+	</div>
+</div>
+
+<script type="text/ng-template" id="myModalContent.html">
+    <div class="modal-body">
+
+	    <div class="wrapper" ng-show="pdfViewer">
+		  <strong>{{file.fileName}}</strong>
+		  <ng-pdf template-url="assets/js/shared/partials/pdfviewer.html" canvasid="pdf" scale="page-fit" page=1></ng-pdf>
+		</div>
+
+
+
+    	<slick settings="slickConfig" class="slider" ng-show="!pdfViewer && msg.files && msg.files.length > 0">
+			<div ng-repeat="picture in msg.files" class="padding-10">
+		                        <div class="thumbnail">
+		                            <img ng-src="/api/img/download/thumbnail/{{picture.fileid }}">
+		                            <div class="caption">
+		                                {{picture.fileName}}
+		                        	</div>
+	                        	</div>
+	                
+		    </div>
+		</slick>
+    </div>
+    <div class="modal-footer">
+        <button class="btn btn-primary" type="button" ng-click="ok()">OK</button>
+        <button class="btn btn-warning" type="button" ng-click="cancel()">Cancel</button>
+    </div>
+</script>

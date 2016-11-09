@@ -1,0 +1,72 @@
+<div ng-photoswipe slides="vm.slides" open="vm.open" slide-selector=".slide-list > figure > a > img"
+      on-close="vm.closeGallery()" options="vm.opts"></div>
+
+<div class="form-group margin-0 padding-0">
+  <div ng-if="galleryTitle">
+    <label >{{galleryTitle}}</label><br>
+  </div>
+
+  <!-- SHOW ALL FILES UPLOADED ALREDY-->
+  <div  style="height: 120px; min-width: 80px; display: inline-block; margin: 10px; text-align: center; padding:0px;overflow: hidden;" class="slide-list" ng-repeat="picture in files" >
+
+    <figure class="overlay "> <!-- overlay-hover -->
+      <a href="javascript:void(0)" ng-click="vm.showGallery($index, picture)">
+        <img ng-src="api/img/download/thumbnail/{{picture.thumbnailid}}" onerror="this.src='assets/images/default.png'" style="max-height: 120px; width: auto;" class="padding-0 overlay-figure" />
+      </a>
+      <div class="top-right" title="delete" ><a ng-click="vm.deleteAttachment(files, picture)" href="javascript:void(0)" ng-if='!vm.readonly'> <i class="icon fa-trash-o " aria-hidden="true"></i></a> </div>
+      <div class="top-left" title="edit">
+      </div>
+
+      <figcaption class="overlay-bottom overlay-panel overlay-background padding-0">
+        <h6 ng-if="picture.caption" class="margin-5" >{{picture.caption}}</h6>
+        <a  href="javascript:void(0)" uib-popover-template="'myPopoverTemplate.html'" popover-trigger="'outsideClick'" popover-placement='bottom' popover-append-to-body='true' ng-if='!vm.readonly'><i class="icon fa-edit" aria-hidden="true" ></i></a> 
+      </figcaption>
+
+      <script type="text/ng-template" id="myPopoverTemplate.html">
+          <div class="form-group">
+            <label>Enter Caption:</label>
+            <input type="text" id="popoverCaption" ng-model="picture.caption" class="form-control" ng-change="vm.formController.$setDirty(true)">
+          </div>
+      </script>
+    </figure>
+  </div>
+  <!-- FLOW JS - show progress and upload box -->
+  <div style="display: inline; padding: 0px; margin: 0px;" flow-init flow-name="gallery.images"
+                                     flow-file-added="vm.onFileAdded($file)" 
+                                     flow-files-submitted="vm.uploadAttachment($file, $message, $flow)"
+                                     flow-file-success="vm.fileSuccess( $file, $message, $flow )"
+                                     flow-file-error="vm.fileError( $file, $message, $flow )"
+                                     flow-complete="vm.flowComplete($flow, 'gallery')" ng-cloak 
+                                     ng-if="!vm.readonly && ( !single || single === 'false' || (single && single==='true' && files.length <= 0) )">
+    
+    <!-- SHOW ALL FILES THAT ARE UPLOADED IN CURRENT SESSION - REMOVE ONCE COMPLETE - AND SHOW IN THE ABOVE SECTION -->
+    <!-- <div ng-repeat="file in $flow.files" style="height: 180px; min-width: 80px; display: inline-block; margin: 10px; text-align: center; padding:0px;overflow: hidden; " ng-cloak>
+      <figure class="overlay ">
+        <img flow-img="file" style="max-height: 180px; width: auto;" class="padding-0 overlay-figure" >
+        <figcaption class="overlay-bottom overlay-panel overlay-background">
+          <div class="progress progress-lg">
+            <div class="progress-bar" role="progressbar"
+                 aria-valuenow="{{file.progress() * 100}}"
+                 aria-valuemin="0"
+                 aria-valuemax="100"
+                 ng-style="{width: (file.progress() * 100) + '%'}">
+              {{file.progress() * 100}}%
+            </div>
+          </div>
+        </figcaption>
+      </figure>
+
+    </div> -->
+
+    <!-- BOX TO UPLOAD FILES -->
+    <div class="drop" style="height: 120px; width: 180px; display: inline-block; margin: 10px; text-align: center; overflow: hidden;" ng-if="size === 'lg'">
+          <button type="button" class="btn btn-icon btn-primary btn-outline" style="position: relative; top: calc(50% - 30px);" flow-btn><i class="icon fa-plus" aria-hidden="true"></i></button><br>
+          <label style="position: relative;top: calc(50% - 10px)">Add files</label>
+    </div>
+
+    <div class="drop padding-10" flow-drop style="height: 60px" ng-if="size === 'sm'">
+        <span class="btn btn-sm btn-round btn-primary btn-outline" flow-btn>Upload Avatar</span>
+    </div>
+
+  </div>
+</div>

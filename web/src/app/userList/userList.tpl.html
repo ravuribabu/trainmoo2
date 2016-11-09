@@ -1,0 +1,40 @@
+<div class="page">
+    <div class="page-content">
+    	<div class="row">
+				<div class="col-xs-12 col-sm-12">
+					<div class="container-fluid">
+						<div class="panel panel-white" >
+							<div class="panel-body">
+								<div class="row border-bottom margin-top-10" ng-repeat="user in ::userList | filter: search | orderBy: name.firstname">
+							  		<div class="col-sm-2">
+										<a href="#">
+											      <img class="media-object" ng-src="/api/img/download/{{::user.picture.fileid}}" alt="pic" height="120" width="120">
+											    </a>
+							  		</div>52
+							  		<div class="col-sm-10">
+							  			<a href="/app/user/{{user.id}}" ng-click="getUser(user.id)"><span class="text-extra-large">{{::user.name}}</span></a>&nbsp;&nbsp;&nbsp;<b>{{::user.title}}</b>
+							  		</div>
+							  		<div class="col-sm-5">
+							 			<p  style="line-height:175%"> Certified in <span class="text-azure">{{::user.certifications}}</span><br>
+									    Specialized in <span class="text-azure">{{::user.specializations}}</span><br>
+									    Available for <span class="text-azure">{{::user.trainingStyle}} training</span><br> 
+									    <span class="text-azure">{{::user.experience}}</span> years experience<br>
+									    <uib-rating ng-model="rate" max="max" read-only="isReadonly"></uib-rating></p>
+								    </div>
+								    <div class="col-sm-5">
+									      <p style="line-height:175%"> <i class="fa fa-inr"></i>&nbsp;<span class="text-azure">{{::user.costPerSession}}</span> per session<br>
+									       <i class="fa fa-thumbs-o-up"></i>&nbsp;{{::user.feedbackPositive}}% positive feedback ({{::user.feedbackVotes}} votes)<br>
+									       <i class="fa fa-bars"></i>&nbsp;{{::user.activeSessions}} active sessions and {{::user.startingSoon}} starting in {{::user.startingInDays}} days<br>
+									       <a href="app/classes/users/{{user.id}}">My Classes</a> &nbsp;  <a href="app/wall/{{user.id}}">Profile</a>
+									       </p>
+
+								    	   <p><button class="btn btn-outline btn-primary btn-round">Appointment</button> &nbsp; <button  class="btn btn-outline btn-primary btn-round">Contact</button></p>
+								    </div>
+									</div>	
+							</div>
+						</div>
+					</div>
+			</div>
+		</div>
+	</div>
+</div>

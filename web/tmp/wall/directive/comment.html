@@ -1,0 +1,14 @@
+<div class="media" ng-cloak>
+	<a href="#" class="pull-left">
+		<img alt="image" class="img-circle" src="assets/images/avatar-1-small.jpg">
+	</a>
+	<div class="media-body ">
+		<h6>{{msg.author.name}} <small> on {{msg.classes | listToString}}</small>
+			&nbsp;&nbsp;<i class="icon fa-comment-o" area-hidden="true"></i>		
+		 <small class="pull-right">{{msg.created_at | postTime}}</small></h6>
+	</div>
+
+    <!-- Comments-->
+    <p class="margin-bottom-10" style="white-space: pre-wrap;">{{msg.text}}</p>
+</div>
+

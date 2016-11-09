@@ -1,0 +1,44 @@
+<div class="widget widget-shadow text-center margin-bottom-10">
+	<div class="widget-header padding-top-10 padding-bottom-0 padding-left-10 padding-right-10">
+		<div class="widget-actions">
+			<a class="text-action" href="javascript:void(0)"><i class="icon wb-edit" aria-hidden="true"></i></a>
+				              </div>
+	  <div class="widget-header-content">
+	    <a class="avatar avatar-lg" href="/app/user/{{formData._id}}">
+	      <img ng-src="/api/img/download/{{formData.picture.fileid }}" alt="...">
+	    </a>
+	    <h4 class="profile-user"><a href="/app/user/{{formData._id}}">{{(formData.credential.name.firstname + " " + formData.credential.name.lastname) | capitalize}}</a></h4>
+	    <p class="profile-job">{{formData.title}}</p>
+	    <strong>{{formData.summary}}</strong>
+	    <p  style="line-height:175%"> 
+		    {{(formData.address + ', ' + formData.city) | capitalize}}<br>
+		    Certified in <span class="text-azure">{{formData.certificationsDisplay}}</span><br>
+		    Specialized in <span class="text-azure">{{formData.specializationsDisplay}}</span><br>
+		    Available for <span class="text-azure">{{formData.trainingStyleDisplay}} training</span><br> 
+		    <span class="text-azure">{{formData.experience}}</span> years experience<br>
+		    <uib-rating ng-model="rate" max="max" read-only="isReadonly"></uib-rating></p>
+	    <div class="profile-social">
+	      <a class="icon bd-twitter" href="javascript:void(0)"></a>
+	      <a class="icon bd-facebook" href="javascript:void(0)"></a>
+	      <a class="icon bd-youtube" href="javascript:void(0)"></a>
+	      <a class="icon bd-instagram" href="javascript:void(0)"></a>
+	    </div>
+	  </div>
+	</div>
+	<div class="widget-footer">
+	  <div class="row no-space">
+	    <div class="col-xs-4">
+	      <strong class="profile-stat-count">1</strong>
+	      <span>Classes</span>
+	    </div>
+	    <div class="col-xs-4">
+	      <strong class="profile-stat-count">6</strong>
+	      <span>Events</span>
+	    </div>
+	    <div class="col-xs-4">
+	      <strong class="profile-stat-count">20</strong>
+	      <span>Posts</span>
+	    </div>
+	  </div>
+	</div>
+</div>

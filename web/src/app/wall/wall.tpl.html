@@ -1,0 +1,133 @@
+<style>
+
+  .icon-bar {
+      width: 100%;
+      text-align: center;
+      background-color: white;
+      overflow: auto;
+      top: 0;
+  }
+
+  .icon-bar a {
+      width: 20%;
+      padding: 12px 0;
+      float: left;
+      transition: all 0.3s ease;
+      
+      font-size: 14px;
+  }
+
+  .icon-bar a:hover {
+      background-color: #e4eaec;
+  }
+
+
+  .input[type=text] {
+      width: 150px;
+      box-sizing: border-box;
+      border: 2px solid #ccc;
+      border-radius: 4px;
+      font-size: 16px;
+      background-color: white;
+      background-position: 10px 10px;
+      background-repeat: no-repeat;
+      padding: 12px 20px 12px 40px;
+      -webkit-transition: width 0.4s ease-in-out;
+      transition: width 0.4s ease-in-out;
+  }
+  
+  .input[type=text]:focus {
+      width: 100%;
+  }
+</style>
+
+
+  <script type="text/javascript">
+    $("#menu-toggle").click(function(e) {
+      e.preventDefault();
+      $("#wrapper").toggleClass("toggled");
+    });
+  </script>
+
+<div class="row" >
+  <div id="wrapper">
+
+  <!-- Sidebar -->
+    <div id="sidebar-wrapper">
+      <ul class="sidebar-nav">
+        <li class="sidebar-category">
+           <a href="#">Message Type</a>
+        </li>
+        <li class="sidebar-item" ng-repeat="i in ['Assignments', 'Notifications', 'Material', 'Blogs', 'Discussions']">
+
+          <a href="#" ng-class="i === 'Discussions' ? 'active' : ''">{{i}}</a>
+        </li>
+
+
+
+        <li class="sidebar-category">
+           <a href="#">Programs<span class="badge" style="text-indent: 0px; margin-left: 20px;">2</span></a>
+        </li>
+        <li class="sidebar-item" ng-repeat="i in ['Body Building', 'Code Bootcamp 101', 'Full Stack Bootcamp']">
+          <a href="#">{{i}}</a>
+        </li>
+
+        <li class="sidebar-category">
+           <a href="#">Classes<span class="badge" style="text-indent: 0px; margin-left: 20px;">6</span></a>
+        </li>
+        <li class="sidebar-item" ng-repeat="j in ['Java 101', 'Node.JS', 'JavaScript', 'Functional Programming', 'Crossfit 101', 'Database Concepts']">
+          <a href="#">{{j}}</a>
+        </li>
+        
+      </ul>
+      <div class="sidebar-footer">
+          <a href="javascript: void(0);" class="fold-show" data-placement="top" data-toggle="tooltip"
+          data-original-title="Settings">
+            <span class="icon wb-settings" aria-hidden="true"></span>
+          </a>
+          <a href="javascript: void(0);" data-placement="top" data-toggle="tooltip" data-original-title="Lock">
+            <span class="icon wb-eye-close" aria-hidden="true"></span>
+          </a>
+          <a href="javascript: void(0);" data-placement="top" data-toggle="tooltip" data-original-title="Logout">
+            <span class="icon wb-power" aria-hidden="true"></span>
+          </a>
+        </div>
+    </div>
+    <!-- /#sidebar-wrapper -->
+
+    <!-- Page Content -->
+    <div id="page-content-wrapper" style="padding-left: 5px; padding-right: 5px; padding-bottom: 0px; padding-top: 5px; ">
+
+        <div class="col-md-8">
+          <div class="row comments">
+            <div class="col-md-12">
+              <post></post>
+            </div>
+            <div class="col-md-12"  ng-repeat="msg in posts" >
+              <div class="panel panel-white  margin-bottom-5" ng-cloak>
+                <div class="panel-body padding-10 ">
+                    <comment msg="msg"></comment>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>  
+        <div class="col-md-4">
+          <div style="display: block;">
+            <div class="icon-bar">
+              <div style="display:inline-block; float:left;margin:8px;text-align:left;width: 50%" >
+
+                <form> <input type="text" class="form-control" name="search" placeholder="Search posts, files.."> </form>
+              </div>
+               <a class="active" href="#"><i class="fa fa-bookmark"></i></a>
+               <a href="#"><i class="fa fa-star"></i></a>
+            </div>
+            <div style="margin-top: 10px">
+              <pre>There are no mentions and files.
+              </pre>
+            </div>
+          </div>
+        </div>
+    </div>
+  </div>
+  </div>
