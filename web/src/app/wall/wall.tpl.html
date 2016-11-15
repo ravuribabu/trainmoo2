@@ -52,48 +52,7 @@
 <div class="row" >
   <div id="wrapper">
 
-  <!-- Sidebar -->
-    <div id="sidebar-wrapper">
-      <ul class="sidebar-nav">
-        <li class="sidebar-category">
-           <a href="#">Message Type</a>
-        </li>
-        <li class="sidebar-item" ng-repeat="i in ['Assignments', 'Notifications', 'Material', 'Blogs', 'Discussions']">
-
-          <a href="#" ng-class="i === 'Discussions' ? 'active' : ''">{{i}}</a>
-        </li>
-
-
-
-        <li class="sidebar-category">
-           <a href="#">Programs<span class="badge" style="text-indent: 0px; margin-left: 20px;">2</span></a>
-        </li>
-        <li class="sidebar-item" ng-repeat="i in ['Body Building', 'Code Bootcamp 101', 'Full Stack Bootcamp']">
-          <a href="#">{{i}}</a>
-        </li>
-
-        <li class="sidebar-category">
-           <a href="#">Classes<span class="badge" style="text-indent: 0px; margin-left: 20px;">6</span></a>
-        </li>
-        <li class="sidebar-item" ng-repeat="j in ['Java 101', 'Node.JS', 'JavaScript', 'Functional Programming', 'Crossfit 101', 'Database Concepts']">
-          <a href="#">{{j}}</a>
-        </li>
-        
-      </ul>
-      <div class="sidebar-footer">
-          <a href="javascript: void(0);" class="fold-show" data-placement="top" data-toggle="tooltip"
-          data-original-title="Settings">
-            <span class="icon wb-settings" aria-hidden="true"></span>
-          </a>
-          <a href="javascript: void(0);" data-placement="top" data-toggle="tooltip" data-original-title="Lock">
-            <span class="icon wb-eye-close" aria-hidden="true"></span>
-          </a>
-          <a href="javascript: void(0);" data-placement="top" data-toggle="tooltip" data-original-title="Logout">
-            <span class="icon wb-power" aria-hidden="true"></span>
-          </a>
-        </div>
-    </div>
-    <!-- /#sidebar-wrapper -->
+    <wallnav />
 
     <!-- Page Content -->
     <div id="page-content-wrapper" style="padding-left: 5px; padding-right: 5px; padding-bottom: 0px; padding-top: 5px; ">

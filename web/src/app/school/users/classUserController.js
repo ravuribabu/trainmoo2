@@ -7,11 +7,9 @@ var classModule = angular.module('school')
 classModule.controller('classUserController',
 	function($scope, $state, $rootScope, $stateParams, schoolFactory, user, $uibModalInstance, SweetAlert, alertify, appForm){
 
-		
 		$scope.user = user;
-
 		$scope.form = new appForm.AppForm(angular, function(form){
-			schoolFactory.saveOrUpdateSchoolUser($scope.user)
+			schoolFactory.saveOrUpdateClassUser($scope.user)
 						.success(function(msg){
 										alertify
 										    .success("User is updated successfully");

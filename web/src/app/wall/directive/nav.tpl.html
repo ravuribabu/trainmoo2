@@ -1,0 +1,59 @@
+<div id="sidebar-wrapper">
+  <ul class="sidebar-nav">
+    <!-- <li class="sidebar-category">
+       <a href="#">View Posts</a>
+    </li> -->
+    <li class="sidebar-item" ng-repeat="type in vm.postTypes">
+      <a href="#" ng-click="vm.selectPostType(type)" 
+              ng-class="type.name === vm.selection.postType.name ? 'active' : ''">
+        <i ng-class="type.icon" class="site-menu-icon" aria-hidden="true"></i>
+        {{type.name}}
+        <div style="position: absolute;right: 30px;display: inline-block; vertical-align: middle;" 
+              ng-if="type.newItems > 0">
+          <span class="badge badge-danger" >2</span>
+        </div>
+        
+      </a>
+      
+    </li>
+
+
+    <li class="sidebar-category" ng-if="vm.hasPrograms">
+       <a href="#">Programs</a>
+    </li>
+    <li class="sidebar-item" ng-repeat="p in vm.programs" ng-if="vm.hasPrograms"> 
+      <a href="#" ng-click="vm.selectProgram(p.id)" ng-class="p.id === vm.selection.program.id ? 'active' : ''">{{p.name}}
+        <div style="position: absolute;right: 30px;display: inline-block; vertical-align: middle;" 
+                ng-if="p.newItems > 0">
+            <span class="badge badge-danger" >2</span>
+        </div>
+      </a>
+    </li>
+
+    <li class="sidebar-category" ng-if="vm.hasClasses">
+       <a href="#">Classes</a>
+    </li>
+    <li class="sidebar-item" ng-repeat="c in vm.visibleClasses" ng-if="vm.hasClasses">
+      <a href="#" ng-click="vm.selectClass(c.id)" ng-class="c.id === vm.selection.class.id ? 'active' : ''">
+        {{c.name}}
+        <div style="position: absolute;right: 30px;display: inline-block; vertical-align: middle;" 
+              ng-if="c.newItems > 0">
+          <span class="badge badge-danger" >2</span>
+        </div>
+      </a>
+    </li>
+    
+  </ul>
+  <div class="sidebar-footer">
+      <a href="javascript: void(0);" class="fold-show" data-placement="top" data-toggle="tooltip"
+      data-original-title="Settings">
+        <span class="icon wb-settings" aria-hidden="true"></span>
+      </a>
+      <a href="javascript: void(0);" data-placement="top" data-toggle="tooltip" data-original-title="Lock">
+        <span class="icon wb-eye-close" aria-hidden="true"></span>
+      </a>
+      <a href="javascript: void(0);" data-placement="top" data-toggle="tooltip" data-original-title="Logout">
+        <span class="icon wb-power" aria-hidden="true"></span>
+      </a>
+    </div>
+</div>

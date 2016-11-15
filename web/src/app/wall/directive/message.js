@@ -1,6 +1,17 @@
 var wall = require('angular').module('wall');
 var moment =require('moment');
 var _ = require('lodash');
+require('./navController');
+
+wall.directive('wallnav', function ($window) {
+return {
+        restrict: 'AE',
+        templateUrl: 'wall/directive/nav.tpl.html',
+		controller: 'navController',
+		controllerAs: 'vm'
+    };
+});
+
 
 wall.directive('message', function(){
 	return {
@@ -17,7 +28,7 @@ wall.directive('comment', function(){
 	return {
 			restict : 'EA',
 			scope: {
-				msg : '=',
+				reply : '=',
 			},
 			templateUrl: 'wall/directive/comment.tpl.html',
 			controller: 'messageController'

@@ -57,7 +57,6 @@ module.exports = function(router) {
 		 	
 		 });
 
-
 	router.route('/class/:classid/users')
 		  .get(function(req, res){
 		  	ClassUser.find( { 'class' : mongoose.Types.ObjectId(req.params.classid) } )
@@ -79,7 +78,33 @@ module.exports = function(router) {
 						res.status(500).send(err);
 					}
 					else { 
-						res.send({message: 'User is Created Successfully'}); 
+
+						//Add user to schoolusers list as well.
+						Class.findById(user.class, function(err, claz) {
+							if (err) {
+								return;
+							}
+							SchoolUser.find({ school: claz.school, email: user.email }, function(err, users) {
+								if (users && users.length > 0) {
+									return; //user exists
+								}
+
+								//add user
+								const schoolUser = {
+									school: claz.school,
+									email: user.email,
+									firstname: user.firstname,
+									lastname: user.lastname,
+									type: user.type
+								};
+								SchoolUser.create(schoolUser, function(err, schoolUser) {
+									console.log('User is added to to school list as well');
+								});
+							});
+						});
+
+
+						res.send(user); 
 					}
 				}); 
 		  }).put(function(req, res){
@@ -104,8 +129,7 @@ module.exports = function(router) {
 		  	});
 		  });
 
-	router
-		.route('/class/user/:userid')
+	router.route('/class/user/:userid')
 		.delete(function(req, res){
 		  	ClassUser.remove( { '_id' : mongoose.Types.ObjectId(req.params.userid) } ).exec(function(err, users){
 		  		if (err) {

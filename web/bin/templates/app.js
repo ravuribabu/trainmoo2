@@ -1,4 +1,4 @@
-angular.module('templates.app', ['blog/blog.tpl.html', 'login/login.tpl.html', 'login/signup.tpl.html', 'post/post.tpl.html', 'school/class/classEdit.tpl.html', 'school/pdfview.tpl.html', 'school/school.tpl.html', 'school/schoolEdit.tpl.html', 'school/users/classUser.tpl.html', 'school/users/classUsers.tpl.html', 'shared/app.tpl.html', 'shared/apph.tpl.html', 'shared/apptop.tpl.html', 'shared/gallery.tpl.html', 'shared/gmap.tpl.html', 'shared/pdfviewer.tpl.html', 'user/directive/userCard.tpl.html', 'user/userEdit.tpl.html', 'userList/userList.tpl.html', 'wall/directive/assignment.tpl.html', 'wall/directive/blog.tpl.html', 'wall/directive/comment.tpl.html', 'wall/directive/message.tpl.html', 'wall/directive/newsletter.tpl.html', 'wall/directive/notification.tpl.html', 'wall/wall.tpl.html', 'wall/wall1.tpl.html', 'wall/wall2.tpl.html']);
+angular.module('templates.app', ['blog/blog.tpl.html', 'login/login.tpl.html', 'login/signup.tpl.html', 'post/post.tpl.html', 'school/class/classEdit.tpl.html', 'school/pdfview.tpl.html', 'school/school.tpl.html', 'school/schoolEdit.tpl.html', 'school/users/classUser.tpl.html', 'school/users/classUsers.tpl.html', 'shared/app.tpl.html', 'shared/apph.tpl.html', 'shared/apptop.tpl.html', 'shared/gallery.tpl.html', 'shared/gmap.tpl.html', 'shared/pdfviewer.tpl.html', 'user/directive/userCard.tpl.html', 'user/userEdit.tpl.html', 'userList/userList.tpl.html', 'wall/directive/assignment.tpl.html', 'wall/directive/blog.tpl.html', 'wall/directive/comment.tpl.html', 'wall/directive/message.tpl.html', 'wall/directive/nav.tpl.html', 'wall/directive/newsletter.tpl.html', 'wall/directive/notification.tpl.html', 'wall/wall.tpl.html']);
 
 angular.module("blog/blog.tpl.html", []).run(["$templateCache", function($templateCache) {
   $templateCache.put("blog/blog.tpl.html",
@@ -163,55 +163,65 @@ angular.module("post/post.tpl.html", []).run(["$templateCache", function($templa
     "        height: 40px !important;\n" +
     "      }\n" +
     "\n" +
+    "      .post-label {\n" +
+    "        margin-left: 10px;\n" +
+    "        padding: 5px 10px;\n" +
+    "        font-size: 12px;\n" +
+    "        font-weight: 200;\n" +
+    "      }\n" +
     "</style>\n" +
     "\n" +
-    "<form  name=\"Form\" id=\"form1\" novalidate ng-submit=\"form.submit(Form)\">\n" +
+    "<form  name=\"Form\" id=\"form1\" novalidate ng-submit=\"vm.form.submit(Form)\">\n" +
     "    <div class=\"panel  margin-bottom-10\" ng-cloak>\n" +
     "        <div class=\"panel-body padding-10\">\n" +
     "                <div class=\"app-message-input\">\n" +
     "\n" +
     "                    <div class=\"message-input\">\n" +
-    "                      <comment-editor id=\"react\" content=\"post.text\" readonly=\"false\" ng-click=\"vm.postSelected=true\"> </comment-editor>\n" +
+    "                      <comment-editor id=\"react\" content=\"vm.post.text\" readonly=\"false\" on-select=\"vm.editStarted()\" on-reset=\"vm.reset(true)\"> </comment-editor>\n" +
     "                      <div class=\"message-input-actions btn-group\" style=\"z-index: 1000;\">\n" +
     "                        <a class=\"btn btn-pure btn-icon btn-default\" type=\"button\">\n" +
     "                          <i class=\"icon wb-emoticon\" aria-hidden=\"true\"></i>\n" +
     "                        </a>\n" +
-    "                        <a class=\"btn btn-pure btn-icon btn-default\" type=\"button\" ng-click=\"uploadImages()\">\n" +
+    "                        <a class=\"btn btn-pure btn-icon btn-default\" type=\"button\" ng-click=\"vm.uploadImages()\">\n" +
     "                          <i class=\"icon wb-image\" aria-hidden=\"true\"></i>\n" +
     "                        </a>\n" +
-    "                        <a class=\"btn btn-pure btn-icon btn-default\" type=\"button\" ng-click=\"uploadFiles()\">\n" +
+    "                        <a class=\"btn btn-pure btn-icon btn-default\" type=\"button\" ng-click=\"vm.uploadFiles()\">\n" +
     "                          <i class=\"icon wb-paperclip\" aria-hidden=\"true\"></i>\n" +
     "                        </a>\n" +
-    "                        <a class=\"btn btn-pure btn-icon btn-default\" type=\"button\" ui-sref=\"app.blog({postid: 1})\" ng-if=\"!vm.reply\">\n" +
+    "                        <a class=\"btn btn-pure btn-icon btn-default\" type=\"button\" ui-sref=\"app.blog({postid: 1})\" ng-if=\"!vm.isReply\">\n" +
     "                          <i class=\"icon wb-pencil\" aria-hidden=\"true\"></i>\n" +
     "                        </a>\n" +
-    "                        \n" +
-    "                        <input id=\"messageImage\" type=\"file\" name=\"messageImage\">\n" +
-    "                        <input id=\"messageFile\" type=\"file\" name=\"messageFile\">\n" +
     "                      </div>\n" +
     "                    </div>\n" +
     "                </div>\n" +
     "\n" +
     "            <div class=\"col-md-12 padding-right-0 padding-left-0\" style=\"margin-top: 10px;\" ng-if=\"vm.postSelected\" >\n" +
+    "              <div class=\"col-md-8\" style=\"text-align: left; display: inline-block;\" >\n" +
+    "                    <div class=\"float: left;\">\n" +
+    "                      <div style=\"display: inline-block;  width: 120px;\" class=\"btn\" ng-if=\"!vm.reply\">\n" +
+    "                        <div class=\"dropdown\"  >\n" +
+    "                          <a class=\"dropdown-toggle inline-block\" data-toggle=\"dropdown\" href=\"#\" aria-expanded=\"true\" style=\"color: #62a8ea;\"><i ng-class=\"vm.selection.postType.icon\" class=\"site-menu-icon\" aria-hidden=\"true\"></i>{{vm.selection.postType.name}}<span class=\"caret\"></span></a>\n" +
+    "                          <ul class=\"dropdown-menu animation-slide-down animation-middle-left animation-duration-250\" role=\"menu\">\n" +
+    "                            <li role=\"presentation\" ng-repeat=\"postType in vm.postTypes\"> \n" +
+    "                              <a href=\"#\" ng-click=\"vm.selectPostType(postType)\"><i ng-class=\"postType.icon\" class=\"site-menu-icon\" aria-hidden=\"true\"></i> {{postType.name}}</a>\n" +
+    "                            </li>\n" +
+    "                          </ul>\n" +
+    "                        </div>\n" +
+    "                      </div>\n" +
     "\n" +
-    "              <div class=\"col-md-6\" style=\"text-align: left; display: inline-block;\" >\n" +
-    "                    <div style=\"display: inline-block; float: left; width: 120px;\" class=\"btn\" ng-if=\"!vm.reply\">\n" +
-    "                      <div class=\"dropdown\"  >\n" +
-    "                        <a class=\"dropdown-toggle inline-block\" data-toggle=\"dropdown\" href=\"#\" aria-expanded=\"true\" style=\"color: #62a8ea;\">{{post.type}}<span class=\"caret\"></span></a>\n" +
-    "                        <ul class=\"dropdown-menu animation-scale-up animation-top-right animation-duration-250\" role=\"menu\">\n" +
-    "                          <li role=\"presentation\"><a href=\"javascript:void(0)\" ng-click=\"post.type = 'Assignment'\">Assignment</a></li>\n" +
-    "                          <li role=\"presentation\"><a href=\"javascript:void(0)\" ng-click=\"post.type = 'Notification'\">Notification</a></li>\n" +
-    "                          <li role=\"presentation\"><a href=\"javascript:void(0)\" ng-click=\"post.type = 'Blog'\">Blog</a></li>\n" +
-    "                          <li role=\"presentation\"><a href=\"javascript:void(0)\" ng-click=\"post.type = 'Message'\">Message</a></li>\n" +
-    "                        </ul>\n" +
+    "                      <div style=\"display: inline-block\" ng-if=\"vm.selection.programLabel\">\n" +
+    "                        <span class=\"label label-success post-label\">{{vm.selection.programLabel}}</span>\n" +
+    "                      </div>\n" +
+    "\n" +
+    "                      <div style=\"display: inline-block\" ng-if=\"vm.selection.classLabel\">\n" +
+    "                        <span class=\"label label-success post-label\">{{vm.selection.classLabel}}</span>\n" +
     "                      </div>\n" +
     "                    </div>\n" +
     "\n" +
-    "\n" +
-    "                    <div style=\"display: inline-block; float: left; width: 200px;\" ng-if=\"post.type === 'Assignment'\">\n" +
+    "                    <div style=\"display: inline-block; float: left; width: 200px;\" ng-if=\"vm.post.type === 'Assignment'\">\n" +
     "                      <datepicker date-format=\"MM/dd/yyyy\" selector=\"form-control\" >\n" +
     "                          <div class=\"input-group\">\n" +
-    "                              <input class=\"form-control\" placeholder=\"Due by..\" ng-model=\"post.dueby\" />\n" +
+    "                              <input class=\"form-control\" placeholder=\"Due by..\" ng-model=\"vm.post.dueby\" />\n" +
     "                              <span class=\"input-group-addon\" style=\"cursor: pointer\">\n" +
     "                                <i class=\"fa fa-lg fa-calendar\"></i>\n" +
     "                              </span>\n" +
@@ -220,19 +230,18 @@ angular.module("post/post.tpl.html", []).run(["$templateCache", function($templa
     "                    </div>\n" +
     "              </div>\n" +
     "              \n" +
-    "              <div class=\"col-md-6\" style=\"text-align: right;\">\n" +
-    "                <button class=\"btn btn-default btn-sm btn-raised\" ng-click=\"vm.cancel()\" style=\"width: 100px;\">Cancel</button>\n" +
-    "                <button class=\"btn btn-default btn-sm btn-raised btn-primary \" type=\"submit\" style=\"width: 100px;\">Post</button>\n" +
+    "              <div class=\"col-md-4\" style=\"text-align: right;\">\n" +
+    "                <button class=\"btn btn-default btn-sm btn-raised btn-default \" ng-click=\"vm.reset()\" style=\"width: 70px; height: 30px; margin-right: 10px;\">Cancel</button>\n" +
+    "                <button class=\"btn btn-default btn-sm btn-raised btn-primary \" type=\"submit\" style=\"width: 70px; height: 30px;\">Post</button>\n" +
     "              </div>\n" +
-    "              \n" +
     "            </div>\n" +
     "\n" +
-    "            <div class=\"col-md-12 margin-top-20\" ng-if=\"uploadImage\">\n" +
-    "              <div gallery files=\"post.files\" type='image' gallery-title=\"Attach Pictures\" ></div>\n" +
+    "            <div class=\"col-md-12 margin-top-20\" ng-if=\"vm.uploadImage\">\n" +
+    "              <div gallery files=\"vm.post.files\" type='image' gallery-title=\"Attach Pictures\" ></div>\n" +
     "            </div>\n" +
     "            \n" +
-    "            <div class=\"col-md-12 margin-top-20\" ng-if=\"uploadFile\">\n" +
-    "              <div gallery files=\"post.files\" type='pdf' gallery-title=\"Attach Files(Pdfs)\"></div>\n" +
+    "            <div class=\"col-md-12 margin-top-20\" ng-if=\"vm.uploadFile\">\n" +
+    "              <div gallery files=\"vm.post.files\" type='pdf' gallery-title=\"Attach Files(Pdfs)\"></div>\n" +
     "            </div>\n" +
     "\n" +
     "    </div>\n" +
@@ -497,8 +506,8 @@ angular.module("school/school.tpl.html", []).run(["$templateCache", function($te
     "							<td>\n" +
     "								<div class=\"padding-10\">\n" +
     "									<div class=\"title\">\n" +
-    "										<a ui-sref=\"app.appt.program({schoolid: schoolid, classid: clazz._id})\" ng-if=\"!clazz.program\"> <strong style=\"margin-right: 20px\">{{clazz.name}}</strong> <span class=\"label label-info\">Program </span></a> \n" +
-    "										<a ui-sref=\"app.appt.class({schoolid: schoolid, classid: clazz._id})\" ng-if=\"clazz.program\"><strong style=\"margin-right: 20px\">{{clazz.name}}</strong><span class=\"label label-info\">Class </span> </a> \n" +
+    "										<a ui-sref=\"app.appt.program({schoolid: schoolid, classid: clazz._id})\" ng-if=\"clazz.type === 'program'\"> <strong style=\"margin-right: 20px\">{{clazz.name}}</strong> <span class=\"label label-info\">{{clazz.type}} </span></a> \n" +
+    "										<a ui-sref=\"app.appt.class({schoolid: schoolid, classid: clazz._id})\" ng-if=\"clazz.type === 'class'\"\"><strong style=\"margin-right: 20px\">{{clazz.name}}</strong><span class=\"label label-info\">Class </span> </a> \n" +
     "\n" +
     "									</div>\n" +
     "									<span class=\"abstract\">Reiciendis iactant eligendi. Vestrae </span>\n" +
@@ -1052,7 +1061,7 @@ angular.module("shared/app.tpl.html", []).run(["$templateCache", function($templ
     "              </a>\n" +
     "              <ul class=\"dropdown-menu\" role=\"menu\">\n" +
     "                <li role=\"presentation\">\n" +
-    "                  <a href=\"javascript:void(0)\" role=\"menuitem\"><i class=\"icon wb-user\" aria-hidden=\"true\"></i> Profile</a>\n" +
+    "                  <a ui-sref=\"app.appt.user\" role=\"menuitem\"><i class=\"icon wb-user\" aria-hidden=\"true\"></i> Profile</a>\n" +
     "                </li>\n" +
     "                <li role=\"presentation\">\n" +
     "                  <a href=\"javascript:void(0)\" role=\"menuitem\"><i class=\"icon wb-payment\" aria-hidden=\"true\"></i> Billing</a>\n" +
@@ -1954,6 +1963,69 @@ angular.module("wall/directive/message.tpl.html", []).run(["$templateCache", fun
     "</div> -->");
 }]);
 
+angular.module("wall/directive/nav.tpl.html", []).run(["$templateCache", function($templateCache) {
+  $templateCache.put("wall/directive/nav.tpl.html",
+    "<div id=\"sidebar-wrapper\">\n" +
+    "  <ul class=\"sidebar-nav\">\n" +
+    "    <!-- <li class=\"sidebar-category\">\n" +
+    "       <a href=\"#\">View Posts</a>\n" +
+    "    </li> -->\n" +
+    "    <li class=\"sidebar-item\" ng-repeat=\"type in vm.postTypes\">\n" +
+    "      <a href=\"#\" ng-click=\"vm.selectPostType(type)\" \n" +
+    "              ng-class=\"type.name === vm.selection.postType.name ? 'active' : ''\">\n" +
+    "        <i ng-class=\"type.icon\" class=\"site-menu-icon\" aria-hidden=\"true\"></i>\n" +
+    "        {{type.name}}\n" +
+    "        <div style=\"position: absolute;right: 30px;display: inline-block; vertical-align: middle;\" \n" +
+    "              ng-if=\"type.newItems > 0\">\n" +
+    "          <span class=\"badge badge-danger\" >2</span>\n" +
+    "        </div>\n" +
+    "        \n" +
+    "      </a>\n" +
+    "      \n" +
+    "    </li>\n" +
+    "\n" +
+    "\n" +
+    "    <li class=\"sidebar-category\" ng-if=\"vm.hasPrograms\">\n" +
+    "       <a href=\"#\">Programs</a>\n" +
+    "    </li>\n" +
+    "    <li class=\"sidebar-item\" ng-repeat=\"p in vm.programs\" ng-if=\"vm.hasPrograms\"> \n" +
+    "      <a href=\"#\" ng-click=\"vm.selectProgram(p.id)\" ng-class=\"p.id === vm.selection.program.id ? 'active' : ''\">{{p.name}}\n" +
+    "        <div style=\"position: absolute;right: 30px;display: inline-block; vertical-align: middle;\" \n" +
+    "                ng-if=\"p.newItems > 0\">\n" +
+    "            <span class=\"badge badge-danger\" >2</span>\n" +
+    "        </div>\n" +
+    "      </a>\n" +
+    "    </li>\n" +
+    "\n" +
+    "    <li class=\"sidebar-category\" ng-if=\"vm.hasClasses\">\n" +
+    "       <a href=\"#\">Classes</a>\n" +
+    "    </li>\n" +
+    "    <li class=\"sidebar-item\" ng-repeat=\"c in vm.visibleClasses\" ng-if=\"vm.hasClasses\">\n" +
+    "      <a href=\"#\" ng-click=\"vm.selectClass(c.id)\" ng-class=\"c.id === vm.selection.class.id ? 'active' : ''\">\n" +
+    "        {{c.name}}\n" +
+    "        <div style=\"position: absolute;right: 30px;display: inline-block; vertical-align: middle;\" \n" +
+    "              ng-if=\"c.newItems > 0\">\n" +
+    "          <span class=\"badge badge-danger\" >2</span>\n" +
+    "        </div>\n" +
+    "      </a>\n" +
+    "    </li>\n" +
+    "    \n" +
+    "  </ul>\n" +
+    "  <div class=\"sidebar-footer\">\n" +
+    "      <a href=\"javascript: void(0);\" class=\"fold-show\" data-placement=\"top\" data-toggle=\"tooltip\"\n" +
+    "      data-original-title=\"Settings\">\n" +
+    "        <span class=\"icon wb-settings\" aria-hidden=\"true\"></span>\n" +
+    "      </a>\n" +
+    "      <a href=\"javascript: void(0);\" data-placement=\"top\" data-toggle=\"tooltip\" data-original-title=\"Lock\">\n" +
+    "        <span class=\"icon wb-eye-close\" aria-hidden=\"true\"></span>\n" +
+    "      </a>\n" +
+    "      <a href=\"javascript: void(0);\" data-placement=\"top\" data-toggle=\"tooltip\" data-original-title=\"Logout\">\n" +
+    "        <span class=\"icon wb-power\" aria-hidden=\"true\"></span>\n" +
+    "      </a>\n" +
+    "    </div>\n" +
+    "</div>");
+}]);
+
 angular.module("wall/directive/newsletter.tpl.html", []).run(["$templateCache", function($templateCache) {
   $templateCache.put("wall/directive/newsletter.tpl.html",
     "");
@@ -2036,48 +2108,7 @@ angular.module("wall/wall.tpl.html", []).run(["$templateCache", function($templa
     "<div class=\"row\" >\n" +
     "  <div id=\"wrapper\">\n" +
     "\n" +
-    "  <!-- Sidebar -->\n" +
-    "    <div id=\"sidebar-wrapper\">\n" +
-    "      <ul class=\"sidebar-nav\">\n" +
-    "        <li class=\"sidebar-category\">\n" +
-    "           <a href=\"#\">Message Type</a>\n" +
-    "        </li>\n" +
-    "        <li class=\"sidebar-item\" ng-repeat=\"i in ['Assignments', 'Notifications', 'Material', 'Blogs', 'Discussions']\">\n" +
-    "\n" +
-    "          <a href=\"#\" ng-class=\"i === 'Discussions' ? 'active' : ''\">{{i}}</a>\n" +
-    "        </li>\n" +
-    "\n" +
-    "\n" +
-    "\n" +
-    "        <li class=\"sidebar-category\">\n" +
-    "           <a href=\"#\">Programs<span class=\"badge\" style=\"text-indent: 0px; margin-left: 20px;\">2</span></a>\n" +
-    "        </li>\n" +
-    "        <li class=\"sidebar-item\" ng-repeat=\"i in ['Body Building', 'Code Bootcamp 101', 'Full Stack Bootcamp']\">\n" +
-    "          <a href=\"#\">{{i}}</a>\n" +
-    "        </li>\n" +
-    "\n" +
-    "        <li class=\"sidebar-category\">\n" +
-    "           <a href=\"#\">Classes<span class=\"badge\" style=\"text-indent: 0px; margin-left: 20px;\">6</span></a>\n" +
-    "        </li>\n" +
-    "        <li class=\"sidebar-item\" ng-repeat=\"j in ['Java 101', 'Node.JS', 'JavaScript', 'Functional Programming', 'Crossfit 101', 'Database Concepts']\">\n" +
-    "          <a href=\"#\">{{j}}</a>\n" +
-    "        </li>\n" +
-    "        \n" +
-    "      </ul>\n" +
-    "      <div class=\"sidebar-footer\">\n" +
-    "          <a href=\"javascript: void(0);\" class=\"fold-show\" data-placement=\"top\" data-toggle=\"tooltip\"\n" +
-    "          data-original-title=\"Settings\">\n" +
-    "            <span class=\"icon wb-settings\" aria-hidden=\"true\"></span>\n" +
-    "          </a>\n" +
-    "          <a href=\"javascript: void(0);\" data-placement=\"top\" data-toggle=\"tooltip\" data-original-title=\"Lock\">\n" +
-    "            <span class=\"icon wb-eye-close\" aria-hidden=\"true\"></span>\n" +
-    "          </a>\n" +
-    "          <a href=\"javascript: void(0);\" data-placement=\"top\" data-toggle=\"tooltip\" data-original-title=\"Logout\">\n" +
-    "            <span class=\"icon wb-power\" aria-hidden=\"true\"></span>\n" +
-    "          </a>\n" +
-    "        </div>\n" +
-    "    </div>\n" +
-    "    <!-- /#sidebar-wrapper -->\n" +
+    "    <wallnav />\n" +
     "\n" +
     "    <!-- Page Content -->\n" +
     "    <div id=\"page-content-wrapper\" style=\"padding-left: 5px; padding-right: 5px; padding-bottom: 0px; padding-top: 5px; \">\n" +
@@ -2115,523 +2146,4 @@ angular.module("wall/wall.tpl.html", []).run(["$templateCache", function($templa
     "    </div>\n" +
     "  </div>\n" +
     "  </div>");
-}]);
-
-angular.module("wall/wall1.tpl.html", []).run(["$templateCache", function($templateCache) {
-  $templateCache.put("wall/wall1.tpl.html",
-    "<div class=\"row\">\n" +
-    "	<div class=\"col-md-3 padding-right-5\">\n" +
-    "		<user-card></user-card>\n" +
-    "        <classes-card user='user'></classes-card>  \n" +
-    "\n" +
-    "\n" +
-    "        <div class=\"panel\" ng-cloak>\n" +
-    "        	<div class=\"panel-title padding-top-10 padding-bottom-10\">\n" +
-    "        		<h3>My content</h3>\n" +
-    "        	</div>\n" +
-    "        	<div class=\"panel-body padding-0\">\n" +
-    "        		<div class=\"row\">\n" +
-    "	        		<div class=\"col-xs-4\" ng-repeat=\"i in [1,2,3,4,5,6,7]\" ng-cloak>\n" +
-    "		        		<figure class=\"overlay overlay-hover animation-hover\">\n" +
-    "		                    <img class=\"overlay-figure overlay-scale\" src=\"assets/images/layout-3.jpg\"\n" +
-    "		                    alt=\"...\">\n" +
-    "		                    <figcaption class=\"overlay-panel overlay-background overlay-fade text-center vertical-align\">\n" +
-    "		                      <button type=\"button\" class=\"btn btn-outline btn-inverse vertical-align-middle\">View</button>\n" +
-    "		                    </figcaption>\n" +
-    "		                  </figure>\n" +
-    "		            </div>\n" +
-    "	            </div>\n" +
-    "        	</div>\n" +
-    "        </div>\n" +
-    "    </div>\n" +
-    "\n" +
-    "	<div class=\"col-md-6 padding-right-5\">\n" +
-    "    		<div class=\"row margin-bottom-5\">	\n" +
-    "				<post></post>\n" +
-    "			</div>\n" +
-    "			<div class=\"row\">\n" +
-    "				<div class=\"panel margin-bottom-5\" >\n" +
-    "					<div class=\"panel-body padding-10 bg-blue-50\">\n" +
-    "						<div class=\"col-md-3\">\n" +
-    "							<div class=\"checkbox-custom checkbox-default\">\n" +
-    "	                              <input type=\"checkbox\" id=\"message\" ng-model=\"filter.message\" ng-click=\"loadMessages()\">\n" +
-    "	                              <label for=\"message\"><strong>Messages</strong></label>&nbsp;&nbsp;<i class=\"icon fa-comment-o\" aria-hidden=\"true\"></i><span class=\"badge badge-info up\">5</span>\n" +
-    "	                         </div>\n" +
-    "                         </div>\n" +
-    "                         <div class=\"col-md-3\">\n" +
-    "	                         <div class=\"checkbox-custom checkbox-default\">\n" +
-    "	                              <input type=\"checkbox\" id=\"notification\" ng-model=\"filter.notification\" ng-click=\"loadMessages()\">\n" +
-    "	                              <label for=\"notification\"><strong>Notifications</strong></label>&nbsp;&nbsp;<i class=\"icon fa-bell-o\" aria-hidden=\"true\"></i><span class=\"badge badge-danger up\">5</span>\n" +
-    "	                         </div>\n" +
-    "	                    </div>\n" +
-    "	                    <div class=\"col-md-3\">\n" +
-    "                         <div class=\"checkbox-custom checkbox-default\">\n" +
-    "                              <input type=\"checkbox\" id=\"assignments\" ng-model=\"filter.assignment\" ng-click=\"loadMessages()\">\n" +
-    "                              <label for=\"assignments\"><strong> Assignments</strong></label>&nbsp;&nbsp;<i class=\"icon md-assignment-o\" aria-hidden=\"true\"></i><span class=\"badge badge-success up\">5</span>\n" +
-    "                         </div>\n" +
-    "                        </div>\n" +
-    "                        <div class=\"col-md-3\">\n" +
-    "                         <div class=\"checkbox-custom checkbox-default\">\n" +
-    "                              <input type=\"checkbox\" id=\"blog\" ng-model=\"filter.blog\" ng-click=\"loadMessages()\">\n" +
-    "                              <label for=\"blog\"><strong>Blogs</strong></label>&nbsp;&nbsp;<i class=\"icon md-cast\" aria-hidden=\"true\"></i><span class=\"badge badge-info up\">5</span>\n" +
-    "                         </div>\n" +
-    "                        </div>\n" +
-    "					</div>\n" +
-    "				</div>\n" +
-    "			</div>\n" +
-    "			<div class=\"row\">\n" +
-    "				<div class=\"panel panel-white  margin-bottom-5\" ng-repeat=\"msg in posts\" ng-cloak>\n" +
-    "					<div class=\"panel-body padding-10 \">\n" +
-    "						<message msg=\"msg\"></message>\n" +
-    "					</div>\n" +
-    "				</div>\n" +
-    "			</div>\n" +
-    "	</div>\n" +
-    "	\n" +
-    "\n" +
-    "	<div class=\"col-md-3\">\n" +
-    "		<div class=\"panel margin-bottom-5\" >\n" +
-    "            <div class=\"panel-heading\"  >\n" +
-    "              <h3 class=\"panel-title padding-left-10\">My Schedule\n" +
-    "              	<div class=\"panel-actions\">		                      \n" +
-    "                  <a class=\"panel-action icon wb-plus\" aria-expanded=\"true\" data-toggle=\"panel-collapse\" aria-hidden=\"true\" uib-tooltip=\"New event\" tooltip-placement=\"left\"></a>\n" +
-    "                </div>\n" +
-    "              </h3>\n" +
-    "            </div>\n" +
-    "            <div class=\"panel-body padding-0\">\n" +
-    "                <div class=\"app-notebook-list\" id=\"exampleBottomHome\">\n" +
-    "                  	<ul class=\"list-group \">\n" +
-    "					    <li class=\"list-group-item padding-5 border-bottom \" ng-repeat=\"i in [1, 2, 3]\">\n" +
-    "							      	<h6 >today 8:00AM - 9:00AM </h6>\n" +
-    "							      \n" +
-    "								      <h6 class=\"list-group-item-heading margin-0\">Class 101<div class=\"pull-right\"><small>Training</small></div></h6>\n" +
-    "\n" +
-    "								      <p class=\"list-group-item-text margin-0\">Meet and greet first class</p>\n" +
-    "					    </li>\n" +
-    "\n" +
-    "					</ul>\n" +
-    "					<button type=\"button\" class=\"btn btn-block btn-primary btn-outline\"><i class=\"icon wb-chevron-down margin-right-5\" aria-hidden=\"true\"></i>Show More</button>\n" +
-    "\n" +
-    "                </div>\n" +
-    "            </div>\n" +
-    "        </div>\n" +
-    "\n" +
-    "        <div class=\"panel\" id=\"messge\">\n" +
-    "	            <div class=\"panel-heading\">\n" +
-    "	              <div class=\"panel-actions\">\n" +
-    "	                <a class=\"text-action\" href=\"javascript:void(0)\"><i class=\"icon wb-edit\" aria-hidden=\"true\"></i></a>\n" +
-    "	              </div>\n" +
-    "	              <h3 class=\"panel-title\">Tasks</h3>\n" +
-    "	            </div>\n" +
-    "	            <div class=\"panel-body padding-0\">\n" +
-    "	              <ul class=\"list-group list-group-full\">\n" +
-    "	                <li class=\"list-group-item\" ng-repeat=\"i in [1, 2, 3]\">\n" +
-    "	                  <div class=\"media\">\n" +
-    "	                    <div class=\"media-left\">\n" +
-    "	                      <span class=\"avatar avatar-online\">\n" +
-    "	                        <img src=\"assets/images/avatar-2.jpg\" alt=\"\">\n" +
-    "	                        <i></i>\n" +
-    "	                      </span>\n" +
-    "	                    </div>\n" +
-    "	                    <div class=\"media-body\">\n" +
-    "	                      <h5 class=\"list-group-item-heading\">\n" +
-    "	                        <small class=\"pull-right\">3 days ago</small>\n" +
-    "	                        Herman Beck\n" +
-    "	                      </h5>\n" +
-    "	                      <p class=\"list-group-item-text\">Cogitemus tempora tibique probabo...</p>\n" +
-    "	                    </div>\n" +
-    "	                  </div>\n" +
-    "	                </li>\n" +
-    "	                \n" +
-    "	              </ul>\n" +
-    "	              <button type=\"button\" class=\"btn btn-block btn-primary  btn-outline\"><i class=\"icon wb-chevron-down margin-right-5\" aria-hidden=\"true\"></i>Show More</button>\n" +
-    "	            </div>\n" +
-    "	          </div>\n" +
-    "\n" +
-    "\n" +
-    "	    <div class=\"panel\" id=\"messge\">\n" +
-    "	            <div class=\"panel-heading\">\n" +
-    "	              <div class=\"panel-actions\">\n" +
-    "	                <a class=\"text-action\" href=\"javascript:void(0)\"><i class=\"icon wb-edit\" aria-hidden=\"true\"></i></a>\n" +
-    "	              </div>\n" +
-    "	              <h3 class=\"panel-title\">Moo List</h3>\n" +
-    "	            </div>\n" +
-    "	            <div class=\"panel-body padding-0\">\n" +
-    "	              <ul class=\"list-group list-group-full\">\n" +
-    "	                <li class=\"list-group-item\" ng-repeat=\"i in [1, 2, 3]\">\n" +
-    "	                  <div class=\"media\">\n" +
-    "	                    <div class=\"media-left\">\n" +
-    "	                      <span class=\"avatar avatar-online\">\n" +
-    "	                        <img src=\"assets/images/avatar-2.jpg\" alt=\"\">\n" +
-    "	                        <i></i>\n" +
-    "	                      </span>\n" +
-    "	                    </div>\n" +
-    "	                    <div class=\"media-body\">\n" +
-    "	                      <h5 class=\"list-group-item-heading\">\n" +
-    "	                        <small class=\"pull-right\">3 days ago</small>\n" +
-    "	                        Herman Beck\n" +
-    "	                      </h5>\n" +
-    "	                      <p class=\"list-group-item-text\">Cogitemus tempora tibique probabo...</p>\n" +
-    "	                    </div>\n" +
-    "	                  </div>\n" +
-    "	                </li>\n" +
-    "	                \n" +
-    "	              </ul>\n" +
-    "	              <button type=\"button\" class=\"btn btn-block btn-primary  btn-outline\"><i class=\"icon wb-chevron-down margin-right-5\" aria-hidden=\"true\"></i>Show More</button>\n" +
-    "	            </div>\n" +
-    "	          </div>\n" +
-    "\n" +
-    "	</div>\n" +
-    "</div>\n" +
-    "\n" +
-    "");
-}]);
-
-angular.module("wall/wall2.tpl.html", []).run(["$templateCache", function($templateCache) {
-  $templateCache.put("wall/wall2.tpl.html",
-    "<!--[if lt IE 8]>\n" +
-    "        <p class=\"browserupgrade\">You are using an <strong>outdated</strong> browser. Please <a href=\"http://browsehappy.com/\">upgrade your browser</a> to improve your experience.</p>\n" +
-    "    <![endif]-->\n" +
-    "  <nav class=\"site-navbar navbar navbar-default navbar-fixed-top navbar-mega navbar-inverse\" role=\"navigation\">\n" +
-    "    <div class=\"navbar-header\">\n" +
-    "      <button type=\"button\" class=\"navbar-toggle hamburger hamburger-close navbar-toggle-left hided\"\n" +
-    "      data-toggle=\"menubar\">\n" +
-    "        <span class=\"sr-only\">Toggle navigation</span>\n" +
-    "        <span class=\"hamburger-bar\"></span>\n" +
-    "      </button>\n" +
-    "      <button type=\"button\" class=\"navbar-toggle collapsed\" data-target=\"#site-navbar-collapse\"\n" +
-    "      data-toggle=\"collapse\">\n" +
-    "        <i class=\"icon wb-more-horizontal\" aria-hidden=\"true\"></i>\n" +
-    "      </button>\n" +
-    "      <div class=\"navbar-brand navbar-brand-center site-gridmenu-toggle\" data-toggle=\"gridmenu\">\n" +
-    "        <img class=\"navbar-brand-logo\" src=\"../assets/images/logo.png\" title=\"trainmoo\">\n" +
-    "        <span class=\"navbar-brand-text hidden-xs\"> trainmoo</span>\n" +
-    "      </div>\n" +
-    "      <button type=\"button\" class=\"navbar-toggle collapsed\" data-target=\"#site-navbar-search\"\n" +
-    "      data-toggle=\"collapse\">\n" +
-    "        <span class=\"sr-only\">Toggle Search</span>\n" +
-    "        <i class=\"icon wb-search\" aria-hidden=\"true\"></i>\n" +
-    "      </button>\n" +
-    "    </div>\n" +
-    "    <div class=\"navbar-container container-fluid\">\n" +
-    "      <!-- Navbar Collapse -->\n" +
-    "      <div class=\"collapse navbar-collapse navbar-collapse-toolbar\" id=\"site-navbar-collapse\">\n" +
-    "        <!-- Navbar Toolbar -->\n" +
-    "        <ul class=\"nav navbar-toolbar\">\n" +
-    "          <li class=\"hidden-float\" id=\"toggleMenubar\">\n" +
-    "            <a data-toggle=\"menubar\" href=\"#\" role=\"button\">\n" +
-    "              <i class=\"icon hamburger hamburger-arrow-left\">\n" +
-    "                  <span class=\"sr-only\">Toggle menubar</span>\n" +
-    "                  <span class=\"hamburger-bar\"></span>\n" +
-    "                </i>\n" +
-    "            </a>\n" +
-    "          </li>\n" +
-    "      \n" +
-    "          <li class=\"hidden-float\">\n" +
-    "            <a class=\"icon wb-search\" data-toggle=\"collapse\" href=\"#\" data-target=\"#site-navbar-search\"\n" +
-    "            role=\"button\">\n" +
-    "              <span class=\"sr-only\">Toggle Search</span>\n" +
-    "            </a>\n" +
-    "          </li>\n" +
-    "\n" +
-    "        </ul>\n" +
-    "        <!-- End Navbar Toolbar -->\n" +
-    "        <!-- Navbar Toolbar Right -->\n" +
-    "        <ul class=\"nav navbar-toolbar navbar-right navbar-toolbar-right\">\n" +
-    "\n" +
-    "          <li><a href=\"#\"><i class=\"wb-icon wb-home\" aria-hidden=\"true\"></i>&nbsp; Home </a></li>\n" +
-    "          <li><a href=\"#\"><i class=\"wb-icon wb-settings\" aria-hidden=\"true\"></i>&nbsp; School</a></li>\n" +
-    "          <li><a href=\"#\"><i class=\"wb-icon wb-dashboard\" aria-hidden=\"true\"></i>&nbsp;Dashboard</a></li>\n" +
-    "\n" +
-    "\n" +
-    "          <li class=\"dropdown\">\n" +
-    "            <a class=\"navbar-avatar dropdown-toggle\" data-toggle=\"dropdown\" href=\"#\" aria-expanded=\"false\"\n" +
-    "            data-animation=\"scale-up\" role=\"button\">\n" +
-    "              <span class=\"avatar avatar-online\">\n" +
-    "                <img src=\"assets/images/avatar-1-small.jpg\" alt=\"...\">\n" +
-    "              </span>\n" +
-    "            </a>\n" +
-    "            <ul class=\"dropdown-menu\" role=\"menu\">\n" +
-    "              <li role=\"presentation\">\n" +
-    "                <a href=\"javascript:void(0)\" role=\"menuitem\"><i class=\"icon wb-user\" aria-hidden=\"true\"></i> Profile</a>\n" +
-    "              </li>\n" +
-    "              <li role=\"presentation\">\n" +
-    "                <a href=\"javascript:void(0)\" role=\"menuitem\"><i class=\"icon wb-payment\" aria-hidden=\"true\"></i> Billing</a>\n" +
-    "              </li>\n" +
-    "              <li role=\"presentation\">\n" +
-    "                <a href=\"javascript:void(0)\" role=\"menuitem\"><i class=\"icon wb-settings\" aria-hidden=\"true\"></i> Settings</a>\n" +
-    "              </li>\n" +
-    "              <li class=\"divider\" role=\"presentation\"></li>\n" +
-    "              <li role=\"presentation\">\n" +
-    "                <a href=\"javascript:void(0)\" role=\"menuitem\"><i class=\"icon wb-power\" aria-hidden=\"true\"></i> Logout</a>\n" +
-    "              </li>\n" +
-    "            </ul>\n" +
-    "          </li>\n" +
-    "          \n" +
-    "          <li><a href=\"#\"><i class=\"wb-icon wb-calendar\" aria-hidden=\"true\"></i><span class=\"badge badge-warn up\">5</span></a></li>\n" +
-    "\n" +
-    "\n" +
-    "          <li class=\"dropdown\">\n" +
-    "            <a data-toggle=\"dropdown\" href=\"javascript:void(0)\" title=\"Notifications\" aria-expanded=\"false\"\n" +
-    "            data-animation=\"scale-up\" role=\"button\">\n" +
-    "              <i class=\"icon wb-bell\" aria-hidden=\"true\"></i>\n" +
-    "              <span class=\"badge badge-danger up\">5</span>\n" +
-    "            </a>\n" +
-    "            <ul class=\"dropdown-menu dropdown-menu-right dropdown-menu-media\" role=\"menu\">\n" +
-    "              <li class=\"dropdown-menu-header\" role=\"presentation\">\n" +
-    "                <h5>NOTIFICATIONS</h5>\n" +
-    "                <span class=\"label label-round label-danger\">New 5</span>\n" +
-    "              </li>\n" +
-    "              <li class=\"list-group\" role=\"presentation\">\n" +
-    "                <div data-role=\"container\">\n" +
-    "                  <div data-role=\"content\">\n" +
-    "                    <a class=\"list-group-item\" href=\"javascript:void(0)\" role=\"menuitem\">\n" +
-    "                      <div class=\"media\">\n" +
-    "                        <div class=\"media-left padding-right-10\">\n" +
-    "                          <i class=\"icon wb-order bg-red-600 white icon-circle\" aria-hidden=\"true\"></i>\n" +
-    "                        </div>\n" +
-    "                        <div class=\"media-body\">\n" +
-    "                          <h6 class=\"media-heading\">A new order has been placed</h6>\n" +
-    "                          <time class=\"media-meta\" datetime=\"2016-06-12T20:50:48+08:00\">5 hours ago</time>\n" +
-    "                        </div>\n" +
-    "                      </div>\n" +
-    "                    </a>\n" +
-    "                    <a class=\"list-group-item\" href=\"javascript:void(0)\" role=\"menuitem\">\n" +
-    "                      <div class=\"media\">\n" +
-    "                        <div class=\"media-left padding-right-10\">\n" +
-    "                          <i class=\"icon wb-user bg-green-600 white icon-circle\" aria-hidden=\"true\"></i>\n" +
-    "                        </div>\n" +
-    "                        <div class=\"media-body\">\n" +
-    "                          <h6 class=\"media-heading\">Completed the task</h6>\n" +
-    "                          <time class=\"media-meta\" datetime=\"2016-06-11T18:29:20+08:00\">2 days ago</time>\n" +
-    "                        </div>\n" +
-    "                      </div>\n" +
-    "                    </a>\n" +
-    "                    <a class=\"list-group-item\" href=\"javascript:void(0)\" role=\"menuitem\">\n" +
-    "                      <div class=\"media\">\n" +
-    "                        <div class=\"media-left padding-right-10\">\n" +
-    "                          <i class=\"icon wb-settings bg-red-600 white icon-circle\" aria-hidden=\"true\"></i>\n" +
-    "                        </div>\n" +
-    "                        <div class=\"media-body\">\n" +
-    "                          <h6 class=\"media-heading\">Settings updated</h6>\n" +
-    "                          <time class=\"media-meta\" datetime=\"2016-06-11T14:05:00+08:00\">2 days ago</time>\n" +
-    "                        </div>\n" +
-    "                      </div>\n" +
-    "                    </a>\n" +
-    "                    <a class=\"list-group-item\" href=\"javascript:void(0)\" role=\"menuitem\">\n" +
-    "                      <div class=\"media\">\n" +
-    "                        <div class=\"media-left padding-right-10\">\n" +
-    "                          <i class=\"icon wb-calendar bg-blue-600 white icon-circle\" aria-hidden=\"true\"></i>\n" +
-    "                        </div>\n" +
-    "                        <div class=\"media-body\">\n" +
-    "                          <h6 class=\"media-heading\">Event started</h6>\n" +
-    "                          <time class=\"media-meta\" datetime=\"2016-06-10T13:50:18+08:00\">3 days ago</time>\n" +
-    "                        </div>\n" +
-    "                      </div>\n" +
-    "                    </a>\n" +
-    "                    <a class=\"list-group-item\" href=\"javascript:void(0)\" role=\"menuitem\">\n" +
-    "                      <div class=\"media\">\n" +
-    "                        <div class=\"media-left padding-right-10\">\n" +
-    "                          <i class=\"icon wb-chat bg-orange-600 white icon-circle\" aria-hidden=\"true\"></i>\n" +
-    "                        </div>\n" +
-    "                        <div class=\"media-body\">\n" +
-    "                          <h6 class=\"media-heading\">Message received</h6>\n" +
-    "                          <time class=\"media-meta\" datetime=\"2016-06-10T12:34:48+08:00\">3 days ago</time>\n" +
-    "                        </div>\n" +
-    "                      </div>\n" +
-    "                    </a>\n" +
-    "                  </div>\n" +
-    "                </div>\n" +
-    "              </li>\n" +
-    "              <li class=\"dropdown-menu-footer\" role=\"presentation\">\n" +
-    "                <a class=\"dropdown-menu-footer-btn\" href=\"javascript:void(0)\" role=\"button\">\n" +
-    "                  <i class=\"icon wb-settings\" aria-hidden=\"true\"></i>\n" +
-    "                </a>\n" +
-    "                <a href=\"javascript:void(0)\" role=\"menuitem\">\n" +
-    "                    All notifications\n" +
-    "                  </a>\n" +
-    "              </li>\n" +
-    "            </ul>\n" +
-    "          </li>\n" +
-    "          <li class=\"dropdown\">\n" +
-    "            <a data-toggle=\"dropdown\" href=\"javascript:void(0)\" title=\"Messages\" aria-expanded=\"false\"\n" +
-    "            data-animation=\"scale-up\" role=\"button\">\n" +
-    "              <i class=\"icon wb-envelope\" aria-hidden=\"true\"></i>\n" +
-    "              <span class=\"badge badge-info up\">3</span>\n" +
-    "            </a>\n" +
-    "            <ul class=\"dropdown-menu dropdown-menu-right dropdown-menu-media\" role=\"menu\">\n" +
-    "              <li class=\"dropdown-menu-header\" role=\"presentation\">\n" +
-    "                <h5>MESSAGES</h5>\n" +
-    "                <span class=\"label label-round label-info\">New 3</span>\n" +
-    "              </li>\n" +
-    "              <li class=\"list-group\" role=\"presentation\">\n" +
-    "                <div data-role=\"container\">\n" +
-    "                  <div data-role=\"content\">\n" +
-    "                    <a class=\"list-group-item\" href=\"javascript:void(0)\" role=\"menuitem\">\n" +
-    "                      <div class=\"media\">\n" +
-    "                        <div class=\"media-left padding-right-10\">\n" +
-    "                          <span class=\"avatar avatar-sm avatar-online\">\n" +
-    "                            <img src=\"../../global/portraits/2.jpg\" alt=\"...\" />\n" +
-    "                            <i></i>\n" +
-    "                          </span>\n" +
-    "                        </div>\n" +
-    "                        <div class=\"media-body\">\n" +
-    "                          <h6 class=\"media-heading\">Mary Adams</h6>\n" +
-    "                          <div class=\"media-meta\">\n" +
-    "                            <time datetime=\"2016-06-17T20:22:05+08:00\">30 minutes ago</time>\n" +
-    "                          </div>\n" +
-    "                          <div class=\"media-detail\">Anyways, i would like just do it</div>\n" +
-    "                        </div>\n" +
-    "                      </div>\n" +
-    "                    </a>\n" +
-    "                    <a class=\"list-group-item\" href=\"javascript:void(0)\" role=\"menuitem\">\n" +
-    "                      <div class=\"media\">\n" +
-    "                        <div class=\"media-left padding-right-10\">\n" +
-    "                          <span class=\"avatar avatar-sm avatar-off\">\n" +
-    "                            <img src=\"../../global/portraits/3.jpg\" alt=\"...\" />\n" +
-    "                            <i></i>\n" +
-    "                          </span>\n" +
-    "                        </div>\n" +
-    "                        <div class=\"media-body\">\n" +
-    "                          <h6 class=\"media-heading\">Caleb Richards</h6>\n" +
-    "                          <div class=\"media-meta\">\n" +
-    "                            <time datetime=\"2016-06-17T12:30:30+08:00\">12 hours ago</time>\n" +
-    "                          </div>\n" +
-    "                          <div class=\"media-detail\">I checheck the document. But there seems</div>\n" +
-    "                        </div>\n" +
-    "                      </div>\n" +
-    "                    </a>\n" +
-    "                    <a class=\"list-group-item\" href=\"javascript:void(0)\" role=\"menuitem\">\n" +
-    "                      <div class=\"media\">\n" +
-    "                        <div class=\"media-left padding-right-10\">\n" +
-    "                          <span class=\"avatar avatar-sm avatar-busy\">\n" +
-    "                            <img src=\"../../global/portraits/4.jpg\" alt=\"...\" />\n" +
-    "                            <i></i>\n" +
-    "                          </span>\n" +
-    "                        </div>\n" +
-    "                        <div class=\"media-body\">\n" +
-    "                          <h6 class=\"media-heading\">June Lane</h6>\n" +
-    "                          <div class=\"media-meta\">\n" +
-    "                            <time datetime=\"2016-06-16T18:38:40+08:00\">2 days ago</time>\n" +
-    "                          </div>\n" +
-    "                          <div class=\"media-detail\">Lorem ipsum Id consectetur et minim</div>\n" +
-    "                        </div>\n" +
-    "                      </div>\n" +
-    "                    </a>\n" +
-    "                    <a class=\"list-group-item\" href=\"javascript:void(0)\" role=\"menuitem\">\n" +
-    "                      <div class=\"media\">\n" +
-    "                        <div class=\"media-left padding-right-10\">\n" +
-    "                          <span class=\"avatar avatar-sm avatar-away\">\n" +
-    "                            <img src=\"../../global/portraits/5.jpg\" alt=\"...\" />\n" +
-    "                            <i></i>\n" +
-    "                          </span>\n" +
-    "                        </div>\n" +
-    "                        <div class=\"media-body\">\n" +
-    "                          <h6 class=\"media-heading\">Edward Fletcher</h6>\n" +
-    "                          <div class=\"media-meta\">\n" +
-    "                            <time datetime=\"2016-06-15T20:34:48+08:00\">3 days ago</time>\n" +
-    "                          </div>\n" +
-    "                          <div class=\"media-detail\">Dolor et irure cupidatat commodo nostrud nostrud.</div>\n" +
-    "                        </div>\n" +
-    "                      </div>\n" +
-    "                    </a>\n" +
-    "                  </div>\n" +
-    "                </div>\n" +
-    "              </li>\n" +
-    "              <li class=\"dropdown-menu-footer\" role=\"presentation\">\n" +
-    "                <a class=\"dropdown-menu-footer-btn\" href=\"javascript:void(0)\" role=\"button\">\n" +
-    "                  <i class=\"icon wb-settings\" aria-hidden=\"true\"></i>\n" +
-    "                </a>\n" +
-    "                <a href=\"javascript:void(0)\" role=\"menuitem\">\n" +
-    "                    See all messages\n" +
-    "                  </a>\n" +
-    "              </li>\n" +
-    "            </ul>\n" +
-    "          </li>\n" +
-    "\n" +
-    "          <!-- <li id=\"toggleChat\">\n" +
-    "            <a data-toggle=\"site-sidebar\" href=\"javascript:void(0)\" title=\"Chat\" data-url=\"site-sidebar.tpl\">\n" +
-    "              <i class=\"icon wb-chat\" aria-hidden=\"true\"></i>\n" +
-    "            </a>\n" +
-    "          </li> -->\n" +
-    "        </ul>\n" +
-    "        <!-- End Navbar Toolbar Right -->\n" +
-    "      </div>\n" +
-    "      <!-- End Navbar Collapse -->\n" +
-    "      <!-- Site Navbar Seach -->\n" +
-    "      <div class=\"collapse navbar-search-overlap\" id=\"site-navbar-search\">\n" +
-    "        <form role=\"search\">\n" +
-    "          <div class=\"form-group\">\n" +
-    "            <div class=\"input-search\">\n" +
-    "              <i class=\"input-search-icon wb-search\" aria-hidden=\"true\"></i>\n" +
-    "              <input type=\"text\" class=\"form-control\" name=\"site-search\" placeholder=\"Search...\">\n" +
-    "              <button type=\"button\" class=\"input-search-close icon wb-close\" data-target=\"#site-navbar-search\"\n" +
-    "              data-toggle=\"collapse\" aria-label=\"Close\"></button>\n" +
-    "            </div>\n" +
-    "          </div>\n" +
-    "        </form>\n" +
-    "      </div>\n" +
-    "      <!-- End Site Navbar Seach -->\n" +
-    "    </div>\n" +
-    "  </nav>\n" +
-    "  <div class=\"site-menubar\">\n" +
-    "    <div class=\"site-menubar-body\">\n" +
-    "      <div>\n" +
-    "        <div>\n" +
-    "          <ul class=\"site-menu\">\n" +
-    "            <li class=\"site-menu-category\">Programs</li>\n" +
-    "            <li class=\"site-menu-item\" ng-repeat=\"i in [1, 2]\" ng-cloak>\n" +
-    "              <a href=\"#\">\n" +
-    "                <i class=\"site-menu-icon wb-dashboard\" aria-hidden=\"true\"></i>\n" +
-    "                <span class=\"site-menu-title\">Program {{i}}</span>\n" +
-    "                <div class=\"site-menu-badge\">\n" +
-    "                  <span class=\"badge badge-success\">{{i}}</span>\n" +
-    "                </div>\n" +
-    "              </a>\n" +
-    "            </li>\n" +
-    "\n" +
-    "            <li class=\"site-menu-category\">Classes</li>\n" +
-    "            <li class=\"site-menu-item\" ng-repeat=\"i in [1, 2, 3, 4]\" ng-cloak>\n" +
-    "              <a href=\"#\">\n" +
-    "                <i class=\"site-menu-icon wb-dashboard\" aria-hidden=\"true\"></i>\n" +
-    "                <span class=\"site-menu-title\">Class {{i}}</span>\n" +
-    "                <div class=\"site-menu-badge\">\n" +
-    "                  <span class=\"badge badge-success\">{{i}}</span>\n" +
-    "                </div>\n" +
-    "              </a>\n" +
-    "            </li>\n" +
-    "\n" +
-    "          </ul>\n" +
-    "        </div>\n" +
-    "      </div>\n" +
-    "    </div>\n" +
-    "    <div class=\"site-menubar-footer\">\n" +
-    "      <a href=\"javascript: void(0);\" class=\"fold-show\" data-placement=\"top\" data-toggle=\"tooltip\"\n" +
-    "      data-original-title=\"Settings\">\n" +
-    "        <span class=\"icon wb-settings\" aria-hidden=\"true\"></span>\n" +
-    "      </a>\n" +
-    "      <a href=\"javascript: void(0);\" data-placement=\"top\" data-toggle=\"tooltip\" data-original-title=\"Lock\">\n" +
-    "        <span class=\"icon wb-eye-close\" aria-hidden=\"true\"></span>\n" +
-    "      </a>\n" +
-    "      <a href=\"javascript: void(0);\" data-placement=\"top\" data-toggle=\"tooltip\" data-original-title=\"Logout\">\n" +
-    "        <span class=\"icon wb-power\" aria-hidden=\"true\"></span>\n" +
-    "      </a>\n" +
-    "    </div>\n" +
-    "  </div>\n" +
-    "\n" +
-    "  <!-- Page -->\n" +
-    "  <div class=\"page\" ng-controller=\"appController as appCtrl\">\n" +
-    "    <div class=\"page-content padding-30 container-fluid \">\n" +
-    "<!--       <div ui-view ></div> \n" +
-    " -->    </div>\n" +
-    "  </div>\n" +
-    "  <!-- End Page -->\n" +
-    "  <!-- Footer -->\n" +
-    "  <footer class=\"site-footer\">\n" +
-    "    <div class=\"site-footer-legal\">© 2016 <a href=\"#\">trainmoo</a></div>\n" +
-    "    <div class=\"site-footer-right\">\n" +
-    "      Crafted with by Rauzr\n" +
-    "    </div>\n" +
-    "  </footer>\n" +
-    "");
 }]);

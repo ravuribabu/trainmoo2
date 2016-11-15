@@ -8,10 +8,10 @@ var async = require('async');
 
 module.exports = function(router) {
 
-
 	router.route('/replies/:post_id')
 			.get(function(req, res) {
-			  	Post.find({discussion_id : req.params.post_id})
+			  	Post.find({parent : req.params.post_id})
+			  		.populate('author')
 				  	.exec(function(err, posts){
 				  		if (err) {
 				  			console.log('error ' + err);
@@ -21,8 +21,6 @@ module.exports = function(router) {
 				  		}
 				  	});
 			  });
-
-
 
 
 	router.route('/posts/:user_id')
@@ -113,7 +111,5 @@ module.exports = function(router) {
 
 
 			  });
-
-
 
 };

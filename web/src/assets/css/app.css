@@ -1014,7 +1014,7 @@ figure:hover .top-left{
 
 
 /* now the element will fade out before it is removed from the DOM */
-[ng-repeat].ng-leave {
+/*[ng-repeat].ng-leave {
   transition:0.5s linear all;
   opacity:1;
 }
@@ -1023,7 +1023,7 @@ figure:hover .top-left{
   opacity:0;
 }
 
-
+*/
 
 
 
@@ -1316,13 +1316,20 @@ a:hover, a:focus, a:active {
   overflow-y: auto;
 }
 .sidebar-nav li {
-  text-indent: 20px;
-  line-height: 40px;
+/*  text-indent: 20px;
+*/  line-height: 40px;
+    padding-left: 10px;
 }
 .sidebar-nav li a {
   display: block;
   text-decoration: none;
+
+
 }
+.sidebar-nav li i {
+  margin-right: 10px;
+}
+
 .sidebar-nav li a:hover {
   text-decoration: none;
   color: #fff;

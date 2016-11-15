@@ -52,8 +52,8 @@
 							<td>
 								<div class="padding-10">
 									<div class="title">
-										<a ui-sref="app.appt.program({schoolid: schoolid, classid: clazz._id})" ng-if="!clazz.program"> <strong style="margin-right: 20px">{{clazz.name}}</strong> <span class="label label-info">Program </span></a> 
-										<a ui-sref="app.appt.class({schoolid: schoolid, classid: clazz._id})" ng-if="clazz.program"><strong style="margin-right: 20px">{{clazz.name}}</strong><span class="label label-info">Class </span> </a> 
+										<a ui-sref="app.appt.program({schoolid: schoolid, classid: clazz._id})" ng-if="clazz.type === 'program'"> <strong style="margin-right: 20px">{{clazz.name}}</strong> <span class="label label-info">{{clazz.type}} </span></a> 
+										<a ui-sref="app.appt.class({schoolid: schoolid, classid: clazz._id})" ng-if="clazz.type === 'class'""><strong style="margin-right: 20px">{{clazz.name}}</strong><span class="label label-info">Class </span> </a> 
 
 									</div>
 									<span class="abstract">Reiciendis iactant eligendi. Vestrae </span>

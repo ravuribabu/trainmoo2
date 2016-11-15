@@ -10,6 +10,7 @@ module.exports = function(grunt){
   grunt.loadNpmTasks('grunt-html2js');
   grunt.loadNpmTasks('grunt-browserify');
   grunt.loadNpmTasks('grunt-mkdir');
+ grunt.loadNpmTasks('grunt-watchify');
 
   // Default task.
 
@@ -100,7 +101,16 @@ module.exports = function(grunt){
         module: 'templates.common'
       }
     },
-
+    watchify: {
+      options: {
+               transform: [['babelify', {presets: ['es2015', 'react', 'stage-2']}]]
+            },
+      js: {
+            
+            src: ['./bin/app/app.js'],
+            dest: '<%= distdir %>/app/app.js'
+          }
+    },
     browserify: {
       js: {
             options: {

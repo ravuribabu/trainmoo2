@@ -74,7 +74,7 @@ school.controller('schoolUsersController',
 		            placement: 'right',
 		            size: 'md',
 		            backdrop: true,
-		            controller: 'classUserController',
+		            controller: 'schoolUserController',
 		            resolve: {
 		            	'user': user
 		            }

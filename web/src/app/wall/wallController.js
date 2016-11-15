@@ -25,6 +25,14 @@ wall.controller('wallController',
 		$rootScope.$on('POST_CREATED', function(event) {
 			loadMessages();
 		})
+
+
+		$rootScope.$on('WALL_NAV_CHANGED', function(event, data) {
+			// console.log('Received NAV Changed Event: ' + JSON.stringify(data));
+			event.stopPropagation();
+			$scope.$broadcast('WALL_NAV_CHANGED', data);
+		})
+
 		function loadMessages(){
 
 

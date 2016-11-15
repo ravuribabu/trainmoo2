@@ -7,8 +7,8 @@ var Schema = mongoose.Schema;
 var ClassUserSchema = new Schema({
   
   'class': {type:Schema.Types.ObjectId, ref: 'Class', required: true },
-  schoolUser: {type:Schema.Types.ObjectId, ref: 'SchoolUser', required: true},
-  
+  user: {type:Schema.Types.ObjectId, ref: 'User'},
+
   status: { type: String, enum: ['active', 'suspended']} ,
   payment: { type: String, enum: ['pending', 'partial', 'completed']} ,
   type: { type: String, enum: ['teacher', 'student', 'parent', 'admin'], required: true} ,

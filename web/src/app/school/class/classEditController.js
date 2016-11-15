@@ -60,7 +60,8 @@ school.controller('classEditController', function($scope, $stateParams, $locatio
 
         $scope.class = {  
                     school: vm.schoolid,
-                    name: (vm.isProgram?'Program:': 'Class'),
+                    name: (vm.isProgram?'Program': 'Class'),
+                    type: (vm.isProgram?'program': 'class'),
                     categories: [],
                     medium: [],
                     placeid: 'ChIJL-k0LnUTrjsRrmqYb6Y0ssI',

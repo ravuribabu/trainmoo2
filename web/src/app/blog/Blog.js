@@ -1,13 +1,7 @@
 'use strict';
 
 import React, {Component} from 'react';
-import RichEditor from '../shared/RichEditor';
-import Select from 'react-select';
-
-const options = [
-	    { value: 'one', label: 'One' },
-	    { value: 'two', label: 'Two' }
-	];
+import RichEditor from '../shared/rte/RichEditor';
 
 export default class Blog extends React.Component {
 
@@ -44,6 +38,7 @@ export default class Blog extends React.Component {
 	
 	render() {
 		return (
+
 		<div className="row padding-0 margin-0">
 			<div className="col-md-8">
 	    		<div className="media" style={{padding: "10px 0px 10px 0px"}}>
@@ -66,8 +61,8 @@ export default class Blog extends React.Component {
 	    	</div>
 
 	    	<div className="col-md-4 margin-top-20">
-	    		<button className="btn btn-round btn-outline btn-primary" onMouseDown={this.save}>Save</button>
-	    		<button className="btn btn-round btn-outline btn-primary margin-left-20" onMouseDown={this.publish}>Publish</button>
+	    		<button className="btn btn-round btn-outline btn-primary" onClick={this.save}>Save</button>
+	    		<button className="btn btn-round btn-outline btn-primary margin-left-20" onClick={this.publish}>Publish</button>
 	    	</div>
 	    	<div className="col-md-12">
 	    		<h1 style={{width: "100%"}}><input type="text" name="title" style={{ border: "0", outline: "none", width: "100%" }} placeholder="Title" /></h1>
@@ -79,15 +74,11 @@ export default class Blog extends React.Component {
 					</div>
 				</div>
 			</div>
-			<Select
-			    name="form-field-name"
-			    value="one"
-			    options={options}
-			    onChange={this.logChange}
-			/>
+			
 		</div>
 
 		);
+
 	}
 
 

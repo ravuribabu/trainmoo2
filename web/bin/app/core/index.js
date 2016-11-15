@@ -16,7 +16,7 @@ require('angularjs-datepicker');
 import ReactDOM from 'react-dom';
 import React, { Component } from 'react';
 import Blog from '../blog/Blog';
-import CommentEditor from '../shared/CommentEditor';
+import CommentEditor from '../shared/rte/CommentEditor';
 
 var core = angular.module('core', ['flow', 'ngAlertify', 'ngAnimate', 'ui.bootstrap', '720kb.datepicker']);
 
@@ -383,31 +383,41 @@ core.directive('commentEditor', function(){
     restrict: 'AE',
     scope:{
       content: '=',
-      readonly: '@'
+      readonly: '@',
+      onSelect: '&',
+      onReset: '&'
     },
     controller: function($scope) {
     },
     link: function(scope, elm, $attributes, formController){
 
       let readonly = false;
+      let reactElem = undefined;
 
       if (scope.readonly && scope.readonly === 'true') {
         readonly = true;
       }
 
+      scope.$on('POST_RESET', function(e) {
+      	if (reactElem) {
+      		reactElem.reset();
+      	}
+      });
+
       scope.$watch('content', function(value){
 		let draftContent = scope.content; 
-		let commentEditor = <CommentEditor content={draftContent} update={setContent} readonly={readonly}/>;
-		ReactDOM.render(commentEditor, elm[0]);
+		let commentEditor = <CommentEditor content={draftContent} update={setContent} readonly={readonly} onSelect={scope.onSelect} onReset={scope.onReset}/>;
+		reactElem = ReactDOM.render(commentEditor, elm[0]);
       });
 
       
 
       function setContent(content){
+      	console.log('update content' + content);
       	if (scope.content === content) {
       		return;
       	}
-      	
+      	console.log('update content : $apply' );
         scope.content = content;
         scope.$apply();
         if (formController) {

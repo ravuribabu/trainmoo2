@@ -3,29 +3,23 @@ var Schema = mongoose.Schema;
 var AttachmentSchema = require('./attachment').AttachmentSchema;
 
 var PostSchema = new Schema({	
-	discussion_id: {type:Schema.Types.ObjectId, ref: 'Post'},
 
-	title: String,
-	type: { type: String, enum: ['Message','Blog', 'Notification', 'Assignment', 'Newsletter', 'Reply']},
-	author : {
-		id: {type:Schema.Types.ObjectId, ref: 'User'},
+	type: { type: String, enum: ['Discussion', 'Message' , 'Assignment', 'Notification', 'Blog', 'Material', 'Newsletter', 'Task']},
+	author : {type:Schema.Types.ObjectId, ref: 'User'},
+	classes : [{
+		id: {type:Schema.Types.ObjectId, ref: 'Class'},
 		name: String
-	},
-	classes : [String],
-	likes: [ {
-		id: {type:Schema.Types.ObjectId, ref: 'User'},
-		name: String
-		}],
-	noOfReplies: Number,
-	parentid: {type:Schema.Types.ObjectId, ref: 'Post'},
+	}],
+	parent: {type:Schema.Types.ObjectId, ref: 'Post'},
     files: [AttachmentSchema],
-
 	dueby : {type:Date},
 	text: String, 
-	slug: String,
-	full_slug: String,
-	tags: [String],
+	section: String,
+	likes: Number,
+	replies: Number,
 
+	created_by: String,
+	updated_by: String,
 	created_at: Date,
   	updated_at: Date
 });
@@ -37,7 +31,6 @@ PostSchema.pre('save', function(next) {
 	if (!this.created_at) {
 		this.created_at = currentDate;
 	}
-	//this.discussion_id = this._id;
 	next();
 });
 

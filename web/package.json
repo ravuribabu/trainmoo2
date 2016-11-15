@@ -29,6 +29,7 @@
     "grunt-html2js": "^0.3.6",
     "grunt-mkdir": "^1.0.0",
     "grunt-recess": "^1.0.1",
+    "grunt-watchify": "^0.1.0",
     "grunt-webpack": "^1.0.18"
   },
   "dependencies": {

@@ -16,6 +16,7 @@ var ClassSchema = new Schema({
   program: {type: Schema.Types.ObjectId, ref: 'Class'} ,
   school:  {type: Schema.Types.ObjectId, ref: 'School'} ,
   name: { type: String, required: true },
+  type: { type: String, enum: ['class', 'program']},
   profile: String,
   address: String, 
   placeid: String, 

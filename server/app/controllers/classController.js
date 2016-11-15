@@ -6,7 +6,7 @@ module.exports = function(router) {
 
 	router.route('/programs')
 		  .get(function(req, res){
-		  	Class.find( { program: null } ).exec(function(err, classes){
+		  	Class.find( { type: 'program' } ).exec(function(err, classes){
 			  		if (err) {
 			  			console.log(err);
 			  			res.send(err);
