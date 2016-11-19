@@ -16,7 +16,7 @@ post.directive('post', function(){
 });
 
 
-post.controller('postController', function($rootScope, $scope, postFactory, SweetAlert, alertify, appForm){
+post.controller('postController', function($rootScope, $scope, postFactory, SweetAlert, alertify, appForm, $uibModal){
 
 	const vm = this;
 	const _ = require('lodash');
@@ -32,6 +32,7 @@ post.controller('postController', function($rootScope, $scope, postFactory, Swee
 			type: 'Discussion'
 		};
 
+	
 
 	vm.postTypes = [
 		{ 
@@ -82,6 +83,25 @@ post.controller('postController', function($rootScope, $scope, postFactory, Swee
 			icon: 'fa-tasks' 
 		}];
 
+
+	vm.sections = [
+		{
+			id: 1,
+			name: 'Section 1',
+		},
+		{
+			id: 2,
+			name: 'Section 2',
+		},
+		{
+			id: 3,
+			name: 'Section 3',
+		},
+		{
+			id: 4,
+			name: 'Section 4',
+		},
+	]
 	vm.selection = {
 		postType: { 
 			name: 'Discussion', 
@@ -101,21 +121,21 @@ post.controller('postController', function($rootScope, $scope, postFactory, Swee
 		vm.uploadImage = false;
 		vm.showDueBy = false;
 		vm.postSelected = false;
+		vm.showBlogPreview = false;
+
 		if (vm.post) {
 			vm.post.files.map(function(file){file.remove();});
 		}
 		vm.post = { };
 		Object.assign(vm.post, emptyPost);
 		$scope.$broadcast('POST_RESET');
+
 	} //END OF reset
 
 	vm.selectPostType = (postType) => {
 		vm.selection.postType = postType;
 		vm.post.type = postType.name;
 	}
-
-
-
 
 	init();
 
@@ -134,15 +154,17 @@ post.controller('postController', function($rootScope, $scope, postFactory, Swee
 
 		vm.form = appForm.AppForm(angular, function(form){
 
-			if (vm.selection.class) {
-				//post to class
-				vm.post.classes = [{ id: vm.selection.class.id, name: vm.selection.class.name }];
-			} else if (vm.selection.program) {
-				//post to program
-				vm.post.classes = [{ id: vm.selection.program.id, name: vm.selection.program.name } ];
-			} else {
-				//Post to all programs
-				vm.post.classes = vm.selection.programs.map(function(p) {return { id: p.id, name: p.name };});
+			if (!vm.isReply) {
+				if (vm.selection.class) {
+					//post to class
+					vm.post.classes = [{ id: vm.selection.class.id, name: vm.selection.class.name }];
+				} else if (vm.selection.program) {
+					//post to program
+					vm.post.classes = [{ id: vm.selection.program.id, name: vm.selection.program.name } ];
+				} else {
+					//Post to all programs
+					vm.post.classes = vm.selection.programs.map(function(p) {return { id: p.id, name: p.name };});
+				}
 			}
 
 
@@ -160,6 +182,8 @@ post.controller('postController', function($rootScope, $scope, postFactory, Swee
 					        $scope.$broadcast('POST_RESET');
 
 						    vm.reset();
+						    $scope.$emit('POST_CREATED', vm.post.parent);
+
 
 						})
 						.error(function(err){
@@ -172,6 +196,9 @@ post.controller('postController', function($rootScope, $scope, postFactory, Swee
 	
 	$scope.$on('WALL_NAV_CHANGED', function(event, data) {
 		//TODO if readonly or reply ignore
+		if (vm.isReply) {
+			return;
+		}
 		event.preventDefault();
 		vm.selection = data;
 
@@ -182,8 +209,35 @@ post.controller('postController', function($rootScope, $scope, postFactory, Swee
 				newItems: 3
 			}
 		}
-		
+		vm.post.type = vm.selection.postType.name;
 		console.log('Post create selection: ' + JSON.stringify(vm.selection));
 	}); //END OF $scope.$on
+
+	vm.openBlog = () => {
+		var modalInstance = $uibModal.open({
+		            templateUrl: 'blog/blog.tpl.html',
+		            size: 'lg',
+		            backdrop: true,
+		            controller: 'blogController',
+		            resolve: {
+		            	richtext: undefined
+		            }
+		        });
+
+		modalInstance.result.then(function (selectedItem) {
+			postFactory.getDraft()
+    				.success(function(draft) { 
+    					vm.draft = draft;
+    					vm.post.richtext = draft;
+    					draft.type = 'Published';
+    				} )
+    				.error(function(err) { 
+    					console.log(err);
+    				} );
+	      	vm.showBlogPreview = true;
+	    }, function () {
+	      console.log('Modal dismissed at: ' + new Date());
+	    });
+	}
 
 });

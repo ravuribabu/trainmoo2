@@ -1,5 +1,16 @@
 const wall = require('angular').module('wall');
 
+
+wall.directive('wallnav', function ($window) {
+return {
+        restrict: 'AE',
+        templateUrl: 'wall/directive/nav.tpl.html',
+		controller: 'navController',
+		controllerAs: 'vm'
+    };
+});
+
+
 wall.controller('navController', function($scope, $rootScope, postFactory){
 
 	var _ = require('lodash');

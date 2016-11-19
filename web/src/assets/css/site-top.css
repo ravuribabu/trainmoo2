@@ -7444,7 +7444,7 @@ div.widget-title {
 .comment-meta {
   display: inline-block;
   margin-left: 5px;
-  font-size: 12px;
+  font-size: 14px;
   color: #9e9e9e;
 }
 .comment-content {
@@ -7456,6 +7456,7 @@ div.widget-title {
 .comment-actions {
   margin-top: 10px;
   text-align: left;
+  margin-bottom: 5px;
 }
 .comment-actions a {
   display: inline-block;

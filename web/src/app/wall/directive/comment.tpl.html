@@ -4,32 +4,39 @@
 	</a>
 	<div class="media-body ">
 		<div class="comment-body">
-			<a href="#" class="comment-author">{{msg.author.name}}</a> <small ng-if="msg.type != 'Reply'">  {{msg.classes | listToString}}</small>
-			
-			<div class="comment-meta">
-				<span class="date"> {{msg.created_at | postTime}}</span>&nbsp;&nbsp;
-				<span class="label" 
-					ng-class="{'label-primary' : msg.type === 'Message', 'label-danger' : msg.type === 'Assignment', 'label-warning' : msg.type === 'Notification'}" 
-					ng-if="msg.type != 'Reply'">
-					{{msg.type}}
-				</span>	
-				<span class="label label-info margin-left-10" ng-if="msg.type === 'Assignment'">
-					Due By: {{msg.dueby | date :  "MMM dd"}}
-				</span>
-			</div>
+			<a href="#" class="comment-author">{{vm.name}}</a> 
+
+			<span ng-if="!vm.isreply">
+				<span ng-if="msg.type != 'Reply'" style="margin: 0px 5px;"> on&nbsp;<span class="text-azure">{{vm.classnames | listToString}}</span> </span>
+				
+				<div class="comment-meta">
+					<span class="label" 
+						ng-class="{'label-primary' : msg.type === 'Message' || msg.type === 'Discussion', 'label-danger' : msg.type === 'Assignment' || msg.type === 'Task', 'label-warning' : msg.type === 'Notification'}" 
+						ng-if="msg.type != 'Reply'">
+						{{msg.type}}
+					</span>	
+					<span class="label label-info margin-left-10" ng-if="msg.dueby">
+						Due {{vm.duein}}
+					</span>
+				</div>
+			</span>
+			<span class="date" style="padding-left: 10px;"> {{vm.posted}}</span>
 
 			<div class="comment-header-actions" >
-				<a href="#"><i class="icon fa-bookmark-o"></i> </a>
-				<a href="#"><i class="icon fa-star-o"></i> </a>
+				<button class="btn btn-pure btn-success icon fa-bookmark-o " ></button>
+				<button class="btn btn-pure btn-success icon fa-star-o" ></button>
 			</div>
 
 			<comment-editor id="react" content="msg.text" readonly="true" class="comment-content"> </comment-editor>
 
+            <blog-card draft="msg.richtext" ng-if="vm.hasRichtext" ng-click="vm.openBlog()"/>
+            
 			<div gallery files="msg.files" readonly="true" ng-if="msg.files && msg.files.length > 0"></div>
 
 			<div class="comment-actions pull-left">
-				<a href="javascript:void(0)" ng-click="like(msg._id)">Like</a>
-				<a href="javascript:void(0)" ng-click="showReplies=!showReplies">Reply</a>
+				<button class="btn btn-default btn-sm btn-round btn-outline "  ng-click="vm.showReply()" style="height: 30px;"><i class="icon fa-reply" aria-hidden="true"></i>Reply</button>
+				<button class="btn btn-default btn-sm btn-round btn-outline "  ng-click="vm.showAllReplies()" style="height: 30px;" ng-if="replies.length > 2 && !vm.showAllRepliesFlag ">Show previous replies ({{replies.length - 2}})</button>
+
 				<a href="javascript:void(0)">
 					<i class="icon md-favorite"></i>
 					<span ng-if='msg.likes.length > 0'>{{msg.likes.length}}</span>
@@ -39,17 +46,14 @@
 					<span ng-if='msg.comments > 0'>{{msg.comments}}</span>
 				</a>
 			</div>
-
-			<div class="comment-reply">
-				<post ng-if="showReplies" parentid="msg._id" type="reply"></post>
+			<div class="comment-reply" ng-if="vm.showReplyBox" >
+				<post parent="msg.parent || msg._id"></post>
 			</div>
 
 		</div>
 
-		
-
 		<div class="comments">
-			<comment msg="reply" ng-repeat="reply in replies"></comment>
+			<comment msg="reply" ng-repeat="reply in visibleReplies"></comment>
 		</div>
 	</div>
 

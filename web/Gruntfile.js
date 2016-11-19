@@ -10,9 +10,28 @@ module.exports = function(grunt){
   grunt.loadNpmTasks('grunt-html2js');
   grunt.loadNpmTasks('grunt-browserify');
   grunt.loadNpmTasks('grunt-mkdir');
- grunt.loadNpmTasks('grunt-watchify');
+  grunt.loadNpmTasks('grunt-sync');
 
-  // Default task.
+  var externalModules = [
+      'lodash',
+      'angular',  
+      'select2',
+      'SweetAlert', 
+      'angular-animate', 
+      'angularjs-datepicker', 
+      'react-dom', 
+      'react',
+      'ngalertify',
+      'SweetAlert',
+      'angular-animate',
+      'angularjs-datepicker',
+      'jquery', 
+      'flow', 
+      'angular-bootstrap', 
+      'draft-js' 
+  ];
+
+    // Default task.
 
   grunt.registerTask('myTask', function(){
     console.log('mytask');
@@ -20,7 +39,7 @@ module.exports = function(grunt){
 
   grunt.registerTask('default', ['build']);
   //grunt.registerTask('build', ['clean', 'mkdir', 'copy:jstobin', 'html2js:app','concat:allappjs', 'browserify', 'copy:assets', 'copy:html', 'copy:vendorcss']);
-  grunt.registerTask('build', ['clean', 'mkdir', 'copy:jstobin', 'html2js:app', 'concat:allappjs', 'browserify', 'copy:assets', 'copy:html', 'copy:vendorcss']);
+  grunt.registerTask('build', ['clean', 'mkdir' , 'sync:jstobin', 'html2js:app', 'concat:allappjs', 'browserify', 'sync:assets', 'sync:html', 'sync:vendorcss']);
   grunt.registerTask('release', ['clean', 'html2js', 'uglify','jshint','concat:index', 'copy:assets']);
 
   // Print a timestamp (useful for when watching)
@@ -33,12 +52,6 @@ module.exports = function(grunt){
     distdir: 'dist',
 
     pkg: grunt.file.readJSON('package.json'),
-
-    banner:
-    '/*! <%= pkg.title || pkg.name %> - v<%= pkg.version %> - <%= grunt.template.today("yyyy-mm-dd") %>\n' +
-    '<%= pkg.homepage ? " * " + pkg.homepage + "\\n" : "" %>' +
-    ' * Copyright (c) <%= grunt.template.today("yyyy") %> <%= pkg.author %>;\n' +
-    ' * Licensed <%= _.pluck(pkg.licenses, "type").join(", ") %>\n */\n',
 
     src: {
       appjs: ['src/app/**/*.js'],
@@ -54,32 +67,31 @@ module.exports = function(grunt){
       }
     },
 
-    clean: ['dist/*', 'bin/*', 'vendor/*'], //why expression is not working?????
+    clean: ['dist/*', 'bin/*'], 
 
     mkdir: {
       all: {
         options: {
-          create: ['bin', 'dist', 'vendor']
+          create: ['bin', 'dist']
         },
       },
     },
 
-    copy: {
-      vendorcss:{
-        files: [{ dest: 'dist/', src : ['node_modules/**/*.css', 'node_modules/**/*.png', 'node_modules/**/*.svg'], expand: true }]
-      },
-
+    sync: {
       jstobin: {
         files: [{ dest: 'bin/', src : ['app/**/*js', 'common/**/*.js'], expand: true, cwd: 'src/' }]
       },
-      assets: {
-        files: [{ dest: '<%= distdir %>/assets/', src : '**', expand: true, cwd: 'src/assets/' }]
+      vendorcss:{
+        files: [{ dest: 'dist/', src : ['node_modules/**/*.css', 'node_modules/**/*.png', 'node_modules/**/*.svg'], expand: true }],
+        verbose: true
       },
-      vendor: {
-        files: [{ dest: '<%= distdir %>/css', src : '**', expand: true, cwd: 'vendor/' }]
+      assets: {
+        files: [{ dest: '<%= distdir %>/assets/', src : '**', expand: true, cwd: 'src/assets/' }],
+        verbose: true
       },
       html: {
-        files: [{ dest: '<%= distdir %>', src : '*.html', expand: true, cwd: 'src/' }]
+        files: [{ dest: '<%= distdir %>', src : '*.html', expand: true, cwd: 'src/' }],
+        verbose: true
       }
     },
 
@@ -101,20 +113,27 @@ module.exports = function(grunt){
         module: 'templates.common'
       }
     },
-    watchify: {
-      options: {
-               transform: [['babelify', {presets: ['es2015', 'react', 'stage-2']}]]
-            },
-      js: {
-            
-            src: ['./bin/app/app.js'],
-            dest: '<%= distdir %>/app/app.js'
-          }
-    },
+
     browserify: {
+      vendors: {
+              src: ['.'],
+              dest: '<%= distdir %>/app/vendor.js',
+              options: {
+                debug: true,
+                alias: externalModules.map(function(module) {
+                  return module + ':';
+                }),
+                external: null,
+                watch: true
+              }
+          },
+
       js: {
             options: {
-               transform: [['babelify', {presets: ['es2015', 'react', 'stage-2']}]]
+               transform: [['babelify', {presets: ['es2015', 'react', 'stage-2']}]],
+               external: externalModules,
+               watch: true,
+               keepAlive: true
             },
             src: ['bin/app/app.js'],
             dest: '<%= distdir %>/app/app.js'
@@ -125,29 +144,37 @@ module.exports = function(grunt){
         allappjs:{
           src:['bin/app/app.js', 'bin/templates/**/*.js'],
           dest:'bin/app/app.js'
-        },
-        index: {
-          src: ['src/index.html'],
-          dest: '<%= distdir %>/index.html',
-          options: {
-            process: true
-          }
-        },
+        }
     },
 
     uglify: {
         js:{
-          src:['dist/app.js'],
-          dest:'dist/app.min.js'
+          src:['<%= distdir %>/app/app.js'],
+          dest:'<%= distdir %>/app/app.min.js'
         },
     },
 
     watch:{
-
-      build: {
-        files:['<%= src.appjs %>', '<%= src.commonjs %>', '<%= src.css.app %>', '<%= src.css.vendor %>', '<%= src.tpl.app %>', '<%= src.tpl.common %>', '<%= src.html %>', 'Gruntfile.js'],
-        tasks:['build','timestamp']
+      assets: {
+        files:['src/assets/**/*'],
+        tasks:['sync:assets', 'timestamp']
+      },
+      html: {
+        files:['src/*.html', ],
+        tasks:['sync:html', 'timestamp']
+      },
+      tpl: {
+        files:['<%= src.tpl.app %>', 'src/app.js'],
+        tasks:['html2js:app', 'concat:allappjs', 'timestamp']
+      },
+      js: {
+        files:['<%= src.appjs %>'],
+        tasks:['sync:jstobin', 'timestamp']
       }
+      // build: {
+      //   files:['<%= src.appjs %>', '<%= src.commonjs %>', '<%= src.css.app %>', '<%= src.css.vendor %>', '<%= src.tpl.app %>', '<%= src.tpl.common %>', '<%= src.html %>', 'Gruntfile.js'],
+      //   tasks:['sync', 'timestamp']
+      // }
     },
 
     jshint:{

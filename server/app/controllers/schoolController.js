@@ -6,15 +6,11 @@ module.exports = function(router) {
 	router.route('/schools')
 			.get(function(req, res){
 
-				console.log('RECEIVED SCHOOLS REQUET');
-
 				if (!req.user) {
-					console.log("NO ACTIVE SESSION / USER");
 					res.status(500).send('ERROR');
 					return;
 				}
 				
-				console.log('REQ USER : ' + req.user);
 				SchoolUser.find({'user' : req.user._id})
 						.populate('school')
 						.exec(function(err, schoolUsers){
@@ -71,8 +67,6 @@ module.exports = function(router) {
 
 	router.route('/school/:schoolid')
 		  .get(function(req, res) {
-
-		  	console.log('Get School ' + req.params.schoolid);
 		  	School.findById(req.params.schoolid)
 		  		  .exec(function(err, school) {
 		  		  	if (err) {

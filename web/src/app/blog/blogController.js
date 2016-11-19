@@ -2,6 +2,15 @@
 
 var blog = require('angular').module('blog');
 
-blog.controller('blogController', function(){
+blog.controller('blogController', function($scope, $uibModalInstance, richtext){
+	
+	$scope.richtext = richtext; 
+	$scope.onPublish = () => {
+		$uibModalInstance.close('publish');
+	}
+
+	$scope.onCancel = (ret) => {
+		$uibModalInstance.dismiss();
+	}
 	
 });

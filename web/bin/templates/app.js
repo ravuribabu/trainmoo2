@@ -1,22 +1,43 @@
-angular.module('templates.app', ['blog/blog.tpl.html', 'login/login.tpl.html', 'login/signup.tpl.html', 'post/post.tpl.html', 'school/class/classEdit.tpl.html', 'school/pdfview.tpl.html', 'school/school.tpl.html', 'school/schoolEdit.tpl.html', 'school/users/classUser.tpl.html', 'school/users/classUsers.tpl.html', 'shared/app.tpl.html', 'shared/apph.tpl.html', 'shared/apptop.tpl.html', 'shared/gallery.tpl.html', 'shared/gmap.tpl.html', 'shared/pdfviewer.tpl.html', 'user/directive/userCard.tpl.html', 'user/userEdit.tpl.html', 'userList/userList.tpl.html', 'wall/directive/assignment.tpl.html', 'wall/directive/blog.tpl.html', 'wall/directive/comment.tpl.html', 'wall/directive/message.tpl.html', 'wall/directive/nav.tpl.html', 'wall/directive/newsletter.tpl.html', 'wall/directive/notification.tpl.html', 'wall/wall.tpl.html']);
+angular.module('templates.app', ['blog/blog.tpl.html', 'blog/blogCard.tpl.html', 'login/login.tpl.html', 'login/signup.tpl.html', 'post/post.tpl.html', 'school/class/classEdit.tpl.html', 'school/pdfview.tpl.html', 'school/school.tpl.html', 'school/schoolEdit.tpl.html', 'school/users/classUser.tpl.html', 'school/users/classUsers.tpl.html', 'shared/app.tpl.html', 'shared/apph.tpl.html', 'shared/apptop.tpl.html', 'shared/gallery.tpl.html', 'shared/gmap.tpl.html', 'shared/pdfviewer.tpl.html', 'user/directive/userCard.tpl.html', 'user/userEdit.tpl.html', 'userList/userList.tpl.html', 'wall/directive/assignment.tpl.html', 'wall/directive/blog.tpl.html', 'wall/directive/comment.tpl.html', 'wall/directive/message.tpl.html', 'wall/directive/nav.tpl.html', 'wall/directive/newsletter.tpl.html', 'wall/directive/notification.tpl.html', 'wall/wall.tpl.html']);
 
 angular.module("blog/blog.tpl.html", []).run(["$templateCache", function($templateCache) {
   $templateCache.put("blog/blog.tpl.html",
     "<div class=\"page bg-white\" >\n" +
     "	<div class=\"page-content padding-top-25 padding-left-5 padding-right-5 container-fluid  \">\n" +
-    "	    <div class=\"row\" style=\"width: 60%; margin: 0 auto;\">\n" +
-    "	    	<blog />\n" +
+    "	    <div class=\"row\" style=\"width: 100%; margin: 0 auto;\">\n" +
+    "	    	<blog richtext=\"richtext\" on-publish=\"onPublish()\" on-cancel=\"onCancel()\" />\n" +
     "		</div>\n" +
     "	</div>\n" +
-    "</div>\n" +
+    "</div>");
+}]);
+
+angular.module("blog/blogCard.tpl.html", []).run(["$templateCache", function($templateCache) {
+  $templateCache.put("blog/blogCard.tpl.html",
+    "<style type=\"text/css\">\n" +
+    "	.card {\n" +
+    "	    /* Add shadows to create the \"card\" effect */\n" +
+    "	    box-shadow: 0 4px 8px 0 rgba(0,0,0,0.2);\n" +
+    "	    transition: 0.3s;\n" +
+    "	}\n" +
     "\n" +
-    "<footer class=\"site-footer\" ng-cloak>\n" +
-    "	<div class=\"site-footer-legal\">© 2016 trainmoo</div>\n" +
-    "	<div class=\"site-footer-right\">\n" +
-    "	  Crafted by <a href=\"#\">Rauzr Inc</a>\n" +
+    "	/* On mouse-over, add a deeper shadow */\n" +
+    "	.card:hover {\n" +
+    "	    box-shadow: 0 8px 16px 0 rgba(0,0,0,0.2);\n" +
+    "	}\n" +
+    "\n" +
+    "</style>\n" +
+    " \n" +
+    "<div class=\"card\" style=\"margin-top: 10px;padding:5px;height: auto;cursor: pointer;    border: 1px solid #f3f2f2;\">\n" +
+    "	 <div class=\"media\">\n" +
+    "		<div class=\"media-left\" ng-if=\"draft.previewImg\">\n" +
+    "		    <img class=\"media-object\" ng-src=\"{{draft.previewImg}}\" alt=\"...\">\n" +
+    "		</div>\n" +
+    "		<div class=\"media-body\">\n" +
+    "		  <h4 class=\"media-heading\">{{draft.title}}</h4>\n" +
+    "		  {{draft.previewText}}\n" +
+    "		</div>\n" +
     "	</div>\n" +
-    "</footer>\n" +
-    "");
+    "</div>");
 }]);
 
 angular.module("login/login.tpl.html", []).run(["$templateCache", function($templateCache) {
@@ -169,9 +190,13 @@ angular.module("post/post.tpl.html", []).run(["$templateCache", function($templa
     "        font-size: 12px;\n" +
     "        font-weight: 200;\n" +
     "      }\n" +
+    "\n" +
+    "      .select2-container {\n" +
+    "        display: inherit;\n" +
+    "      }\n" +
     "</style>\n" +
     "\n" +
-    "<form  name=\"Form\" id=\"form1\" novalidate ng-submit=\"vm.form.submit(Form)\">\n" +
+    "<form  name=\"Form\" id=\"form1\" novalidate ng-submit=\"vm.form.submit(Form)\" class=\"form-inline\">\n" +
     "    <div class=\"panel  margin-bottom-10\" ng-cloak>\n" +
     "        <div class=\"panel-body padding-10\">\n" +
     "                <div class=\"app-message-input\">\n" +
@@ -188,7 +213,7 @@ angular.module("post/post.tpl.html", []).run(["$templateCache", function($templa
     "                        <a class=\"btn btn-pure btn-icon btn-default\" type=\"button\" ng-click=\"vm.uploadFiles()\">\n" +
     "                          <i class=\"icon wb-paperclip\" aria-hidden=\"true\"></i>\n" +
     "                        </a>\n" +
-    "                        <a class=\"btn btn-pure btn-icon btn-default\" type=\"button\" ui-sref=\"app.blog({postid: 1})\" ng-if=\"!vm.isReply\">\n" +
+    "                        <a class=\"btn btn-pure btn-icon btn-default\" type=\"button\" ng-click=\"vm.openBlog()\" ng-if=\"!vm.isReply\">\n" +
     "                          <i class=\"icon wb-pencil\" aria-hidden=\"true\"></i>\n" +
     "                        </a>\n" +
     "                      </div>\n" +
@@ -197,7 +222,7 @@ angular.module("post/post.tpl.html", []).run(["$templateCache", function($templa
     "\n" +
     "            <div class=\"col-md-12 padding-right-0 padding-left-0\" style=\"margin-top: 10px;\" ng-if=\"vm.postSelected\" >\n" +
     "              <div class=\"col-md-8\" style=\"text-align: left; display: inline-block;\" >\n" +
-    "                    <div class=\"float: left;\">\n" +
+    "                    <div class=\"float: left;\" ng-if=\"!vm.isReply\">\n" +
     "                      <div style=\"display: inline-block;  width: 120px;\" class=\"btn\" ng-if=\"!vm.reply\">\n" +
     "                        <div class=\"dropdown\"  >\n" +
     "                          <a class=\"dropdown-toggle inline-block\" data-toggle=\"dropdown\" href=\"#\" aria-expanded=\"true\" style=\"color: #62a8ea;\"><i ng-class=\"vm.selection.postType.icon\" class=\"site-menu-icon\" aria-hidden=\"true\"></i>{{vm.selection.postType.name}}<span class=\"caret\"></span></a>\n" +
@@ -217,24 +242,44 @@ angular.module("post/post.tpl.html", []).run(["$templateCache", function($templa
     "                        <span class=\"label label-success post-label\">{{vm.selection.classLabel}}</span>\n" +
     "                      </div>\n" +
     "                    </div>\n" +
-    "\n" +
-    "                    <div style=\"display: inline-block; float: left; width: 200px;\" ng-if=\"vm.post.type === 'Assignment'\">\n" +
-    "                      <datepicker date-format=\"MM/dd/yyyy\" selector=\"form-control\" >\n" +
-    "                          <div class=\"input-group\">\n" +
-    "                              <input class=\"form-control\" placeholder=\"Due by..\" ng-model=\"vm.post.dueby\" />\n" +
-    "                              <span class=\"input-group-addon\" style=\"cursor: pointer\">\n" +
-    "                                <i class=\"fa fa-lg fa-calendar\"></i>\n" +
-    "                              </span>\n" +
-    "                          </div>\n" +
-    "                      </datepicker>\n" +
-    "                    </div>\n" +
     "              </div>\n" +
+    "\n" +
     "              \n" +
     "              <div class=\"col-md-4\" style=\"text-align: right;\">\n" +
     "                <button class=\"btn btn-default btn-sm btn-raised btn-default \" ng-click=\"vm.reset()\" style=\"width: 70px; height: 30px; margin-right: 10px;\">Cancel</button>\n" +
     "                <button class=\"btn btn-default btn-sm btn-raised btn-primary \" type=\"submit\" style=\"width: 70px; height: 30px;\">Post</button>\n" +
     "              </div>\n" +
     "            </div>\n" +
+    "\n" +
+    "            <div class=\"col-md-12\" ng-if=\"vm.showBlogPreview\">\n" +
+    "              <blog-card draft=\"vm.draft\"/>\n" +
+    "            </div>\n" +
+    "\n" +
+    "\n" +
+    "            <div class=\"col-md-12\" ng-if=\"vm.postSelected && (vm.post.type === 'Assignment' || vm.post.type === 'Task')\" style=\"padding-left: 10px;\" >\n" +
+    "              <hr />\n" +
+    "              <div class=\"form-group\">\n" +
+    "                <label class=\"control-label\" for=\"datepicker\">Due by</label>\n" +
+    "                <datepicker date-format=\"MM/dd/yyyy\" selector=\"form-control\"  id=\"datepicker\" style=\"float: initial;\">\n" +
+    "                    <div class=\"input-group\">\n" +
+    "                        <input class=\"form-control\" ng-model=\"vm.post.dueby\" />\n" +
+    "                        <span class=\"input-group-addon\" style=\"cursor: pointer\">\n" +
+    "                          <i class=\"fa fa-lg fa-calendar\"></i>\n" +
+    "                        </span>\n" +
+    "                    </div>\n" +
+    "                </datepicker>\n" +
+    "              </div>\n" +
+    "\n" +
+    "              <div class=\"form-group\">\n" +
+    "                <label class=\"control-label\" for=\"title\">Title </label>\n" +
+    "                <select id=\"title\" class=\"form-control \" ng-model=\"vm.post.section\" ui-select2 style=\"min-width: 300px;\">\n" +
+    "                  <option ng-repeat=\"p in vm.sections\" >{{p.name}}</option>\n" +
+    "                </select>\n" +
+    "              </div>\n" +
+    "\n" +
+    "              \n" +
+    "            </div>\n" +
+    "\n" +
     "\n" +
     "            <div class=\"col-md-12 margin-top-20\" ng-if=\"vm.uploadImage\">\n" +
     "              <div gallery files=\"vm.post.files\" type='image' gallery-title=\"Attach Pictures\" ></div>\n" +
@@ -1877,32 +1922,39 @@ angular.module("wall/directive/comment.tpl.html", []).run(["$templateCache", fun
     "	</a>\n" +
     "	<div class=\"media-body \">\n" +
     "		<div class=\"comment-body\">\n" +
-    "			<a href=\"#\" class=\"comment-author\">{{msg.author.name}}</a> <small ng-if=\"msg.type != 'Reply'\">  {{msg.classes | listToString}}</small>\n" +
-    "			\n" +
-    "			<div class=\"comment-meta\">\n" +
-    "				<span class=\"date\"> {{msg.created_at | postTime}}</span>&nbsp;&nbsp;\n" +
-    "				<span class=\"label\" \n" +
-    "					ng-class=\"{'label-primary' : msg.type === 'Message', 'label-danger' : msg.type === 'Assignment', 'label-warning' : msg.type === 'Notification'}\" \n" +
-    "					ng-if=\"msg.type != 'Reply'\">\n" +
-    "					{{msg.type}}\n" +
-    "				</span>	\n" +
-    "				<span class=\"label label-info margin-left-10\" ng-if=\"msg.type === 'Assignment'\">\n" +
-    "					Due By: {{msg.dueby | date :  \"MMM dd\"}}\n" +
-    "				</span>\n" +
-    "			</div>\n" +
+    "			<a href=\"#\" class=\"comment-author\">{{vm.name}}</a> \n" +
+    "\n" +
+    "			<span ng-if=\"!vm.isreply\">\n" +
+    "				<span ng-if=\"msg.type != 'Reply'\" style=\"margin: 0px 5px;\"> on&nbsp;<span class=\"text-azure\">{{vm.classnames | listToString}}</span> </span>\n" +
+    "				\n" +
+    "				<div class=\"comment-meta\">\n" +
+    "					<span class=\"label\" \n" +
+    "						ng-class=\"{'label-primary' : msg.type === 'Message' || msg.type === 'Discussion', 'label-danger' : msg.type === 'Assignment' || msg.type === 'Task', 'label-warning' : msg.type === 'Notification'}\" \n" +
+    "						ng-if=\"msg.type != 'Reply'\">\n" +
+    "						{{msg.type}}\n" +
+    "					</span>	\n" +
+    "					<span class=\"label label-info margin-left-10\" ng-if=\"msg.dueby\">\n" +
+    "						Due {{vm.duein}}\n" +
+    "					</span>\n" +
+    "				</div>\n" +
+    "			</span>\n" +
+    "			<span class=\"date\" style=\"padding-left: 10px;\"> {{vm.posted}}</span>\n" +
     "\n" +
     "			<div class=\"comment-header-actions\" >\n" +
-    "				<a href=\"#\"><i class=\"icon fa-bookmark-o\"></i> </a>\n" +
-    "				<a href=\"#\"><i class=\"icon fa-star-o\"></i> </a>\n" +
+    "				<button class=\"btn btn-pure btn-success icon fa-bookmark-o \" ></button>\n" +
+    "				<button class=\"btn btn-pure btn-success icon fa-star-o\" ></button>\n" +
     "			</div>\n" +
     "\n" +
     "			<comment-editor id=\"react\" content=\"msg.text\" readonly=\"true\" class=\"comment-content\"> </comment-editor>\n" +
     "\n" +
+    "            <blog-card draft=\"msg.richtext\" ng-if=\"vm.hasRichtext\" ng-click=\"vm.openBlog()\"/>\n" +
+    "            \n" +
     "			<div gallery files=\"msg.files\" readonly=\"true\" ng-if=\"msg.files && msg.files.length > 0\"></div>\n" +
     "\n" +
     "			<div class=\"comment-actions pull-left\">\n" +
-    "				<a href=\"javascript:void(0)\" ng-click=\"like(msg._id)\">Like</a>\n" +
-    "				<a href=\"javascript:void(0)\" ng-click=\"showReplies=!showReplies\">Reply</a>\n" +
+    "				<button class=\"btn btn-default btn-sm btn-round btn-outline \"  ng-click=\"vm.showReply()\" style=\"height: 30px;\"><i class=\"icon fa-reply\" aria-hidden=\"true\"></i>Reply</button>\n" +
+    "				<button class=\"btn btn-default btn-sm btn-round btn-outline \"  ng-click=\"vm.showAllReplies()\" style=\"height: 30px;\" ng-if=\"replies.length > 2 && !vm.showAllRepliesFlag \">Show previous replies ({{replies.length - 2}})</button>\n" +
+    "\n" +
     "				<a href=\"javascript:void(0)\">\n" +
     "					<i class=\"icon md-favorite\"></i>\n" +
     "					<span ng-if='msg.likes.length > 0'>{{msg.likes.length}}</span>\n" +
@@ -1912,17 +1964,14 @@ angular.module("wall/directive/comment.tpl.html", []).run(["$templateCache", fun
     "					<span ng-if='msg.comments > 0'>{{msg.comments}}</span>\n" +
     "				</a>\n" +
     "			</div>\n" +
-    "\n" +
-    "			<div class=\"comment-reply\">\n" +
-    "				<post ng-if=\"showReplies\" parentid=\"msg._id\" type=\"reply\"></post>\n" +
+    "			<div class=\"comment-reply\" ng-if=\"vm.showReplyBox\" >\n" +
+    "				<post parent=\"msg.parent || msg._id\"></post>\n" +
     "			</div>\n" +
     "\n" +
     "		</div>\n" +
     "\n" +
-    "		\n" +
-    "\n" +
     "		<div class=\"comments\">\n" +
-    "			<comment msg=\"reply\" ng-repeat=\"reply in replies\"></comment>\n" +
+    "			<comment msg=\"reply\" ng-repeat=\"reply in visibleReplies\"></comment>\n" +
     "		</div>\n" +
     "	</div>\n" +
     "\n" +

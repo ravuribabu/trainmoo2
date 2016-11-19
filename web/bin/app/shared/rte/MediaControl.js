@@ -4,7 +4,102 @@ import {Modal, Header, Button, Popover, Tooltip, Overlay, OverlayTrigger, FormGr
 import Dropzone from 'react-dropzone';
 const $ = window.$;
 
-export default class MediaControl extends React.Component {
+
+export default class Toolbar extends React.Component  {
+
+  constructor(props) {
+    super(props);
+  }
+
+  render() {
+      
+      const {editorState} = this.props;
+      const selection = editorState.getSelection();
+      const blockType = editorState.getCurrentContent().getBlockForKey(selection.getStartKey()).getType();
+      var currentStyle = editorState.getCurrentInlineStyle();
+
+      return (
+        <ul  style={ {display:'inline-block'} }>
+            {BLOCK_TYPES.map((type) =>
+              <ToolbarButton key={type.style} active={type.style === blockType} type={'block'} onToggle={this.props.onToggle} style={type.style}  element={type.element} />)}
+            {INLINE_STYLES.map(type =>
+              <ToolbarButton key={type.style} active={currentStyle.has(type.style)} type={'inline'} onToggle={this.props.onToggle} style={type.style}  element={type.element}/>)}
+            <LinkToolbarButton onToggle={this.props.onToggle}/>
+            <MediaToolbar {...this.props}/>
+        </ul>
+     );
+  }
+  
+}
+
+
+class ToolbarButton extends React.Component {
+
+    constructor(props) {
+        super(props);
+        this.onToggle = (e) => {
+            e.preventDefault();
+            this.props.onToggle(this.props.type,this.props.style);
+        };
+    }
+
+    render() {
+        let className = '';
+        if (this.props.active) {
+          className = 'medium-editor-button-active'
+        }
+        return (
+            <li onMouseDown={this.onToggle}>
+                <button style={styles.toolbarButton}  className={className}>
+                  {this.props.element}
+                </button>
+            </li>
+        );
+    }
+}
+
+var INLINE_STYLES = [
+    {
+        style: 'BOLD',
+        element: <i className="fa fa-bold"></i>,
+    }, {
+        style: 'ITALIC',
+        element: <i className="fa fa-italic"></i>,
+    }
+    , {
+        style: 'UNDERLINE',
+        element: <i className="fa fa-underline"></i>,
+    }
+];
+
+
+const BLOCK_TYPES = [
+  {
+        style: 'header-two',
+        element: <i className="fa fa-header"><sup>2</sup></i>,
+    }
+    , {
+        style: 'header-three',
+        element: <i className="fa fa-header"><sup>3</sup></i>,
+    }
+    , {
+        style: 'blockquote',
+        element: <i className="fa fa-paragraph"></i>,
+    }, {
+        style: 'unordered-list-item',
+        element: <i className="fa fa-list-ul"></i>,
+    }
+    , {
+        style: 'ordered-list-item',
+        element: <i className="fa fa-list-ol"></i>,
+    }
+];
+
+
+//@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
+
+
+class MediaToolbar extends React.Component {
 
     constructor(props) {
         super(props);
@@ -30,19 +125,19 @@ export default class MediaControl extends React.Component {
         this.updateCaption = (e) => {
           this.setState({ caption: e.target.value });
         }
-        this.closeModal = () => {
+        this.onMediaSubmit = (e) => {
+          e.preventDefault();
           this.setState({
             showModal: false,
           });
 
 
-          setTimeout(() => this.props.onCloseReturn(
+          setTimeout(() => this.props.onToggle(this.state.type, 
               {
                 link: this.state.value,
                 caption: this.state.caption,
-                type: this.state.type
               }
-            ), 100 );
+            ), 1000 );
         }
 
         this.showModal = (type, upload) => {
@@ -114,10 +209,6 @@ export default class MediaControl extends React.Component {
     }
 
     render() {
-        let className = 'medium-editor-action medium-editor-action-bold medium-editor-button-first';
-        if (this.props.active) {
-            className += ' medium-editor-button-active';
-        }
 
         let modalElement = '';
 
@@ -163,43 +254,121 @@ export default class MediaControl extends React.Component {
           
         }
 
+
         return (
-            <div style= { {display: 'block'} }>
-              <button type="button" className="btn btn-floating btn-dark btn-sm" style= { {display: 'block', marginBottom: '10px'} }><i className="icon wb-plus" aria-hidden="true" ></i></button>
-              <button type="button" className="btn btn-floating btn-dark btn-sm" style= { {display: 'block', marginBottom: '10px'} } onClick={() => this.showModal('image')} ><i className="icon wb-image" aria-hidden="true"></i></button>
-              <button type="button" className="btn btn-floating btn-dark btn-sm" style= { {display: 'block', marginBottom: '10px'} } onClick={() => this.showModal('video')}><i className="icon fa-youtube" aria-hidden="true"></i></button>
-              <button type="button" className="btn btn-floating btn-dark btn-sm" style= { {display: 'block', marginBottom: '10px'} } onClick={() => this.showModal('image', true)}><i className="icon fa-upload" aria-hidden="true"></i></button>
 
+            <ul  style={ {display:'inline-block'} }>
+              <li>
+                <button style={styles.toolbarButton}  onClick={() => this.showModal('image')} ><i className="fa wb-image"></i></button>
+              </li>
+              <li>
+                <button style={styles.toolbarButton}  onClick={() => this.showModal('video')} ><i className="fa fa-youtube"></i></button>
+              </li>
+              <li>
+                <button style={styles.toolbarButton} onClick={() => this.showModal('image', true)} ><i className="fa fa-upload"></i></button>
+              </li>
               <Modal show={this.state.showModal} onHide={this.closeModal}>
-                <Modal.Header closeButton>
-                  <Modal.Title>Media Content</Modal.Title>
-                </Modal.Header>
-                <Modal.Body>
-                  <form>
-                    <FormGroup
-                      controlId="formBasicText"
-                    >
-                      
-                      {modalElement}
+                <form  onSubmit={this.onMediaSubmit}>
+                  <Modal.Header closeButton>
+                    <Modal.Title>Media Content</Modal.Title>
+                  </Modal.Header>
+                  <Modal.Body>
+                      <FormGroup
+                        controlId="formBasicText"
+                      >
+                        
+                        {modalElement}
 
-                      <FormControl
-                        type="text"
-                        value={this.state.caption}
-                        placeholder="Enter caption"
-                        onChange={this.updateCaption}
-                        style={{marginTop: "20px"}}
-                      />
+                        <FormControl
+                          type="text"
+                          value={this.state.caption}
+                          placeholder="Enter caption"
+                          onChange={this.updateCaption}
+                          style={{marginTop: "20px"}}
+                        />
 
-                    </FormGroup>
-                  </form>
-                </Modal.Body>
-                <Modal.Footer>
-                  <Button onClick={this.closeModal}>Add</Button>
-                </Modal.Footer>
+                      </FormGroup>
+                  </Modal.Body>
+                  <Modal.Footer>
+                    <Button type="submit">Add</Button>
+                  </Modal.Footer>
+                </form>
               </Modal>
-
-            </div>
+          </ul>
         );
     }
 
 }
+
+
+class LinkToolbarButton extends React.Component {
+
+  constructor(props){
+    super(props);
+    this.state = {showModal: false, value:''};
+
+    this.onClick = () => {
+      this.setState({showModal:true});
+    };
+    this.onLinkSubmit = (e) => {
+      e.preventDefault();
+      this.setState({showModal:false});
+      setTimeout(() => {
+        this.props.onToggle('link', this.state.value);
+      }, 100);
+    };
+    this.updateLink = (e) => {
+      this.setState({value: e.target.value});
+    };
+  }
+
+
+  render(){
+
+    return (
+        <li onMouseDown={this.onClick}>
+            <button style={styles.toolbarButton}><i className="fa fa-link"></i></button>
+            <Modal show={this.state.showModal} onHide={this.closeModal}>
+              <form onSubmit={this.onLinkSubmit}>
+                <Modal.Header closeButton>
+                  <Modal.Title>Media Content</Modal.Title>
+                </Modal.Header>
+                <Modal.Body>
+                    <FormGroup
+                      controlId="formBasicText"
+                    >
+                    <FormControl
+                                type="text"
+                                value={this.state.value}
+                                placeholder="Enter youtube link"
+                                onChange={this.updateLink}
+                                style={{marginTop: "20px"}}
+                              />
+
+                    </FormGroup>
+                </Modal.Body>
+                <Modal.Footer>
+                  <button type="submit" className="btn btn-primary" >Add</button>
+                </Modal.Footer>
+              </form>
+            </Modal>
+        </li>
+    );
+  }
+
+}
+
+
+
+const styles = {
+
+  toolbarButton: {
+    border: 'none',
+    borderRadius: 2,
+    cursor: 'pointer',
+    display: 'inline-block',
+    position: 'relative',
+  } 
+};
+
+

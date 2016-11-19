@@ -1,6 +1,8 @@
 "use strict";
 var Post = require('../models/post').Post;
 var User = require('../models/user').User;
+var RichText = require('../models/richText').RichText;
+
 var Jimp = require("jimp");
 var flow = require('./flowPersister.js')('tmp');
 var _ = require('lodash');
@@ -23,16 +25,35 @@ module.exports = function(router) {
 			  });
 
 
-	router.route('/posts/:user_id')
+	router.route('/posts')
 			.post(function(req, res){
 				var postJson = req.body;
-				Post.create(postJson, function(err, event){
+				console.log('USER: ' + JSON.stringify(req.user));
+				postJson.author = req.user;
+				Post.create(postJson, function(err, post){
 					if (err) {
 						console.log('Could not create post: ' + err);
 						res.status(500).send(err);
 					}
 					else {
-						res.send({message: 'Post is Created Successfully'});
+						res.send(post);
+						if (postJson.richtext) {
+							const draftReq = postJson.richtext;
+							RichText.findById(draftReq._id, function(err, draft) {
+							  		if (err) {
+							  			console.log(err);
+							  			return;
+							  		}
+							  		Object.assign(draft, draftReq);
+							  		draft.save(function(err, d) {
+							  			if (err) {
+							  				console.log(err);
+								  			return;
+								  		}
+							  		});
+
+							  	});
+						}
 					}
 				});
 			})
@@ -40,7 +61,9 @@ module.exports = function(router) {
 
 			//	console.log('REQUEST USER: ' + req.user.user_id);
 
-			  	Post.find({discussion_id : {$eq : null}})
+			  	Post.find({ parent : null})
+			  		.populate('author')
+			  		.populate('richtext')
 			  		.sort({created_at : -1})
 				  	.exec(function(err, posts){
 				  		if (err) {

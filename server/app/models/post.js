@@ -5,7 +5,7 @@ var AttachmentSchema = require('./attachment').AttachmentSchema;
 var PostSchema = new Schema({	
 
 	type: { type: String, enum: ['Discussion', 'Message' , 'Assignment', 'Notification', 'Blog', 'Material', 'Newsletter', 'Task']},
-	author : {type:Schema.Types.ObjectId, ref: 'User'},
+	author : {type:Schema.Types.ObjectId, ref: 'User', required: true},
 	classes : [{
 		id: {type:Schema.Types.ObjectId, ref: 'Class'},
 		name: String
@@ -17,7 +17,8 @@ var PostSchema = new Schema({
 	section: String,
 	likes: Number,
 	replies: Number,
-
+	richtext: {type:Schema.Types.ObjectId, ref: 'RichText'},
+	
 	created_by: String,
 	updated_by: String,
 	created_at: Date,

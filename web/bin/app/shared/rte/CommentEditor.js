@@ -97,6 +97,7 @@ export default class CommentEditor extends React.Component {
     let editorStyle = {}
     if (readonly){
       editorStyle.border = '0';
+      editorStyle.padding = '0px';
     } else {
       editorStyle.height = (selected?'80px':'35px');
     }

@@ -8,4 +8,5 @@ module.exports = function(router){
 	require('./schoolUserController')(router)
 	require('./schoolController')(router);
 	require('./lookupController')(router);
+	require('./richTextController')(router);
 };

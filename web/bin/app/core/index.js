@@ -5,7 +5,6 @@ require('../../../node_modules/angular-ui-utils/modules/mask/mask');
 require('../../../node_modules/ng-flow/dist/ng-flow');
 require('../../../node_modules/select2/dist/js/select2');
 require('../../../node_modules/angular-ui-select2/angular-ui-select2');
-require('../../../node_modules/alertify/lib/alertify')
 require('../../../node_modules/formatter.js/dist/jquery.formatter.min');
 require('ngalertify')
 require('lodash');
@@ -13,16 +12,14 @@ require('SweetAlert');
 require('angular-animate');
 require('../../../node_modules/angular-ui-bootstrap/dist/ui-bootstrap-tpls');
 require('angularjs-datepicker');
-import ReactDOM from 'react-dom';
-import React, { Component } from 'react';
-import Blog from '../blog/Blog';
-import CommentEditor from '../shared/rte/CommentEditor';
 
 var core = angular.module('core', ['flow', 'ngAlertify', 'ngAnimate', 'ui.bootstrap', '720kb.datepicker']);
+require('./directive/commentEditor');
 
 core.factory('_', ['$window', function($window) {
   return $window._; // assumes underscore has already been loaded on the page
 }]);
+
 
 core.directive('select2', function(){
 	return {
@@ -34,7 +31,6 @@ core.directive('select2', function(){
 		}
 	};
 });
-
 
 
 core.factory('lookupService', function($http){
@@ -342,91 +338,6 @@ core.directive('ngEnter', function () {
 
 
 
-core.directive('blog', function(){
-  return {
-    require: '?form',
-    restrict: 'AE',
-    scope:{
-      content: '=',
-      readonly: '@'
-    },
-    controller: function($scope) {
-      console.log($scope.content);
-    },
-    link: function(scope, elm, $attributes, formController){
-
-      var readonly = false;
-
-      if (scope.readonly && scope.readonly === 'true') {
-        readonly = true;
-      }
-      scope.$watch('content', function(value){
-          var draftContent = scope.content; 
-          ReactDOM.render(<Blog content={draftContent} update={setContent} readonly={readonly}/>, elm[0]);
-      });
-
-      function setContent(content){
-        scope.content = content;
-        scope.$apply();
-        if (formController) {
-        	formController.$setDirty(true);
-        }
-      } 
-    }
-  };
-});
-
-
-core.directive('commentEditor', function(){
-  return {
-    require: '?form',
-    restrict: 'AE',
-    scope:{
-      content: '=',
-      readonly: '@',
-      onSelect: '&',
-      onReset: '&'
-    },
-    controller: function($scope) {
-    },
-    link: function(scope, elm, $attributes, formController){
-
-      let readonly = false;
-      let reactElem = undefined;
-
-      if (scope.readonly && scope.readonly === 'true') {
-        readonly = true;
-      }
-
-      scope.$on('POST_RESET', function(e) {
-      	if (reactElem) {
-      		reactElem.reset();
-      	}
-      });
-
-      scope.$watch('content', function(value){
-		let draftContent = scope.content; 
-		let commentEditor = <CommentEditor content={draftContent} update={setContent} readonly={readonly} onSelect={scope.onSelect} onReset={scope.onReset}/>;
-		reactElem = ReactDOM.render(commentEditor, elm[0]);
-      });
-
-      
-
-      function setContent(content){
-      	console.log('update content' + content);
-      	if (scope.content === content) {
-      		return;
-      	}
-      	console.log('update content : $apply' );
-        scope.content = content;
-        scope.$apply();
-        if (formController) {
-        	formController.$setDirty(true);
-        }
-      } 
-    }
-  };
-});
 
 
 
