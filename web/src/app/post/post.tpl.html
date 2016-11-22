@@ -29,11 +29,10 @@
     <div class="panel  margin-bottom-10" ng-cloak>
         <div class="panel-body padding-10">
                 <div class="app-message-input">
-
-                    <div class="message-input">
-                      <comment-editor id="react" content="vm.post.text" readonly="false" on-select="vm.editStarted()" on-reset="vm.reset(true)"> </comment-editor>
+                    <div class="message-input"> 
+                      <comment-editor id="react" content="vm.post.text" placeholder="{{vm.placeholder}}" readonly="false" on-select="vm.editStarted()" on-reset="vm.reset(true)"> </comment-editor>
                       <div class="message-input-actions btn-group" style="z-index: 1000;">
-                        <a class="btn btn-pure btn-icon btn-default" type="button">
+                        <a class="btn btn-pure btn-icon btn-default" type="button" ng-click="vm.openCalendar()">
                           <i class="icon wb-emoticon" aria-hidden="true"></i>
                         </a>
                         <a class="btn btn-pure btn-icon btn-default" type="button" ng-click="vm.uploadImages()">
@@ -42,7 +41,7 @@
                         <a class="btn btn-pure btn-icon btn-default" type="button" ng-click="vm.uploadFiles()">
                           <i class="icon wb-paperclip" aria-hidden="true"></i>
                         </a>
-                        <a class="btn btn-pure btn-icon btn-default" type="button" ng-click="vm.openBlog()" ng-if="!vm.isReply">
+                        <a class="btn btn-pure btn-icon btn-default" type="button" ng-click="vm.openRichtext()">
                           <i class="icon wb-pencil" aria-hidden="true"></i>
                         </a>
                       </div>
@@ -81,11 +80,11 @@
             </div>
 
             <div class="col-md-12" ng-if="vm.showBlogPreview">
-              <blog-card draft="vm.draft"/>
+              <richtext-card rtpost="vm.post"/>
             </div>
 
 
-            <div class="col-md-12" ng-if="vm.postSelected && (vm.post.type === 'Assignment' || vm.post.type === 'Task')" style="padding-left: 10px;" >
+            <div class="col-md-12" ng-if="!vm.isReply && vm.postSelected && (vm.post.type === 'Assignment' || vm.post.type === 'Task')" style="padding-left: 10px;" >
               <hr />
               <div class="form-group">
                 <label class="control-label" for="datepicker">Due by</label>

@@ -28,7 +28,8 @@ module.exports = function(grunt){
       'jquery', 
       'flow', 
       'angular-bootstrap', 
-      'draft-js' 
+      'draft-js' ,
+      'react-big-calendar'
   ];
 
     // Default task.
@@ -39,7 +40,7 @@ module.exports = function(grunt){
 
   grunt.registerTask('default', ['build']);
   //grunt.registerTask('build', ['clean', 'mkdir', 'copy:jstobin', 'html2js:app','concat:allappjs', 'browserify', 'copy:assets', 'copy:html', 'copy:vendorcss']);
-  grunt.registerTask('build', ['clean', 'mkdir' , 'sync:jstobin', 'html2js:app', 'concat:allappjs', 'browserify', 'sync:assets', 'sync:html', 'sync:vendorcss']);
+  grunt.registerTask('build', ['clean', 'mkdir' , 'sync:jstobin', 'html2js:app', 'concat:allappjs',  'sync:assets', 'sync:html', 'sync:vendorcss', 'browserify']);
   grunt.registerTask('release', ['clean', 'html2js', 'uglify','jshint','concat:index', 'copy:assets']);
 
   // Print a timestamp (useful for when watching)
@@ -131,7 +132,25 @@ module.exports = function(grunt){
       js: {
             options: {
                transform: [['babelify', {presets: ['es2015', 'react', 'stage-2']}]],
-               external: externalModules,
+               external: [
+                                      'lodash',
+                                      'angular',  
+                                      'select2',
+                                      'SweetAlert', 
+                                      'angular-animate', 
+                                      'angularjs-datepicker', 
+                                      'react-dom', 
+                                      'react',
+                                      'ngalertify',
+                                      'SweetAlert',
+                                      'angular-animate',
+                                      'angularjs-datepicker',
+                                      'jquery', 
+                                      'flow', 
+                                      'angular-bootstrap', 
+                                      'draft-js' ,
+                                      'react-big-calendar'
+                                  ],
                watch: true,
                keepAlive: true
             },

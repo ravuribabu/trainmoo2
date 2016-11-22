@@ -1,0 +1,21 @@
+<style type="text/css">
+	.card {
+	    box-shadow: 0 4px 8px 0 rgba(0,0,0,0.2);
+	    transition: 0.3s;
+	}
+	.card:hover {
+	    box-shadow: 0 8px 16px 0 rgba(0,0,0,0.2);
+	}
+</style>
+ 
+<div class="card" style="margin-top: 10px;padding:5px;height: auto;cursor: pointer;    border: 1px solid #f3f2f2;">
+	 <div class="media">
+		<div class="media-left" ng-if="rtpost.richtext.previewImg">
+		    <img class="media-object" ng-src="{{rtpost.richtext.previewImg}}" alt="...">
+		</div>
+		<div class="media-body">
+		  <h4 class="media-heading">{{rtpost.richtext.title}}</h4>
+		  {{rtpost.richtext.previewText}}
+		</div>
+	</div>
+</div>

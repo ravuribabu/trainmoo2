@@ -50,7 +50,7 @@ module.exports = function(router) {
 		  
 
 	
-	router.route('/richtext/{id}')
+	router.route('/richtext/:id')
 		  .get(function(req, res){
 
 		  	RichText.findById(req.params.id)

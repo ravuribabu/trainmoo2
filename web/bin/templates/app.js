@@ -1,43 +1,99 @@
-angular.module('templates.app', ['blog/blog.tpl.html', 'blog/blogCard.tpl.html', 'login/login.tpl.html', 'login/signup.tpl.html', 'post/post.tpl.html', 'school/class/classEdit.tpl.html', 'school/pdfview.tpl.html', 'school/school.tpl.html', 'school/schoolEdit.tpl.html', 'school/users/classUser.tpl.html', 'school/users/classUsers.tpl.html', 'shared/app.tpl.html', 'shared/apph.tpl.html', 'shared/apptop.tpl.html', 'shared/gallery.tpl.html', 'shared/gmap.tpl.html', 'shared/pdfviewer.tpl.html', 'user/directive/userCard.tpl.html', 'user/userEdit.tpl.html', 'userList/userList.tpl.html', 'wall/directive/assignment.tpl.html', 'wall/directive/blog.tpl.html', 'wall/directive/comment.tpl.html', 'wall/directive/message.tpl.html', 'wall/directive/nav.tpl.html', 'wall/directive/newsletter.tpl.html', 'wall/directive/notification.tpl.html', 'wall/wall.tpl.html']);
+angular.module('templates.app', ['comment/comment.tpl.html', 'events/calendar.tpl.html', 'login/login.tpl.html', 'login/signup.tpl.html', 'nav/nav.tpl.html', 'post/post.tpl.html', 'richtext/richtext.tpl.html', 'richtext/richtextCard.tpl.html', 'school/class/classEdit.tpl.html', 'school/pdfview.tpl.html', 'school/school.tpl.html', 'school/schoolEdit.tpl.html', 'school/users/classUser.tpl.html', 'school/users/classUsers.tpl.html', 'shared/app.tpl.html', 'shared/apph.tpl.html', 'shared/apptop.tpl.html', 'shared/gallery.tpl.html', 'shared/gmap.tpl.html', 'shared/pdfviewer.tpl.html', 'user/directive/userCard.tpl.html', 'user/userEdit.tpl.html', 'userList/userList.tpl.html', 'wall/wall.tpl.html']);
 
-angular.module("blog/blog.tpl.html", []).run(["$templateCache", function($templateCache) {
-  $templateCache.put("blog/blog.tpl.html",
+angular.module("comment/comment.tpl.html", []).run(["$templateCache", function($templateCache) {
+  $templateCache.put("comment/comment.tpl.html",
+    "<div class=\"comment media\" ng-cloak style=\"width: 100%\">\n" +
+    "	<a href=\"#\" class=\"media-left\">\n" +
+    "		<img alt=\"image\" class=\"avatar avatar-lg\" src=\"assets/images/avatar-1-small.jpg\" >\n" +
+    "	</a>\n" +
+    "	<div class=\"media-body \">\n" +
+    "		<div class=\"comment-body\">\n" +
+    "			<a href=\"#\" class=\"comment-author\">{{vm.name}}</a> \n" +
+    "\n" +
+    "			<span ng-if=\"!vm.isreply\">\n" +
+    "				<span ng-if=\"msg.type != 'Reply'\" style=\"margin: 0px 5px;\"> on&nbsp;<span class=\"text-azure\">{{vm.classnames | listToString}}</span> </span>\n" +
+    "				\n" +
+    "				<div class=\"comment-meta\">\n" +
+    "					<span class=\"label\" \n" +
+    "						ng-class=\"{'label-primary' : ['Message', 'Discussion', 'Blog'].indexOf(msg.type) >= 0 , 'label-danger' : ['Assignment', 'Task'].indexOf(msg.type) >= 0 , 'label-warning' :['Notification', 'Newsletter',  'Assessment'].indexOf(msg.type) >= 0 , 'label-info' :['Material'].indexOf(msg.type) >= 0 }\" \n" +
+    "						ng-if=\"msg.type != 'Reply'\">\n" +
+    "						{{msg.type}}\n" +
+    "					</span>	\n" +
+    "					<span class=\"label label-info margin-left-10\" ng-if=\"msg.dueby\">\n" +
+    "						Due {{vm.duein}}\n" +
+    "					</span>\n" +
+    "				</div>\n" +
+    "			</span>\n" +
+    "			<span class=\"date\" style=\"padding-left: 10px;\"> {{vm.posted}}</span>\n" +
+    "\n" +
+    "			<div class=\"comment-header-actions\" >\n" +
+    "				<button class=\"btn btn-pure btn-success icon fa-bookmark-o \" ></button>\n" +
+    "				<button class=\"btn btn-pure btn-success icon fa-star-o\" ></button>\n" +
+    "			</div>\n" +
+    "\n" +
+    "			<comment-editor id=\"react\" content=\"msg.text\" readonly=\"true\" class=\"comment-content\"> </comment-editor>\n" +
+    "\n" +
+    "            <richtext-card rtpost=\"msg\" ng-if=\"vm.hasRichtext\" ng-click=\"vm.openRichtext()\"/>\n" +
+    "            \n" +
+    "			<div gallery files=\"msg.files\" readonly=\"true\" ng-if=\"msg.files && msg.files.length > 0\"></div>\n" +
+    "\n" +
+    "			<div class=\"comment-actions pull-left\">\n" +
+    "\n" +
+    "				<div ng-if=\"!vm.showSubmitActions\">\n" +
+    "					<button class=\"btn btn-default btn-sm btn-round btn-outline \" ng-click=\"vm.showReply()\" style=\"height: 30px;\"><i class=\"icon fa-reply\" aria-hidden=\"true\"></i>Reply</button>\n" +
+    "\n" +
+    "					<button class=\"btn btn-default btn-sm btn-round btn-outline \"  ng-click=\"vm.showAllReplies()\" style=\"height: 30px;\" ng-if=\"replies.length > 2 && vm.showFewReplies\">All replies ({{replies.length}})</button>\n" +
+    "\n" +
+    "				</div>\n" +
+    "\n" +
+    "				<div ng-if=\"vm.showSubmitActions\">\n" +
+    "					\n" +
+    "					<button class=\"btn btn-default btn-sm btn-round btn-success\" ng-class=\"vm.visibleReplyType==='submission'?'':' btn-outline'\" ng-click=\"vm.showAllReplies('submission')\"  ng-if=\"vm.showSubmitActions\" style=\"height: 30px;\">Submissions ({{vm.submissionsCount}})</button> \n" +
+    "\n" +
+    "					<button class=\"btn btn-default btn-sm btn-round btn-outline \" ng-click=\"vm.showSubmission()\" style=\"height: 30px;\"><i class=\"icon fa-reply\" aria-hidden=\"true\"></i>Submit</button>\n" +
+    "					\n" +
+    "					<button class=\"btn btn-default btn-sm btn-round btn-info btn-outline \" ng-if=\"vm.showSubmitActions\" ng-class=\"vm.visibleReplyType==='reply'?'':' btn-outline'\"  ng-click=\"vm.showAllReplies()\" style=\"height: 30px; margin-left: 20px;\">Q&amp;A ({{vm.qaCount}})</button>\n" +
+    "\n" +
+    "					<button class=\"btn btn-default btn-sm btn-round btn-outline \" ng-if=\"vm.showSubmitActions\"  ng-click=\"vm.showReply()\"  style=\"height: 30px;\"><i class=\"icon fa-reply\" aria-hidden=\"true\"></i>Question?</button>\n" +
+    "					\n" +
+    "					\n" +
+    "					<button class=\"btn btn-default btn-sm btn-round btn-outline btn-warning\"   style=\"height: 30px; margin-left: 20px;\">Pending (10)</button> \n" +
+    "				</div>\n" +
+    "			</div>\n" +
+    "			\n" +
+    "			<div class=\"comment-reply\" ng-if=\"vm.showReplyBox\" >\n" +
+    "				<post parent=\"msg.parent || msg\" response-type=\"reply\" placeholder=\"Enter your question/response here..\"></post>\n" +
+    "			</div>\n" +
+    "\n" +
+    "			\n" +
+    "			<div class=\"comment-reply\" ng-if=\"vm.showSubmitBox\" >\n" +
+    "				<post parent=\"msg.parent || msg\" response-type=\"submission\" placeholder=\"Enter comments & submit assignment..\"></post>\n" +
+    "			</div>\n" +
+    "\n" +
+    "		</div>\n" +
+    "\n" +
+    "		<div class=\"comments\">\n" +
+    "			<comment msg=\"reply\" ng-repeat=\"reply in vm.visibleReplies\"></comment>\n" +
+    "		</div>\n" +
+    "	</div>\n" +
+    "\n" +
+    "    <!-- Comments-->\n" +
+    "    \n" +
+    "</div>\n" +
+    "\n" +
+    "");
+}]);
+
+angular.module("events/calendar.tpl.html", []).run(["$templateCache", function($templateCache) {
+  $templateCache.put("events/calendar.tpl.html",
     "<div class=\"page bg-white\" >\n" +
     "	<div class=\"page-content padding-top-25 padding-left-5 padding-right-5 container-fluid  \">\n" +
     "	    <div class=\"row\" style=\"width: 100%; margin: 0 auto;\">\n" +
-    "	    	<blog richtext=\"richtext\" on-publish=\"onPublish()\" on-cancel=\"onCancel()\" />\n" +
+    "	    	<calendar/>\n" +
     "		</div>\n" +
     "	</div>\n" +
-    "</div>");
-}]);
-
-angular.module("blog/blogCard.tpl.html", []).run(["$templateCache", function($templateCache) {
-  $templateCache.put("blog/blogCard.tpl.html",
-    "<style type=\"text/css\">\n" +
-    "	.card {\n" +
-    "	    /* Add shadows to create the \"card\" effect */\n" +
-    "	    box-shadow: 0 4px 8px 0 rgba(0,0,0,0.2);\n" +
-    "	    transition: 0.3s;\n" +
-    "	}\n" +
-    "\n" +
-    "	/* On mouse-over, add a deeper shadow */\n" +
-    "	.card:hover {\n" +
-    "	    box-shadow: 0 8px 16px 0 rgba(0,0,0,0.2);\n" +
-    "	}\n" +
-    "\n" +
-    "</style>\n" +
-    " \n" +
-    "<div class=\"card\" style=\"margin-top: 10px;padding:5px;height: auto;cursor: pointer;    border: 1px solid #f3f2f2;\">\n" +
-    "	 <div class=\"media\">\n" +
-    "		<div class=\"media-left\" ng-if=\"draft.previewImg\">\n" +
-    "		    <img class=\"media-object\" ng-src=\"{{draft.previewImg}}\" alt=\"...\">\n" +
-    "		</div>\n" +
-    "		<div class=\"media-body\">\n" +
-    "		  <h4 class=\"media-heading\">{{draft.title}}</h4>\n" +
-    "		  {{draft.previewText}}\n" +
-    "		</div>\n" +
-    "	</div>\n" +
-    "</div>");
+    "</div>\n" +
+    "");
 }]);
 
 angular.module("login/login.tpl.html", []).run(["$templateCache", function($templateCache) {
@@ -167,6 +223,69 @@ angular.module("login/signup.tpl.html", []).run(["$templateCache", function($tem
     "");
 }]);
 
+angular.module("nav/nav.tpl.html", []).run(["$templateCache", function($templateCache) {
+  $templateCache.put("nav/nav.tpl.html",
+    "<div id=\"sidebar-wrapper\">\n" +
+    "  <ul class=\"sidebar-nav\">\n" +
+    "    <!-- <li class=\"sidebar-category\">\n" +
+    "       <a href=\"#\">View Posts</a>\n" +
+    "    </li> -->\n" +
+    "    <li class=\"sidebar-item\" ng-repeat=\"type in vm.postTypes\">\n" +
+    "      <a href=\"#\" ng-click=\"vm.selectPostType(type)\" \n" +
+    "              ng-class=\"type.name === vm.selection.postType.name ? 'active' : ''\">\n" +
+    "        <i ng-class=\"type.icon\" class=\"site-menu-icon\" aria-hidden=\"true\"></i>\n" +
+    "        {{type.name}}\n" +
+    "        <div style=\"position: absolute;right: 30px;display: inline-block; vertical-align: middle;\" \n" +
+    "              ng-if=\"type.newItems > 0\">\n" +
+    "          <span class=\"badge badge-danger\" >2</span>\n" +
+    "        </div>\n" +
+    "        \n" +
+    "      </a>\n" +
+    "      \n" +
+    "    </li>\n" +
+    "\n" +
+    "\n" +
+    "    <li class=\"sidebar-category\" ng-if=\"vm.hasPrograms\">\n" +
+    "       <a href=\"#\">Programs</a>\n" +
+    "    </li>\n" +
+    "    <li class=\"sidebar-item\" ng-repeat=\"p in vm.programs\" ng-if=\"vm.hasPrograms\"> \n" +
+    "      <a href=\"#\" ng-click=\"vm.selectProgram(p.id)\" ng-class=\"p.id === vm.selection.program.id ? 'active' : ''\">{{p.name}}\n" +
+    "        <div style=\"position: absolute;right: 30px;display: inline-block; vertical-align: middle;\" \n" +
+    "                ng-if=\"p.newItems > 0\">\n" +
+    "            <span class=\"badge badge-danger\" >2</span>\n" +
+    "        </div>\n" +
+    "      </a>\n" +
+    "    </li>\n" +
+    "\n" +
+    "    <li class=\"sidebar-category\" ng-if=\"vm.hasClasses\">\n" +
+    "       <a href=\"#\">Classes</a>\n" +
+    "    </li>\n" +
+    "    <li class=\"sidebar-item\" ng-repeat=\"c in vm.visibleClasses\" ng-if=\"vm.hasClasses\">\n" +
+    "      <a href=\"#\" ng-click=\"vm.selectClass(c.id)\" ng-class=\"c.id === vm.selection.class.id ? 'active' : ''\">\n" +
+    "        {{c.name}}\n" +
+    "        <div style=\"position: absolute;right: 30px;display: inline-block; vertical-align: middle;\" \n" +
+    "              ng-if=\"c.newItems > 0\">\n" +
+    "          <span class=\"badge badge-danger\" >2</span>\n" +
+    "        </div>\n" +
+    "      </a>\n" +
+    "    </li>\n" +
+    "    \n" +
+    "  </ul>\n" +
+    "  <div class=\"sidebar-footer\">\n" +
+    "      <a href=\"javascript: void(0);\" class=\"fold-show\" data-placement=\"top\" data-toggle=\"tooltip\"\n" +
+    "      data-original-title=\"Settings\">\n" +
+    "        <span class=\"icon wb-settings\" aria-hidden=\"true\"></span>\n" +
+    "      </a>\n" +
+    "      <a href=\"javascript: void(0);\" data-placement=\"top\" data-toggle=\"tooltip\" data-original-title=\"Lock\">\n" +
+    "        <span class=\"icon wb-eye-close\" aria-hidden=\"true\"></span>\n" +
+    "      </a>\n" +
+    "      <a href=\"javascript: void(0);\" data-placement=\"top\" data-toggle=\"tooltip\" data-original-title=\"Logout\">\n" +
+    "        <span class=\"icon wb-power\" aria-hidden=\"true\"></span>\n" +
+    "      </a>\n" +
+    "    </div>\n" +
+    "</div>");
+}]);
+
 angular.module("post/post.tpl.html", []).run(["$templateCache", function($templateCache) {
   $templateCache.put("post/post.tpl.html",
     "<style type=\"text/css\">\n" +
@@ -200,11 +319,10 @@ angular.module("post/post.tpl.html", []).run(["$templateCache", function($templa
     "    <div class=\"panel  margin-bottom-10\" ng-cloak>\n" +
     "        <div class=\"panel-body padding-10\">\n" +
     "                <div class=\"app-message-input\">\n" +
-    "\n" +
-    "                    <div class=\"message-input\">\n" +
-    "                      <comment-editor id=\"react\" content=\"vm.post.text\" readonly=\"false\" on-select=\"vm.editStarted()\" on-reset=\"vm.reset(true)\"> </comment-editor>\n" +
+    "                    <div class=\"message-input\"> \n" +
+    "                      <comment-editor id=\"react\" content=\"vm.post.text\" placeholder=\"{{vm.placeholder}}\" readonly=\"false\" on-select=\"vm.editStarted()\" on-reset=\"vm.reset(true)\"> </comment-editor>\n" +
     "                      <div class=\"message-input-actions btn-group\" style=\"z-index: 1000;\">\n" +
-    "                        <a class=\"btn btn-pure btn-icon btn-default\" type=\"button\">\n" +
+    "                        <a class=\"btn btn-pure btn-icon btn-default\" type=\"button\" ng-click=\"vm.openCalendar()\">\n" +
     "                          <i class=\"icon wb-emoticon\" aria-hidden=\"true\"></i>\n" +
     "                        </a>\n" +
     "                        <a class=\"btn btn-pure btn-icon btn-default\" type=\"button\" ng-click=\"vm.uploadImages()\">\n" +
@@ -213,7 +331,7 @@ angular.module("post/post.tpl.html", []).run(["$templateCache", function($templa
     "                        <a class=\"btn btn-pure btn-icon btn-default\" type=\"button\" ng-click=\"vm.uploadFiles()\">\n" +
     "                          <i class=\"icon wb-paperclip\" aria-hidden=\"true\"></i>\n" +
     "                        </a>\n" +
-    "                        <a class=\"btn btn-pure btn-icon btn-default\" type=\"button\" ng-click=\"vm.openBlog()\" ng-if=\"!vm.isReply\">\n" +
+    "                        <a class=\"btn btn-pure btn-icon btn-default\" type=\"button\" ng-click=\"vm.openRichtext()\">\n" +
     "                          <i class=\"icon wb-pencil\" aria-hidden=\"true\"></i>\n" +
     "                        </a>\n" +
     "                      </div>\n" +
@@ -252,11 +370,11 @@ angular.module("post/post.tpl.html", []).run(["$templateCache", function($templa
     "            </div>\n" +
     "\n" +
     "            <div class=\"col-md-12\" ng-if=\"vm.showBlogPreview\">\n" +
-    "              <blog-card draft=\"vm.draft\"/>\n" +
+    "              <richtext-card rtpost=\"vm.post\"/>\n" +
     "            </div>\n" +
     "\n" +
     "\n" +
-    "            <div class=\"col-md-12\" ng-if=\"vm.postSelected && (vm.post.type === 'Assignment' || vm.post.type === 'Task')\" style=\"padding-left: 10px;\" >\n" +
+    "            <div class=\"col-md-12\" ng-if=\"!vm.isReply && vm.postSelected && (vm.post.type === 'Assignment' || vm.post.type === 'Task')\" style=\"padding-left: 10px;\" >\n" +
     "              <hr />\n" +
     "              <div class=\"form-group\">\n" +
     "                <label class=\"control-label\" for=\"datepicker\">Due by</label>\n" +
@@ -292,6 +410,43 @@ angular.module("post/post.tpl.html", []).run(["$templateCache", function($templa
     "    </div>\n" +
     "</form>\n" +
     "");
+}]);
+
+angular.module("richtext/richtext.tpl.html", []).run(["$templateCache", function($templateCache) {
+  $templateCache.put("richtext/richtext.tpl.html",
+    "<div class=\"page bg-white\" >\n" +
+    "	<div class=\"page-content padding-top-25 padding-left-5 padding-right-5 container-fluid  \">\n" +
+    "	    <div class=\"row\" style=\"width: 100%; margin: 0 auto;\">\n" +
+    "	    	<richtext on-publish=\"onPublish()\" on-cancel=\"onCancel()\" richtextid=\"{{richtextid}}\" readonly=\"{{readonly}}\"/>\n" +
+    "		</div>\n" +
+    "	</div>\n" +
+    "</div>\n" +
+    "");
+}]);
+
+angular.module("richtext/richtextCard.tpl.html", []).run(["$templateCache", function($templateCache) {
+  $templateCache.put("richtext/richtextCard.tpl.html",
+    "<style type=\"text/css\">\n" +
+    "	.card {\n" +
+    "	    box-shadow: 0 4px 8px 0 rgba(0,0,0,0.2);\n" +
+    "	    transition: 0.3s;\n" +
+    "	}\n" +
+    "	.card:hover {\n" +
+    "	    box-shadow: 0 8px 16px 0 rgba(0,0,0,0.2);\n" +
+    "	}\n" +
+    "</style>\n" +
+    " \n" +
+    "<div class=\"card\" style=\"margin-top: 10px;padding:5px;height: auto;cursor: pointer;    border: 1px solid #f3f2f2;\">\n" +
+    "	 <div class=\"media\">\n" +
+    "		<div class=\"media-left\" ng-if=\"rtpost.richtext.previewImg\">\n" +
+    "		    <img class=\"media-object\" ng-src=\"{{rtpost.richtext.previewImg}}\" alt=\"...\">\n" +
+    "		</div>\n" +
+    "		<div class=\"media-body\">\n" +
+    "		  <h4 class=\"media-heading\">{{rtpost.richtext.title}}</h4>\n" +
+    "		  {{rtpost.richtext.previewText}}\n" +
+    "		</div>\n" +
+    "	</div>\n" +
+    "</div>");
 }]);
 
 angular.module("school/class/classEdit.tpl.html", []).run(["$templateCache", function($templateCache) {
@@ -1863,244 +2018,6 @@ angular.module("userList/userList.tpl.html", []).run(["$templateCache", function
     "</div>");
 }]);
 
-angular.module("wall/directive/assignment.tpl.html", []).run(["$templateCache", function($templateCache) {
-  $templateCache.put("wall/directive/assignment.tpl.html",
-    "<div class=\"media\" ng-cloak>\n" +
-    "	<a href=\"#\" class=\"pull-left\">\n" +
-    "		<img alt=\"image\" class=\"img-circle\" src=\"assets/images/avatar-1-small.jpg\" style=\"width:40px\">\n" +
-    "	</a>\n" +
-    "	<div class=\"media-body \">\n" +
-    "		<h5>{{msg.author.name}} <small> {{msg.classes | listToString}}</small>\n" +
-    "			&nbsp;&nbsp;<span class=\"label label-warning\">assignment</span>		\n" +
-    "			&nbsp;<small>Due by: {{msg.dueby | date :  \"MMM dd\"}}</small>\n" +
-    "		 <small class=\"pull-right\">{{msg.created_at | postTime}}</small></h5>\n" +
-    "	</div>\n" +
-    "\n" +
-    "    <!-- Comments-->\n" +
-    "    <p class=\"margin-bottom-10\">\n" +
-    "			{{msg.text}}\n" +
-    "	</p>\n" +
-    "</div>\n" +
-    "\n" +
-    "");
-}]);
-
-angular.module("wall/directive/blog.tpl.html", []).run(["$templateCache", function($templateCache) {
-  $templateCache.put("wall/directive/blog.tpl.html",
-    "<div class=\"media\" ng-cloak>\n" +
-    "	<a href=\"#\" class=\"pull-left\">\n" +
-    "		<img alt=\"image\" class=\"img-circle\" src=\"assets/images/avatar-1-small.jpg\" style=\"width:40px\">\n" +
-    "	</a>\n" +
-    "	<div class=\"media-body \">\n" +
-    "		<h5>{{msg.author.name}} <small> {{msg.classes | listToString}}</small>\n" +
-    "			&nbsp;&nbsp;	<span class=\"label label-info\">blog</span>	\n" +
-    "		 <small class=\"pull-right\">{{msg.created_at | postTime}}</small></h5>\n" +
-    "	</div>\n" +
-    "\n" +
-    "    <div class=\"margin-top-10 margin-bottom-10\">\n" +
-    "		<div class=\"media\">\n" +
-    "			<a href=\"/app/blog/read/{{msg._id}}\" class=\"pull-left\"> <img ng-src=\"{{getFirstImageSrc(msg.text)}}\" alt=\"\" class=\"media-object\" style=\"width:150px;\"> </a>\n" +
-    "	        <div class=\"media-body\">\n" +
-    "	            <h4 class=\"media-heading\">{{msg.title}}</h4>\n" +
-    "	            {{msg.text | stripHtml}}\n" +
-    "	        </div>\n" +
-    "		</div>\n" +
-    "	</div>\n" +
-    "</div>\n" +
-    "\n" +
-    "\n" +
-    "\n" +
-    "\n" +
-    "");
-}]);
-
-angular.module("wall/directive/comment.tpl.html", []).run(["$templateCache", function($templateCache) {
-  $templateCache.put("wall/directive/comment.tpl.html",
-    "<div class=\"comment media\" ng-cloak style=\"width: 100%\">\n" +
-    "	<a href=\"#\" class=\"media-left\">\n" +
-    "		<img alt=\"image\" class=\"avatar avatar-lg\" src=\"assets/images/avatar-1-small.jpg\" >\n" +
-    "	</a>\n" +
-    "	<div class=\"media-body \">\n" +
-    "		<div class=\"comment-body\">\n" +
-    "			<a href=\"#\" class=\"comment-author\">{{vm.name}}</a> \n" +
-    "\n" +
-    "			<span ng-if=\"!vm.isreply\">\n" +
-    "				<span ng-if=\"msg.type != 'Reply'\" style=\"margin: 0px 5px;\"> on&nbsp;<span class=\"text-azure\">{{vm.classnames | listToString}}</span> </span>\n" +
-    "				\n" +
-    "				<div class=\"comment-meta\">\n" +
-    "					<span class=\"label\" \n" +
-    "						ng-class=\"{'label-primary' : msg.type === 'Message' || msg.type === 'Discussion', 'label-danger' : msg.type === 'Assignment' || msg.type === 'Task', 'label-warning' : msg.type === 'Notification'}\" \n" +
-    "						ng-if=\"msg.type != 'Reply'\">\n" +
-    "						{{msg.type}}\n" +
-    "					</span>	\n" +
-    "					<span class=\"label label-info margin-left-10\" ng-if=\"msg.dueby\">\n" +
-    "						Due {{vm.duein}}\n" +
-    "					</span>\n" +
-    "				</div>\n" +
-    "			</span>\n" +
-    "			<span class=\"date\" style=\"padding-left: 10px;\"> {{vm.posted}}</span>\n" +
-    "\n" +
-    "			<div class=\"comment-header-actions\" >\n" +
-    "				<button class=\"btn btn-pure btn-success icon fa-bookmark-o \" ></button>\n" +
-    "				<button class=\"btn btn-pure btn-success icon fa-star-o\" ></button>\n" +
-    "			</div>\n" +
-    "\n" +
-    "			<comment-editor id=\"react\" content=\"msg.text\" readonly=\"true\" class=\"comment-content\"> </comment-editor>\n" +
-    "\n" +
-    "            <blog-card draft=\"msg.richtext\" ng-if=\"vm.hasRichtext\" ng-click=\"vm.openBlog()\"/>\n" +
-    "            \n" +
-    "			<div gallery files=\"msg.files\" readonly=\"true\" ng-if=\"msg.files && msg.files.length > 0\"></div>\n" +
-    "\n" +
-    "			<div class=\"comment-actions pull-left\">\n" +
-    "				<button class=\"btn btn-default btn-sm btn-round btn-outline \"  ng-click=\"vm.showReply()\" style=\"height: 30px;\"><i class=\"icon fa-reply\" aria-hidden=\"true\"></i>Reply</button>\n" +
-    "				<button class=\"btn btn-default btn-sm btn-round btn-outline \"  ng-click=\"vm.showAllReplies()\" style=\"height: 30px;\" ng-if=\"replies.length > 2 && !vm.showAllRepliesFlag \">Show previous replies ({{replies.length - 2}})</button>\n" +
-    "\n" +
-    "				<a href=\"javascript:void(0)\">\n" +
-    "					<i class=\"icon md-favorite\"></i>\n" +
-    "					<span ng-if='msg.likes.length > 0'>{{msg.likes.length}}</span>\n" +
-    "				</a>\n" +
-    "				<a href=\"javascript:void(0)\">\n" +
-    "					<i class=\"icon md-comment\"></i>\n" +
-    "					<span ng-if='msg.comments > 0'>{{msg.comments}}</span>\n" +
-    "				</a>\n" +
-    "			</div>\n" +
-    "			<div class=\"comment-reply\" ng-if=\"vm.showReplyBox\" >\n" +
-    "				<post parent=\"msg.parent || msg._id\"></post>\n" +
-    "			</div>\n" +
-    "\n" +
-    "		</div>\n" +
-    "\n" +
-    "		<div class=\"comments\">\n" +
-    "			<comment msg=\"reply\" ng-repeat=\"reply in visibleReplies\"></comment>\n" +
-    "		</div>\n" +
-    "	</div>\n" +
-    "\n" +
-    "    <!-- Comments-->\n" +
-    "    \n" +
-    "</div>\n" +
-    "\n" +
-    "");
-}]);
-
-angular.module("wall/directive/message.tpl.html", []).run(["$templateCache", function($templateCache) {
-  $templateCache.put("wall/directive/message.tpl.html",
-    "<comment msg=\"msg\" ng-if=\"msg.type === 'Message' || msg.type === 'Reply'\"></comment>\n" +
-    "<notification msg=\"msg\" ng-if=\"msg.type === 'Notification'\"></notification>\n" +
-    "<assignment msg=\"msg\" ng-if=\"msg.type === 'Assignment'\"></assignment>\n" +
-    "<blogCard msg=\"msg\" ng-if=\"msg.type === 'Blog'\"></blogCard>\n" +
-    "\n" +
-    "<div gallery files=\"msg.files\" readonly=\"true\" ng-if=\"msg.files && msg.files.length > 0\"></div>\n" +
-    "\n" +
-    "<!-- <div class=\"widget-actions pull-left small\">\n" +
-    "	<a href=\"javascript:void(0)\" ng-click=\"like(msg._id)\">Like</a>\n" +
-    "	<a href=\"javascript:void(0)\" ng-click=\"showReplies=!showReplies\">Reply</a>\n" +
-    "	<a href=\"javascript:void(0)\">\n" +
-    "		<i class=\"icon md-favorite\"></i>\n" +
-    "		<span ng-if='msg.likes.length > 0'>{{msg.likes.length}}</span>\n" +
-    "	</a>\n" +
-    "	<a href=\"javascript:void(0)\">\n" +
-    "		<i class=\"icon md-comment\"></i>\n" +
-    "		<span ng-if='msg.comments > 0'>{{msg.comments}}</span>\n" +
-    "	</a>\n" +
-    "</div> -->\n" +
-    "\n" +
-    "<!-- <div class=\"col-md-12 margin-right-0 padding-right-0 margin-top-10\">\n" +
-    "	<post ng-if=\"showReplies\" parentid=\"msg._id\" type=\"reply\"></post>\n" +
-    "	<div class=\"padding-left-40 padding-top-30 padding-bottom-5 \" style=\"border: 0 none;\" ng-repeat=\"reply in replies\" >\n" +
-    "			<message msg=\"reply\"></message>\n" +
-    "	</div>\n" +
-    "</div> -->");
-}]);
-
-angular.module("wall/directive/nav.tpl.html", []).run(["$templateCache", function($templateCache) {
-  $templateCache.put("wall/directive/nav.tpl.html",
-    "<div id=\"sidebar-wrapper\">\n" +
-    "  <ul class=\"sidebar-nav\">\n" +
-    "    <!-- <li class=\"sidebar-category\">\n" +
-    "       <a href=\"#\">View Posts</a>\n" +
-    "    </li> -->\n" +
-    "    <li class=\"sidebar-item\" ng-repeat=\"type in vm.postTypes\">\n" +
-    "      <a href=\"#\" ng-click=\"vm.selectPostType(type)\" \n" +
-    "              ng-class=\"type.name === vm.selection.postType.name ? 'active' : ''\">\n" +
-    "        <i ng-class=\"type.icon\" class=\"site-menu-icon\" aria-hidden=\"true\"></i>\n" +
-    "        {{type.name}}\n" +
-    "        <div style=\"position: absolute;right: 30px;display: inline-block; vertical-align: middle;\" \n" +
-    "              ng-if=\"type.newItems > 0\">\n" +
-    "          <span class=\"badge badge-danger\" >2</span>\n" +
-    "        </div>\n" +
-    "        \n" +
-    "      </a>\n" +
-    "      \n" +
-    "    </li>\n" +
-    "\n" +
-    "\n" +
-    "    <li class=\"sidebar-category\" ng-if=\"vm.hasPrograms\">\n" +
-    "       <a href=\"#\">Programs</a>\n" +
-    "    </li>\n" +
-    "    <li class=\"sidebar-item\" ng-repeat=\"p in vm.programs\" ng-if=\"vm.hasPrograms\"> \n" +
-    "      <a href=\"#\" ng-click=\"vm.selectProgram(p.id)\" ng-class=\"p.id === vm.selection.program.id ? 'active' : ''\">{{p.name}}\n" +
-    "        <div style=\"position: absolute;right: 30px;display: inline-block; vertical-align: middle;\" \n" +
-    "                ng-if=\"p.newItems > 0\">\n" +
-    "            <span class=\"badge badge-danger\" >2</span>\n" +
-    "        </div>\n" +
-    "      </a>\n" +
-    "    </li>\n" +
-    "\n" +
-    "    <li class=\"sidebar-category\" ng-if=\"vm.hasClasses\">\n" +
-    "       <a href=\"#\">Classes</a>\n" +
-    "    </li>\n" +
-    "    <li class=\"sidebar-item\" ng-repeat=\"c in vm.visibleClasses\" ng-if=\"vm.hasClasses\">\n" +
-    "      <a href=\"#\" ng-click=\"vm.selectClass(c.id)\" ng-class=\"c.id === vm.selection.class.id ? 'active' : ''\">\n" +
-    "        {{c.name}}\n" +
-    "        <div style=\"position: absolute;right: 30px;display: inline-block; vertical-align: middle;\" \n" +
-    "              ng-if=\"c.newItems > 0\">\n" +
-    "          <span class=\"badge badge-danger\" >2</span>\n" +
-    "        </div>\n" +
-    "      </a>\n" +
-    "    </li>\n" +
-    "    \n" +
-    "  </ul>\n" +
-    "  <div class=\"sidebar-footer\">\n" +
-    "      <a href=\"javascript: void(0);\" class=\"fold-show\" data-placement=\"top\" data-toggle=\"tooltip\"\n" +
-    "      data-original-title=\"Settings\">\n" +
-    "        <span class=\"icon wb-settings\" aria-hidden=\"true\"></span>\n" +
-    "      </a>\n" +
-    "      <a href=\"javascript: void(0);\" data-placement=\"top\" data-toggle=\"tooltip\" data-original-title=\"Lock\">\n" +
-    "        <span class=\"icon wb-eye-close\" aria-hidden=\"true\"></span>\n" +
-    "      </a>\n" +
-    "      <a href=\"javascript: void(0);\" data-placement=\"top\" data-toggle=\"tooltip\" data-original-title=\"Logout\">\n" +
-    "        <span class=\"icon wb-power\" aria-hidden=\"true\"></span>\n" +
-    "      </a>\n" +
-    "    </div>\n" +
-    "</div>");
-}]);
-
-angular.module("wall/directive/newsletter.tpl.html", []).run(["$templateCache", function($templateCache) {
-  $templateCache.put("wall/directive/newsletter.tpl.html",
-    "");
-}]);
-
-angular.module("wall/directive/notification.tpl.html", []).run(["$templateCache", function($templateCache) {
-  $templateCache.put("wall/directive/notification.tpl.html",
-    "<div class=\"media\" ng-cloak>\n" +
-    "	<a href=\"#\" class=\"pull-left\">\n" +
-    "		<img alt=\"image\" class=\"img-circle\" src=\"assets/images/avatar-1-small.jpg\" style=\"width:40px\">\n" +
-    "	</a>\n" +
-    "	<div class=\"media-body \">\n" +
-    "		<h6>{{msg.author.name}} <small> on {{msg.classes | listToString}}</small>\n" +
-    "			&nbsp;&nbsp;<i class=\"icon fa-bell-o\" area-hidden=\"true\"></i>		\n" +
-    "		 <small class=\"pull-right\">{{msg.created_at | postTime}}</small></h6>\n" +
-    "	</div>\n" +
-    "\n" +
-    "    <!-- Comments-->\n" +
-    "    <p class=\"margin-bottom-10\">\n" +
-    "			{{msg.text}}\n" +
-    "	</p>\n" +
-    "</div>\n" +
-    "\n" +
-    "");
-}]);
-
 angular.module("wall/wall.tpl.html", []).run(["$templateCache", function($templateCache) {
   $templateCache.put("wall/wall.tpl.html",
     "<style>\n" +
@@ -2147,6 +2064,7 @@ angular.module("wall/wall.tpl.html", []).run(["$templateCache", function($templa
     "</style>\n" +
     "\n" +
     "\n" +
+    "\n" +
     "  <script type=\"text/javascript\">\n" +
     "    $(\"#menu-toggle\").click(function(e) {\n" +
     "      e.preventDefault();\n" +
@@ -2165,12 +2083,12 @@ angular.module("wall/wall.tpl.html", []).run(["$templateCache", function($templa
     "        <div class=\"col-md-8\">\n" +
     "          <div class=\"row comments\">\n" +
     "            <div class=\"col-md-12\">\n" +
-    "              <post></post>\n" +
+    "              <post placeholder=\"Create new post..\"></post>\n" +
     "            </div>\n" +
     "            <div class=\"col-md-12\"  ng-repeat=\"msg in posts\" >\n" +
     "              <div class=\"panel panel-white  margin-bottom-5\" ng-cloak>\n" +
     "                <div class=\"panel-body padding-10 \">\n" +
-    "                    <comment msg=\"msg\"></comment>\n" +
+    "                    <comment msg=\"msg\" ></comment>\n" +
     "                </div>\n" +
     "              </div>\n" +
     "            </div>\n" +

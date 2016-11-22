@@ -42,6 +42,7 @@
 </style>
 
 
+
   <script type="text/javascript">
     $("#menu-toggle").click(function(e) {
       e.preventDefault();
@@ -60,12 +61,12 @@
         <div class="col-md-8">
           <div class="row comments">
             <div class="col-md-12">
-              <post></post>
+              <post placeholder="Create new post.."></post>
             </div>
             <div class="col-md-12"  ng-repeat="msg in posts" >
               <div class="panel panel-white  margin-bottom-5" ng-cloak>
                 <div class="panel-body padding-10 ">
-                    <comment msg="msg"></comment>
+                    <comment msg="msg" ></comment>
                 </div>
               </div>
             </div>

@@ -1,10 +1,18 @@
 "use strict";
 var Post = require('../models/post').Post;
+var PostSchema = require('../models/post').PostSchema;
 var User = require('../models/user').User;
 var RichText = require('../models/richText').RichText;
+var mongoose = require('mongoose');
 
-var Jimp = require("jimp");
-var flow = require('./flowPersister.js')('tmp');
+var deepPopulate = require('mongoose-deep-populate')(mongoose);
+PostSchema.plugin(deepPopulate, {
+									  whitelist: [
+									    'replies.author',
+									    'replies.parent'
+									  ]
+									});
+
 var _ = require('lodash');
 var async = require('async');
 
@@ -28,7 +36,6 @@ module.exports = function(router) {
 	router.route('/posts')
 			.post(function(req, res){
 				var postJson = req.body;
-				console.log('USER: ' + JSON.stringify(req.user));
 				postJson.author = req.user;
 				Post.create(postJson, function(err, post){
 					if (err) {
@@ -37,8 +44,41 @@ module.exports = function(router) {
 					}
 					else {
 						res.send(post);
+
+						//TODO parllelize both below
+						//Save parent
+						if (postJson.parent) {
+							let parent = postJson.parent;
+
+							Post.findById(parent._id, function(err, parentPost) {
+								if (err) {
+									console.log(err);
+									return;
+								}
+
+								if (!parentPost.replies) {
+									parentPost.replies = [];
+								}
+								parentPost.replies.push(post);
+
+
+								parentPost.save(function(err, parent){
+									if (err) {
+										console.log(err)
+									}
+								})
+							});
+
+
+							
+						}
+
+
+						//Save rich text
 						if (postJson.richtext) {
-							const draftReq = postJson.richtext;
+							const draftReq = postJson.richtext.id;
+							draftReq.post = post;
+							draftReq.type = 'Published';
 							RichText.findById(draftReq._id, function(err, draft) {
 							  		if (err) {
 							  			console.log(err);
@@ -59,18 +99,41 @@ module.exports = function(router) {
 			})
 			.get(function(req, res) {
 
-			//	console.log('REQUEST USER: ' + req.user.user_id);
+				console.log('classidsRAM: ' + req.query.classids);
+				console.log('postTypeRAM: ' + req.query.postType);
+				
+				const classids = req.query.classids.split(',').map((id) => { return mongoose.Types.ObjectId(id)});
 
-			  	Post.find({ parent : null})
+			//TODO eager fetch replies as well
+			// calculate stats for submissions ahead of the time
+			// when submission was created
+			// load x posts at a time based on timestamp
+
+				let query = { 
+					parent : null, 
+					'classes.id' : { $in : classids}, 
+				};
+
+				if (req.query.postType ) {
+					query.type = req.query.postType;
+				}
+				
+
+			  	Post.find(query)
 			  		.populate('author')
-			  		.populate('richtext')
+			  		.deepPopulate('replies.author replies.parent')
 			  		.sort({created_at : -1})
 				  	.exec(function(err, posts){
 				  		if (err) {
 				  			console.log('error ' + err);
 				  			res.send(err);
 				  		} else {
-				  			res.set("Connection", "close");
+				  			// posts.forEach((post) => {
+				  			// 	post.replies.forEach((reply) => {
+				  			// 		reply.parent = post;
+				  			// 	});
+				  			// });
+
 				  			res.json(posts);
 				  		}
 				  	});

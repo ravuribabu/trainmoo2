@@ -8,6 +8,7 @@ var RichTextSchema = new Schema({
 	author : {type:Schema.Types.ObjectId, ref: 'User', required: true},
 	post: {type:Schema.Types.ObjectId, ref: 'Post'},
     files: [AttachmentSchema],
+  
     text: String,
     title: String,
     previewImg: String,

@@ -12,6 +12,7 @@ core.directive('commentEditor', function(){
     restrict: 'AE',
     scope:{
       content: '=',
+      placeholder: '@',
       readonly: '@',
       onSelect: '&'
     },
@@ -21,7 +22,7 @@ core.directive('commentEditor', function(){
 
       let readonly = false;
       let reactElem = undefined;
-
+      const placeholder = (scope.placeholder?scope.placeholder:'Enter comments here..')
       if (scope.readonly && scope.readonly === 'true') {
         readonly = true;
       }
@@ -35,7 +36,7 @@ core.directive('commentEditor', function(){
 
       scope.$watch('content', function(value){
 		let draftContent = scope.content; 
-		let commentEditor = <CommentEditor content={draftContent} update={setContent} readonly={readonly} onSelect={scope.onSelect} />;
+		let commentEditor = <CommentEditor content={draftContent} placeholder={placeholder} update={setContent} readonly={readonly} onSelect={scope.onSelect} />;
 		reactElem = ReactDOM.render(commentEditor, elm[0]);
       });
 

@@ -16,8 +16,24 @@ var PostSchema = new Schema({
 	text: String, 
 	section: String,
 	likes: Number,
-	replies: Number,
-	richtext: {type:Schema.Types.ObjectId, ref: 'RichText'},
+	replies: [ { type:Schema.Types.ObjectId, ref: 'Post' } ],
+	
+
+	//assignment, task, polls, assessments - tasks that need response from students
+	//responses can be viewed by trainer only
+	submittable: Boolean,
+	//for private messages - default trainers can view all messages
+	//no need to includes trainers and admins in this list
+	users: [{type:Schema.Types.ObjectId, ref: 'User'}] ,
+	responseType: { type: String, enum: ['submission', 'reply']},
+
+	//Rich text preview 
+	richtext: {
+		id: {type:Schema.Types.ObjectId, ref: 'RichText'},
+		previewImg: String,
+	    previewText: String,
+	    title: String
+	},
 	
 	created_by: String,
 	updated_by: String,
@@ -26,12 +42,22 @@ var PostSchema = new Schema({
 });
 
 PostSchema.pre('save', function(next) {
+
 	console.log('Saving post text: ' + this.text);
 	var currentDate = new Date();
 	this.updated_at = currentDate;
 	if (!this.created_at) {
 		this.created_at = currentDate;
 	}
+
+	if (['Assignment', 'Task', 'Poll', 'Assessment'].indexOf(this.type) >= 0) {
+		this.submittable = true;
+	}
+
+	if (!this.responseType && this.parent) {
+		this.responseType = 'reply';
+	}
+
 	next();
 });
 

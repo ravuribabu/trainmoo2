@@ -162,7 +162,7 @@ export default class RichEditor extends React.Component {
             </div>;
         }
 
-        const editorStyle = this.props.readonly? {height:'500px', overflow:'hidden', zoom: '0.5'} : {height: '500px', overflowY: 'scroll'};
+        const editorStyle = {height: '500px', overflowY: 'scroll'};
         return (
             <div className="RichEditor-root">
                 <div className={className} onClick={this.focus}>

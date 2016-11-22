@@ -1,0 +1,79 @@
+<div class="comment media" ng-cloak style="width: 100%">
+	<a href="#" class="media-left">
+		<img alt="image" class="avatar avatar-lg" src="assets/images/avatar-1-small.jpg" >
+	</a>
+	<div class="media-body ">
+		<div class="comment-body">
+			<a href="#" class="comment-author">{{vm.name}}</a> 
+
+			<span ng-if="!vm.isreply">
+				<span ng-if="msg.type != 'Reply'" style="margin: 0px 5px;"> on&nbsp;<span class="text-azure">{{vm.classnames | listToString}}</span> </span>
+				
+				<div class="comment-meta">
+					<span class="label" 
+						ng-class="{'label-primary' : ['Message', 'Discussion', 'Blog'].indexOf(msg.type) >= 0 , 'label-danger' : ['Assignment', 'Task'].indexOf(msg.type) >= 0 , 'label-warning' :['Notification', 'Newsletter',  'Assessment'].indexOf(msg.type) >= 0 , 'label-info' :['Material'].indexOf(msg.type) >= 0 }" 
+						ng-if="msg.type != 'Reply'">
+						{{msg.type}}
+					</span>	
+					<span class="label label-info margin-left-10" ng-if="msg.dueby">
+						Due {{vm.duein}}
+					</span>
+				</div>
+			</span>
+			<span class="date" style="padding-left: 10px;"> {{vm.posted}}</span>
+
+			<div class="comment-header-actions" >
+				<button class="btn btn-pure btn-success icon fa-bookmark-o " ></button>
+				<button class="btn btn-pure btn-success icon fa-star-o" ></button>
+			</div>
+
+			<comment-editor id="react" content="msg.text" readonly="true" class="comment-content"> </comment-editor>
+
+            <richtext-card rtpost="msg" ng-if="vm.hasRichtext" ng-click="vm.openRichtext()"/>
+            
+			<div gallery files="msg.files" readonly="true" ng-if="msg.files && msg.files.length > 0"></div>
+
+			<div class="comment-actions pull-left">
+
+				<div ng-if="!vm.showSubmitActions">
+					<button class="btn btn-default btn-sm btn-round btn-outline " ng-click="vm.showReply()" style="height: 30px;"><i class="icon fa-reply" aria-hidden="true"></i>Reply</button>
+
+					<button class="btn btn-default btn-sm btn-round btn-outline "  ng-click="vm.showAllReplies()" style="height: 30px;" ng-if="replies.length > 2 && vm.showFewReplies">All replies ({{replies.length}})</button>
+
+				</div>
+
+				<div ng-if="vm.showSubmitActions">
+					
+					<button class="btn btn-default btn-sm btn-round btn-success" ng-class="vm.visibleReplyType==='submission'?'':' btn-outline'" ng-click="vm.showAllReplies('submission')"  ng-if="vm.showSubmitActions" style="height: 30px;">Submissions ({{vm.submissionsCount}})</button> 
+
+					<button class="btn btn-default btn-sm btn-round btn-outline " ng-click="vm.showSubmission()" style="height: 30px;"><i class="icon fa-reply" aria-hidden="true"></i>Submit</button>
+					
+					<button class="btn btn-default btn-sm btn-round btn-info btn-outline " ng-if="vm.showSubmitActions" ng-class="vm.visibleReplyType==='reply'?'':' btn-outline'"  ng-click="vm.showAllReplies()" style="height: 30px; margin-left: 20px;">Q&amp;A ({{vm.qaCount}})</button>
+
+					<button class="btn btn-default btn-sm btn-round btn-outline " ng-if="vm.showSubmitActions"  ng-click="vm.showReply()"  style="height: 30px;"><i class="icon fa-reply" aria-hidden="true"></i>Question?</button>
+					
+					
+					<button class="btn btn-default btn-sm btn-round btn-outline btn-warning"   style="height: 30px; margin-left: 20px;">Pending (10)</button> 
+				</div>
+			</div>
+			
+			<div class="comment-reply" ng-if="vm.showReplyBox" >
+				<post parent="msg.parent || msg" response-type="reply" placeholder="Enter your question/response here.."></post>
+			</div>
+
+			
+			<div class="comment-reply" ng-if="vm.showSubmitBox" >
+				<post parent="msg.parent || msg" response-type="submission" placeholder="Enter comments & submit assignment.."></post>
+			</div>
+
+		</div>
+
+		<div class="comments">
+			<comment msg="reply" ng-repeat="reply in vm.visibleReplies"></comment>
+		</div>
+	</div>
+
+    <!-- Comments-->
+    
+</div>
+

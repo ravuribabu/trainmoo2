@@ -2,12 +2,11 @@
 		    
 require('../core')
 require('../shared/gallery');
-require('../blog');
-
+require('../richtext');
+require('../events')
 // require('../../../node_modules/ng-photoswipe/angular-photoswipe');
 
-angular.module('post', ['ui.router', 'core', 'ui.bootstrap', 'gallery', 'blog']);
+angular.module('post', ['ui.router', 'core', 'ui.bootstrap', 'gallery', 'richtext', 'events']);
 
-require('./postConfig');
 require('./postFactory');
 require('./postController');

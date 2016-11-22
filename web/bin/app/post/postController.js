@@ -6,8 +6,10 @@ var moment = require('moment');
 post.directive('post', function(){
 	return {
 			restict : 'EA',
-			scope: {
+			scope: { //TODO pass the entire POST for simplicity
 				parent : '=',
+				responseType: '@',
+				placeholder: '@'
 			},
 			templateUrl: 'post/post.tpl.html',
 			controller: 'postController',
@@ -19,17 +21,32 @@ post.directive('post', function(){
 post.controller('postController', function($rootScope, $scope, postFactory, SweetAlert, alertify, appForm, $uibModal){
 
 	const vm = this;
-	const _ = require('lodash');
+
 	vm.parent = $scope.parent;
 	vm.isReply = $scope.parent?true:false;
+	vm.responseType = ($scope.responseType?$scope.responseType:'reply');
+	vm.placeholder = $scope.placeholder;
+	
+	//Default values
+	vm.selection = {
+		postType: { 
+			name: 'Discussion', 
+			icon: 'fa-exchange' ,
+		} ,
+		programLabel: 'All Programs',
+		classLabel: 'All Classes'
+	}
 
+	//Default post values
 	const emptyPost = {
 			parent: vm.parent,
 			files: [],
 			likes: 0,
 			classes: [],
-			replies: 0,
-			type: 'Discussion'
+			replies: [],
+			type: vm.parent && vm.parent.type?vm.parent.type:vm.selection.postType.name,
+			responseType: vm.responseType,
+			user: vm.parent?vm.parent.author:undefined
 		};
 
 	
@@ -102,21 +119,9 @@ post.controller('postController', function($rootScope, $scope, postFactory, Swee
 			name: 'Section 4',
 		},
 	]
-	vm.selection = {
-		postType: { 
-			name: 'Discussion', 
-			icon: 'fa-exchange' ,
-		} ,
-		programLabel: 'All Programs',
-		classLabel: 'All Classes'
-	}
-
-	vm.editStarted = () => {
-		vm.postSelected = true;
-		$scope.$apply();
-	}
 
 	vm.reset = (digest) => {
+
 		vm.uploadFile = false;
 		vm.uploadImage = false;
 		vm.showDueBy = false;
@@ -132,13 +137,7 @@ post.controller('postController', function($rootScope, $scope, postFactory, Swee
 
 	} //END OF reset
 
-	vm.selectPostType = (postType) => {
-		vm.selection.postType = postType;
-		vm.post.type = postType.name;
-	}
-
 	init();
-
 	function init(){
 
 		vm.reset();
@@ -167,11 +166,7 @@ post.controller('postController', function($rootScope, $scope, postFactory, Swee
 				}
 			}
 
-
-			console.log('POST CREATE: ' + JSON.stringify(vm.post));
-
-			if (!vm.post.text || vm.post.text.length <= 0) {
-				console.log("Empty text.. Ignore request to post");
+			if (!vm.richtext && (!vm.post.text || vm.post.text.length <= 0)) {
 				return;
 			}
 			postFactory.createPost(vm.post)
@@ -179,11 +174,11 @@ post.controller('postController', function($rootScope, $scope, postFactory, Swee
 
 						alertify
 						    .success("Post is created successfully");
+					       
 					        $scope.$broadcast('POST_RESET');
+							$scope.$emit('POST_CREATED', vm.post.parent);
 
 						    vm.reset();
-						    $scope.$emit('POST_CREATED', vm.post.parent);
-
 
 						})
 						.error(function(err){
@@ -193,14 +188,27 @@ post.controller('postController', function($rootScope, $scope, postFactory, Swee
 
 	} //END INIT
 
+
+	vm.editStarted = () => {
+		vm.postSelected = true;
+		$scope.$apply();
+	}
+
 	
+
+	vm.selectPostType = (postType) => {
+		vm.selection.postType = postType;
+		vm.post.type = postType.name;
+	}
+
+	//Side navigator selection changed
 	$scope.$on('WALL_NAV_CHANGED', function(event, data) {
 		//TODO if readonly or reply ignore
 		if (vm.isReply) {
 			return;
 		}
 		event.preventDefault();
-		vm.selection = data;
+		Object.assign(vm.selection, data);
 
 		if (!vm.selection.postType) {
 			vm.selection.postType = { 
@@ -210,17 +218,22 @@ post.controller('postController', function($rootScope, $scope, postFactory, Swee
 			}
 		}
 		vm.post.type = vm.selection.postType.name;
-		console.log('Post create selection: ' + JSON.stringify(vm.selection));
-	}); //END OF $scope.$on
+	}); 
+	//END OF $scope.$on
 
-	vm.openBlog = () => {
+	vm.openRichtext = () => {
 		var modalInstance = $uibModal.open({
-		            templateUrl: 'blog/blog.tpl.html',
+		            templateUrl: 'richtext/richtext.tpl.html',
 		            size: 'lg',
 		            backdrop: true,
-		            controller: 'blogController',
-		            resolve: {
-		            	richtext: undefined
+		            controller: 'richtextController',
+		            resolve:  {
+		            	params: function() {
+			            		return {
+				            		'richtextid': undefined,
+				            		'readonly': false
+		            			};
+		            	}
 		            }
 		        });
 
@@ -228,8 +241,11 @@ post.controller('postController', function($rootScope, $scope, postFactory, Swee
 			postFactory.getDraft()
     				.success(function(draft) { 
     					vm.draft = draft;
-    					vm.post.richtext = draft;
-    					draft.type = 'Published';
+    					vm.post.richtext = {};
+    					vm.post.richtext.id = draft;
+    					vm.post.richtext.previewText = draft.previewText;
+    					vm.post.richtext.previewImg = draft.previewImg;
+    					vm.post.richtext.title = draft.title;
     				} )
     				.error(function(err) { 
     					console.log(err);
@@ -239,5 +255,18 @@ post.controller('postController', function($rootScope, $scope, postFactory, Swee
 	      console.log('Modal dismissed at: ' + new Date());
 	    });
 	}
+
+	
+
+	vm.openCalendar = () => {
+		var modalInstance = $uibModal.open({
+		            templateUrl: 'events/calendar.tpl.html',
+		            size: 'lg',
+		            backdrop: true,
+		            controller: function() {} ,
+		    
+		        });
+	}
+
 
 });

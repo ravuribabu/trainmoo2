@@ -109,7 +109,7 @@ export default class CommentEditor extends React.Component {
             editorState={editorState}
             handleKeyCommand={this.handleKeyCommand}
             onChange={this.onChange}
-            placeholder="Create new post..."
+            placeholder={this.props.placeholder}
             ref="editor"
             readOnly={this.props.readonly}
             plugins={[this.emojiPlugin, this.mentionPlugin]}
