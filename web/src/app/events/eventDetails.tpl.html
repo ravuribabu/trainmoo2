@@ -1,0 +1,251 @@
+<form class="modal-content" name="Form" id="form" novalidate ng-submit="vm.form.submit(Form)" >
+
+  <div class="modal-header">
+      <button type="button" class="close" data-dismiss="modal" aria-label="Close" ng-click="vm.cancel()">
+        <span aria-hidden="true">×</span>
+      </button>
+      <h4 class="modal-title">Event</h4>
+  </div>
+
+  <div class="modal-body">
+
+    <div class="form-group">
+      <label for="title" class="control-label">Title</label>
+      <input type="text" id="title" class="form-control" placeholder="Title" ng-model="vm.event.title" required>
+      <span class="error text-small block" ng-if="Form.title.$dirty && Form.title.$error.required">Title is required.</span>
+    </div>
+
+    <div class="form-group">
+     <label for="message" class="control-label">Message</label>
+      <textarea id="message" name="message" class="form-control" rows="3" placeholder="Type your message" ng-model="vm.event.details" required></textarea>
+      <span class="error text-small block" ng-if="Form.message.$dirty && Form.message.$error.required">Message is required.</span>
+    </div>
+
+    <div class="form-group">
+        <div class="checkbox checkbox-primary">
+            <label class="control-label">
+              <input type="checkbox" ng-model="vm.event.isAllDay" ng-click="vm.setAllday(vm.event.isAllDay)">
+              All Day
+            </label>
+        </div>
+    </div>
+      
+
+    <!-- <div class="col-md-6" style="padding-left: 0px;"> -->
+      <div class="form-group">
+          <label class="control-label">From</label>
+          <div>
+             <div class="input-group" style="float: left; width: 200px;">
+                  <span class="input-group-addon">
+                    <i class="icon wb-calendar" aria-hidden="true"></i>
+                  </span>
+                  <input type="text" id="startDate" class="form-control" datepicker ng-model="vm.event.startDate" ng-change="vm.onStartDateChange()">
+              </div>
+              <div class="input-group" style="width: 150px;">
+                  <span class="input-group-addon">
+                    <i class="icon wb-time" aria-hidden="true"></i>
+                  </span>
+                  <input type="text" class="form-control ui-timepicker-input" timepicker ng-model="vm.event.startTime" ng-disabled="vm.event.isAllDay" ng-change="vm.onStartTimeChange()">
+              </div>
+          </div>
+      </div>
+   <!--  </div>
+
+    <div class="col-md-6"> -->
+      <div class="form-group">
+          <label class="control-label">To</label>
+          <div>
+             <div class="input-group" style="float: left; width: 200px;">
+                  <span class="input-group-addon">
+                    <i class="icon wb-calendar" aria-hidden="true"></i>
+                  </span>
+                  <input type="text" class="form-control datepair-date datepair-end" datepicker ng-model="vm.event.endDate" start-date="vm.event.startDate" ng-change="vm.onEndDateChange()">
+              </div>
+              <div class="input-group" style="width: 150px; "   >
+                  <span class="input-group-addon">
+                    <i class="icon wb-time" aria-hidden="true"></i>
+                  </span>
+                  <input type="text" class="form-control datepair-time datepair-end ui-timepicker-input" timepicker ng-model="vm.event.endTime" start-time="vm.event.startTime"  ng-disabled="vm.event.isAllDay" ng-change="vm.onEndTimeChange()">
+              </div>
+          </div>
+      </div>
+    <!-- </div> -->
+
+
+
+    <div class="form-group">
+        <label class="control-label">
+           Repeat 
+        </label>
+        <div class="btn-group dropdown" style="margin-left: 10px;">
+          <a href="#" class="dropdown-toggle" data-toggle="dropdown" aria-expanded="false">
+            {{vm.event.repeat}}
+            <span class="caret"></span>
+          </a>
+          <ul class="dropdown-menu bullet" aria-labelledby="exampleBulletDropdown1" role="menu">
+            <li role="presentation"><a href="javascript:void(0)" role="menuitem" ng-repeat="v in ['daily', 'weekly', 'monthly', 'none']" ng-click="vm.setFrequency(v)">{{v}}</a></li>
+          </ul>
+        </div>
+
+        <div class="checkbox checkbox-primary animate-if" style="display: inline-block; margin: 0px; padding: 0px 0px 0px 10px;" ng-if="vm.event.repeat != 'none'">
+            <label>
+              <input type="checkbox" ng-model="vm.event.isCustom" ng-click="vm.selectCustom()">
+              Custom
+            </label>
+        </div>
+
+        <span style="margin-left: 20px;">{{vm.repeatText}}</span>
+    </div>
+
+
+
+    <div class="col-md-12 form-group" uib-collapse="!vm.event.isCustom" style="border: 1px solid #eae6e6; border-radius: 5px; padding: 10px;">
+
+      <div ng-if="vm.event.repeat === 'daily'" class="animate-if">
+        Every <input type="number" class="form-control" style="width: 70px; display: inline;" ng-model="vm.event.daily.every"/> day(s).
+      </div>
+
+      <div ng-if="vm.event.repeat === 'weekly'" class="animate-if">
+        Every <input type="number" class="form-control" style="width: 70px; display: inline;" ng-model="vm.event.weekly.every"/> week(s) on <br/>
+        <div class="btn-group" aria-label="Basic example" role="group" style="margin-top: 10px"> 
+          <button type="button" 
+              style="margin-right: 2px;" 
+              ng-class=" vm.isWeekDaySelected(w.value)? 'btn-raised btn-info' : ''"
+              ng-click="vm.selectWeekDay(w.value)"
+              class="btn btn-default " 
+              ng-repeat="w in [{label: 'M', value: 1 }, {label: 'T', value: 2 },{label: 'W', value: 3 },{label: 'T', value: 4 },{label: 'F', value: 5 }, {label: 'S', value: 6 }, {label: 'S', value: 0 },] track by $index">{{w.label}}</button>
+        </div>
+      </div>
+
+      <div ng-if="vm.event.repeat === 'monthly'" class="animate-if">
+        Every <input type="number" class="form-control" style="width: 70px; display: inline;" ng-model="vm.event.monthly.every" /> month(s) on <br/>
+        
+        <div class="col-md-6">
+          <div class="checkbox checkbox-primary">
+              <label>
+                <input type="checkbox" ng-model="vm.event.monthly.iseach" ng-click="vm.selectMonthlyEach()">
+                Each
+              </label>
+          </div>
+          <div class="btn-group" aria-label="Basic example" role="group" style="margin-top: 10px; width: 264px;"> 
+            <button type="button" 
+                ng-disabled="vm.event.monthly.isonthe"
+                style="padding: 6px; width: 35px; margin-right: 2px; margin-bottom: 2px" 
+                class="btn btn-default " 
+                ng-class=" vm.isMonthDaySelected($index+1)? 'btn-raised btn-info' : ''"
+               ng-click="vm.selectMonthDay($index+1)"
+                ng-repeat="w in vm.monthDays track by $index">{{$index+1}}</button>
+          </div> 
+        </div>
+        
+        <div class="col-md-6">
+          <div class="checkbox checkbox-primary">
+                <label>
+                  <input type="checkbox" ng-model="vm.event.monthly.isonthe" ng-click="vm.selectMonthlyOnthe()">
+                  On the
+                </label>
+          </div>
+          <div class="col-md-6">
+            <div class="form-group" >
+                <select id="trainingstyle" class="form-control " ng-model="vm.event.monthly.seq" ui-select2 style="width: 100%">
+                  <option ng-repeat=" p in vm.monthly.seq "  >{{p}}</option>
+                </select>
+            </div>
+          </div>
+          <div class="col-md-6">
+            <div class="form-group">
+                <select id="trainingstyle" class="form-control " ng-model="vm.event.monthly.day" ui-select2 style="width: 100%" >
+                  <option ng-repeat="p in vm.monthly.days"  >{{p}}</option>
+                </select>
+            </div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+
+    <div class="form-group col-md-12 animate-if" ng-if="vm.event.repeat && vm.event.repeat != 'none'" style="padding: 0px">
+
+      <div style="float: left; margin-top: 5px; margin-right: 10px;">
+         <label style="display: inline-block;">End repeat: </label>
+         <div class="btn-group dropdown" style="margin-left: 10px;">
+           <a href="#" class="dropdown-toggle" data-toggle="dropdown" aria-expanded="false">{{vm.event.endRepeat}} <span class="caret"></span></a>
+           <ul class="dropdown-menu bullet" aria-labelledby="exampleBulletDropdown1" role="menu">
+              <li role="presentation"><a href="javascript:void(0)" role="menuitem" ng-repeat="v in ['Never', 'After', 'On Date']" ng-click="vm.setEndRepeat(v)">{{v}}</a></li>
+            </ul>
+          </div>
+          <div style="display: inline; margin-left: 10px" class="animate-if" ng-if="vm.event.endRepeat==='After'"> 
+            <input type="number" class="form-control" ng-model="vm.event.endAfter" style="display: inline;width: 70px;">
+            <label>sessions</label>
+          </div>
+      </div>    
+      <div ng-if="vm.event.endRepeat==='On Date'" style="padding: 0px;" class="animate-if">
+
+        <div class="input-group " style="width: 200px; margin-left: 10px;" >
+            <span class="input-group-addon">
+              <i class="icon wb-calendar" aria-hidden="true"></i>
+            </span>
+            <input type="text" id="startDate" class="form-control" datepicker ng-model="vm.event.endOn">
+         </div>
+      </div>
+    </div>
+
+    <div class="form-group">
+      <div gallery files="vm.event.attachments" type='image' gallery-title="Attachments"></div>
+    </div>
+
+    <div class="form-group" id="editColor">
+      <label class="control-label">Color:</label>
+      <div class="form-control" style="border: none;">
+        <ul class="color-selector">
+          <li class="bg-blue-600">
+            <input type="radio" data-color="blue|600" name="colorChosen" id="editColorChosen2" ng-model="vm.event.color" ng-value="'#1e88e5'">
+            <label for="editColorChosen2"></label>
+          </li>
+          <li class="bg-green-600">
+            <input type="radio" data-color="green|600" name="colorChosen" id="editColorChosen3"  ng-model="vm.event.color" ng-value="'#43a047'">
+            <label for="editColorChosen3"></label>
+          </li>
+          <li class="bg-cyan-600">
+            <input type="radio" data-color="cyan|600" name="colorChosen" id="editColorChosen4"  ng-model="vm.event.color" ng-value="'#00acc1'">
+            <label for="editColorChosen4"></label>
+          </li>
+          <li class="bg-orange-600">
+            <input type="radio" data-color="orange|600" name="colorChosen" id="editColorChosen5"  ng-model="vm.event.color" ng-value="'#fb8c00'">
+            <label for="editColorChosen4"></label>
+          </li>
+          <li class="bg-red-600">
+            <input type="radio" data-color="red|600" name="colorChosen" id="editColorChosen6"  ng-model="vm.event.color" ng-value="'#e53935'">
+            <label for="editColorChosen6"></label>
+          </li>
+          <li class="bg-blue-grey-600">
+            <input type="radio" data-color="blue-grey|600" name="colorChosen" id="editColorChosen7"  ng-model="vm.event.color" ng-value="'#546e7a'">
+            <label for="editColorChosen7"></label>
+          </li>
+          <li class="bg-purple-600">
+            <input type="radio" data-color="purple|600" name="colorChosen" id="editColorChosen8"  ng-model="vm.event.color" ng-value="'#8e24aa'">
+            <label for="editColorChosen8"></label>
+          </li>
+        </ul>
+      </div>
+    </div>
+
+<!-- 
+    <div style="text-align: left;">
+         <a href="#" class="btn btn-success btn-raised" ng-click="vm.update()" ng-if="vm.event._id">Accept</a>
+         <a href="#" class="btn btn-danger btn-raised" ng-click="vm.update()" ng-if="vm.event._id">Decline</a>
+    </div> -->
+    <div style="text-align: right;">
+        <button type="submit" class="btn btn-primary btn-raised" ng-if="vm.event._id">Save</button>
+        <button type="submit"  class="btn btn-primary btn-raised"  ng-if="!vm.event._id">Create</button>
+        <a href="#"  class="btn btn-danger btn-raised" ng-click="vm.delete()"  ng-if="vm.event._id">Delete</button>
+        <a href="#"  class="btn btn-default btn-raised" ng-click="vm.cancel()"  ng-if="!vm.event._id">Cancel</button>
+    </div>
+
+
+  </div>
+
+    
+
+
+</form>

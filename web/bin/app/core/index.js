@@ -5,15 +5,17 @@ require('../../../node_modules/angular-ui-utils/modules/mask/mask');
 require('../../../node_modules/ng-flow/dist/ng-flow');
 require('../../../node_modules/select2/dist/js/select2');
 require('../../../node_modules/angular-ui-select2/angular-ui-select2');
-require('../../../node_modules/formatter.js/dist/jquery.formatter.min');
 require('ngalertify')
-require('lodash');
+const _ = require('lodash');
 require('SweetAlert');
 require('angular-animate');
 require('../../../node_modules/angular-ui-bootstrap/dist/ui-bootstrap-tpls');
-require('angularjs-datepicker');
+require('../../../node_modules/bootstrap-datepicker/dist/js/bootstrap-datepicker.min')
+require('../../../node_modules/jquery-timepicker/jquery.timepicker');
+require('angular-aside');
+var moment = require('moment');
 
-var core = angular.module('core', ['flow', 'ngAlertify', 'ngAnimate', 'ui.bootstrap', '720kb.datepicker']);
+var core = angular.module('core', ['flow', 'ngAlertify', 'ngAnimate', 'ui.bootstrap', 'ngAside']);
 require('./directive/commentEditor');
 
 core.factory('_', ['$window', function($window) {
@@ -31,6 +33,76 @@ core.directive('select2', function(){
 		}
 	};
 });
+
+
+core.directive('datepicker', function(){
+	return {
+		require: 'ngModel',
+		restrict: 'AE',
+		scope: {
+			date: "=",
+			startDate: "=",
+			ngModel: "="
+		},
+		link: function($scope, elm, $attributes, controller){
+
+			const value = $scope.ngModel; // _.get($scope, $attributes.ngModel, '12/31/2016');
+			
+			elm.datepicker({
+		        format: 'mm/dd/yyyy',
+		        'autoclose': true,
+		         todayHighlight: true,
+		         todayBtn: true,
+		    });
+
+			if (value instanceof Date) {
+				elm.datepicker('update', moment(value).format('MM/DD/YYYY'));
+			} else {
+				elm.datepicker('update', value);
+			}
+		    
+
+			$scope.$watch('startDate', function(startDate) {
+				if (startDate){
+					elm.datepicker('setStartDate', startDate);
+				}
+			})
+		}
+	};
+});
+
+// core.config(['uiMask.ConfigProvider', function(uiMaskConfigProvider) {
+//   uiMaskConfigProvider.maskDefinitions({'A': /[a-z]/, '*': /[a-zA-Z0-9]/});
+//   uiMaskConfigProvider.clearOnBlur(false);
+//   uiMaskConfigProvider.eventsToHandle(['input', 'keyup', 'click']);
+//   uiMaskConfigProvider.addDefaultPlaceholder('@');
+// }]);
+
+core.directive('timepicker', function(){
+	return {
+		require: 'ngModel',
+		restrict: 'AE',
+		scope: {
+			startTime: '='
+		},
+		link: function($scope, elm, $attributes, controller){
+			elm.timepicker({
+				zindex: 1060
+		    });
+		    
+		    $scope.$watch('startTime', function(startTime) {
+		    	if (startTime) {
+		    		elm.timepicker('option', {
+		    			minTime: startTime,
+		    			showDuration: true
+		    		});
+		    	}
+		    })
+		}
+	};
+});
+
+
 
 
 core.factory('lookupService', function($http){
@@ -100,23 +172,6 @@ core.factory('SweetAlert', [ '$rootScope', function ( $rootScope ) {
 
 
 require('./appForm')
-
-core.directive('formatter', function(){
-	return {
-		require: 'ngModel',
-		restrict: 'A',
-		link: function($scope, elm, attrs, controller){
-			 var pattern;
-			// if (attrs.pattern === 'phone') {
-			// 	pattern = '({{999}}) {{999}}-{{9999}}'
-			// }
-			if (attrs.pattern) {
-		        pattern = attrs.pattern.replace(/\[\[/g, '{{').replace(/\]\]/g, '}}');
-		      }
-			elm.formatter({pattern: pattern, persistent: true});
-		}
-	};
-});
 
 // Google Map
 core.directive('gmap', function($rootScope, lazyLoadGmapApi) {
@@ -320,24 +375,6 @@ core.service('lazyLoadGmapApi', function lazyLoadGmapApi($window, $q) {
 
   return deferred.promise
 });
-
-
-core.directive('ngEnter', function () {
-    return function (scope, element, attrs) {
-        element.bind("keydown keypress", function (event) {
-            if(event.which === 13) {
-                scope.$apply(function (){
-                    scope.$eval(attrs.ngEnter);
-                });
- 
-                event.preventDefault();
-            }
-        });
-    };
-});
-
-
-
 
 
 

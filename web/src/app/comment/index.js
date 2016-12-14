@@ -11,7 +11,9 @@ require('../post')
 const comment = angular.module('comment', ['ui.router', 'core', 'ui.bootstrap', 'gallery', 'post']);
 
 require('./commentController');
-
+require('./submitActionController');
+require('./taskActionController');
+require('./repliesController');
 
 comment.filter('postTime', function(){
 	return function(d) {

@@ -5,7 +5,7 @@ require('../shared/gallery');
 
 // require('../../../node_modules/ng-photoswipe/angular-photoswipe');
 
-angular.module('school', ['ui.router', 'core', 'ui.bootstrap', 'gallery']);
+angular.module('school', ['ui.router', 'core', 'ui.bootstrap', 'gallery', 'richtext', 'events']);
 
 require('./schoolFactory');
 require('./schoolEditController');

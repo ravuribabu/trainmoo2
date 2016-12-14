@@ -24,7 +24,7 @@ post.controller('postController', function($rootScope, $scope, postFactory, Swee
 
 	vm.parent = $scope.parent;
 	vm.isReply = $scope.parent?true:false;
-	vm.responseType = ($scope.responseType?$scope.responseType:'reply');
+	vm.responseType = $scope.responseType;
 	vm.placeholder = $scope.placeholder;
 	
 	//Default values
@@ -169,6 +169,11 @@ post.controller('postController', function($rootScope, $scope, postFactory, Swee
 			if (!vm.richtext && (!vm.post.text || vm.post.text.length <= 0)) {
 				return;
 			}
+
+			if (vm.post.parent) {
+				vm.post.parent = vm.post.parent._id;
+			}
+			
 			postFactory.createPost(vm.post)
 						.success(function(data){
 

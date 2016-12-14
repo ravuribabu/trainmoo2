@@ -14,14 +14,15 @@ var SchoolUserSchema = new Schema({
   status: { type: String, enum: ['active', 'suspended']} ,
   payment: { type: String, enum: ['pending', 'partial', 'completed']} ,
   type: { type: String, enum: ['teacher', 'student', 'parent', 'admin'], required: true} ,
-  created_at: Date,
-  updated_at: Date,
 
   //Stage till user is created
   email: String,
-  firstname: String,
-  lastname: String
+  name: String,
+  mobile: String,
+  registerUsing: { type: String, enum: ['mobile', 'email']},
 
+  created_at: Date,
+  updated_at: Date,
 });
 
 // on every save, add the date

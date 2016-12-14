@@ -1,6 +1,7 @@
+var moment = require('moment');
 var school = require('angular').module('school');
 
-school.controller('classEditController', function($scope, $stateParams, $location, appForm, lookupService, schoolFactory, SweetAlert, alertify, $interval){
+school.controller('classEditController', function($scope, $stateParams, $location, appForm, lookupService, schoolFactory, SweetAlert, alertify, $interval, $aside, eventFactory){
 
   var vm = this;
   var _ = require('lodash');
@@ -72,6 +73,18 @@ school.controller('classEditController', function($scope, $stateParams, $locatio
                   };
     }
 
+    vm.schedule = {}
+    eventFactory.getSchedule(vm.classid)
+                .success(function(event){
+                  vm.schedule = event;
+                  vm.schedule.repeatText = eventFactory.getRepeatText(vm.schedule);
+                })
+                .error(function(err){
+                  console.log(err);
+                })
+
+
+
 
 
     $scope.form = new appForm.AppForm(angular, function(form){
@@ -116,10 +129,6 @@ school.controller('classEditController', function($scope, $stateParams, $locatio
         } 
       }, 10000);
 
-
-
-
-  
   };
 
   //TODO Make it directive
@@ -129,6 +138,39 @@ school.controller('classEditController', function($scope, $stateParams, $locatio
     $scope.newSection = {
     }
   }
+
+  $scope.openEvent = function() {
+
+      vm.schedule.event = event._id;
+
+      var modalInstance = $aside.open({
+                  templateUrl: 'events/eventDetails.tpl.html',
+                  size: 'md',
+                  backdrop: true,
+                  controller: 'eventDetailsController',
+                  controllerAs: 'vm',
+                  placement: 'right',
+                  resolve:  {
+                        params: function() {
+                                return {
+                                    'calendarEvent': vm.schedule,
+                                };
+                        }
+                    }
+              });
+
+      modalInstance.result.then(function (event) {
+          vm.event = event;
+          //loadEvents(vm.currentDate, vm.currentView);
+        }, function () {
+          console.log('Modal dismissed at: ' + new Date());
+          //loadEvents(vm.currentDate, vm.currentView);
+        });
+
+
+    }
+
+
 
   $scope.hideAddSection = function() {
     $scope.sectionAdd = false;

@@ -22,6 +22,7 @@ module.exports = function(router) {
 			.get(function(req, res) {
 			  	Post.find({parent : req.params.post_id})
 			  		.populate('author')
+			  		.populate('parent')
 				  	.exec(function(err, posts){
 				  		if (err) {
 				  			console.log('error ' + err);
@@ -47,10 +48,11 @@ module.exports = function(router) {
 
 						//TODO parllelize both below
 						//Save parent
+						debugger;
 						if (postJson.parent) {
 							let parent = postJson.parent;
 
-							Post.findById(parent._id, function(err, parentPost) {
+							Post.findById(parent, function(err, parentPost) {
 								if (err) {
 									console.log(err);
 									return;

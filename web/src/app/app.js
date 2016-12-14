@@ -23,6 +23,8 @@ require('../common/sidebar');
 // require('../common/top/menubar');
 // require('../common/top/sidebar');
 require('../common/jquery-slidePanel');
+require('../common/jquery-maskmoney');
+
 var angular = require('angular');
 
 
@@ -98,7 +100,7 @@ app.config(function($stateProvider, $urlRouterProvider, $locationProvider, $http
 		        abstract: true
 		    })
 	    .state('app.apph', {
-		        url: "/appt",
+		        url: "/apph",
 		        templateUrl: "shared/apph.tpl.html",
 		        abstract: true
 		    });
@@ -156,24 +158,21 @@ app.directive('selectpicker', function(){
 	};
 });
 
-// app.directive('datepicker', function(){
-// 	return {
-// 		restrict: 'A',
-// 		require: 'ngModel',
-// 		link: function($scope, $element, $attributes){
-// 			$element.datepicker({
-// 				todayBtn: "linked",
-// 			    clearBtn: true,
-// 			    forceParse: false,
-// 			    autoclose: true,
-// 			    todayHighlight: true,
-// 			    toggleActive: true,
-// 			    defaultViewDate: { year: 2016, month: 8, day: 15 }
-// 			});
-// 		}
-// 	};
-// });
-//Apply to form-group element as attribute to get material look
+
+app.directive('maskmoney', function(){
+	return {
+		restrict: 'A',
+		require: '?ngModel',
+		link: function($scope, $element, $attributes){
+
+			const value = $scope.ngModel;
+			console.log('MASKMONEY:' + value);
+
+			$element.maskMoney();
+		}
+	};
+});
+
 app.directive('floating', function(){
 	return {
 		restrict: 'A',

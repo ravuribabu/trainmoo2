@@ -24,12 +24,13 @@ module.exports = function(grunt){
       'ngalertify',
       'SweetAlert',
       'angular-animate',
-      'angularjs-datepicker',
       'jquery', 
       'flow', 
       'angular-bootstrap', 
       'draft-js' ,
-      'react-big-calendar'
+      'react-big-calendar',
+      'moment',
+      'angular-aside'
   ];
 
     // Default task.

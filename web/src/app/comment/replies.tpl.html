@@ -1,0 +1,8 @@
+<div ng-if="vm.showFew" style="text-align: right">
+	<small>Showing {{vm.visibleReplies.length}} of {{vm.total}} <a href="#" ng-click="vm.showAll()" style="margin-left: 20px;">Show all</a></small>
+</div>
+<div ng-if="!vm.showFew" style="text-align: right">
+	<small> {{vm.total}} responses</small>
+</div>
+
+<comment msg="reply" ng-repeat="reply in vm.visibleReplies"></comment>

@@ -5,7 +5,7 @@ var angular = require('angular')
 var school = angular.module('school')
 
 school.controller('classUsersController',
-	function($scope, $state, $rootScope, $stateParams, $uibModal, schoolFactory, SweetAlert){
+	function($scope, $state, $rootScope, $stateParams, $uibModal, $aside, schoolFactory, SweetAlert){
 
 		$scope.selected = undefined;
 	    $scope.selectedStates = [];
@@ -51,8 +51,7 @@ school.controller('classUsersController',
 
 	      var newClassUser = {
 	      	email: $item.email,
-			firstname: $item.firstname,
-			lastname: $item.lastname,
+			name: $item.name,
 			type: $item.type,
 			'class': vm.classid,
 			user: $item.user
@@ -100,9 +99,10 @@ school.controller('classUsersController',
 		$scope.add = function(role, user) {
 				var newUser = {
 					email: '',
-					firstname: 'new',
-					lastname: 'user',
-					type: role,
+					mobile: '',
+					name: '',
+					type: 'student',
+					registerUsing: 'Email',
 					'class': vm.classid
 				}
 
@@ -111,12 +111,13 @@ school.controller('classUsersController',
 
 		function openModal(user){
 
-			var modalInstance = $uibModal.open({
+			var modalInstance = $aside.open({
 		            templateUrl: 'school/users/classUser.tpl.html',
 		            placement: 'right',
 		            size: 'md',
 		            backdrop: true,
 		            controller: 'classUserController',
+		            controllerAs: 'vm',
 		            resolve: {
 		            	'user': user
 		            }

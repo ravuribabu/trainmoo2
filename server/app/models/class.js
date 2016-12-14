@@ -36,7 +36,7 @@ var ClassSchema = new Schema({
 
   status: String,
   capacity: String,
-  cost: Number,
+  cost: String,
   start: Date,
   end: Date,
   noOfSessions: Number,

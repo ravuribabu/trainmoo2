@@ -1,30 +1,49 @@
 var mongoose = require('mongoose');
 var Schema = mongoose.Schema;
-
+var AttachmentSchema = require('./attachment').AttachmentSchema;
+var moment = require('moment');
 
 var EventSchema = new Schema({
+	
+	school:  {type: Schema.Types.ObjectId, ref: 'School'},
 	class: {type: Schema.Types.ObjectId, ref: 'Class'},
-	trainer : {type: Schema.Types.ObjectId, ref: 'User'},
+	users : [{type: Schema.Types.ObjectId, ref: 'User'}],
+
 	title: { type: String, required: true},
 	details: { type: String, required: true},
-	type: { type: String, required: true},
-	eventTime: {
-		start: { type: Date, required: true},
-		end: { type: Date, required: true}
-	},
+	type: { type: String, enum: ['schedule', 'event', 'other']},
+	isAllDay: { type: Boolean, default: false },
+	start: Date,
+	end: Date,
+	calculatedEndDate: Date,
+	color: String,
 
-	repeat: { type: Boolean, default: false},
-	frequency:  {
-			type: String,
-			enum: ['daily', 'weekly', 'monthly', 'yearly']
+	repeat: {type:String, enum: ['none', 'daily', 'weekly', 'monthly'], default: 'none'},
+	isCustom: { type: Boolean, default: false },
+	daily: {
+			every: Number
 		},
-	eventDate: {
-		start: Date, end: Date
+	weekly: {
+		every: Number,
+		days: [Number],
 	},
-	days: [ {
-			type: String,
-			enum: ['monday', 'tuesday', 'wednesday', 'thursday', 'friday', 'saturday', 'sunday']
-		} ],
+	monthly: {
+		every: Number,
+		iseach: Boolean,
+		isonthe: Boolean,
+		days: [Number],
+		seq: {type:String, enum:['first', 'second', 'third', 'fourth', 'fifth', 'last']},
+		day : {
+				type: String,
+				enum: ['monday', 'tuesday', 'wednesday', 'thursday', 'friday', 'saturday', 'sunday', 'day', 'weekday', 'weekendday']
+			  } 
+	},
+	endRepeat: { type: String, enum: ['Never', 'After', 'On Date']},
+	endAfter: Number,
+	endOn: Date,
+	attachments: [AttachmentSchema],
+
+
 	created_at: Date,
     updated_at: Date
 });
@@ -37,6 +56,7 @@ EventSchema.virtual('eventid').get(function(){
 
 // on every save, add the date
 EventSchema.pre('save', function(next) {
+
   var currentDate = new Date();
   this.updated_at = currentDate;
   if (!this.created_at)

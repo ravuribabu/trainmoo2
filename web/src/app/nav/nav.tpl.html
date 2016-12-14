@@ -3,6 +3,36 @@
     <!-- <li class="sidebar-category">
        <a href="#">View Posts</a>
     </li> -->
+    
+
+    <li class="sidebar-category" ng-if="vm.hasPrograms">
+       Programs
+    </li>
+    <li class="sidebar-item" ng-repeat="p in vm.programs" ng-if="vm.hasPrograms"> 
+      <a href="#" ng-click="vm.selectProgram(p.id)" ng-class="p.id === vm.selection.program.id ? 'active' : ''">{{p.name}}
+        <div style="position: absolute;right: 30px;display: inline-block; vertical-align: middle;" 
+                ng-if="p.newItems > 0">
+            <span class="badge badge-danger" >2</span>
+        </div>
+      </a>
+    </li>
+
+    <li class="sidebar-category" ng-if="vm.hasClasses">
+      Classes
+    </li>
+    <li class="sidebar-item" ng-repeat="c in vm.visibleClasses" ng-if="vm.hasClasses">
+      <a href="#" ng-click="vm.selectClass(c.id)" ng-class="c.id === vm.selection.class.id ? 'active' : ''">
+        {{c.name}}
+        <div style="position: absolute;right: 30px;display: inline-block; vertical-align: middle;" 
+              ng-if="c.newItems > 0">
+          <span class="badge badge-danger" >2</span>
+        </div>
+      </a>
+    </li>
+
+    <li class="sidebar-category" ng-if="vm.hasClasses">
+      Post Type
+    </li>
     <li class="sidebar-item" ng-repeat="type in vm.postTypes">
       <a href="#" ng-click="vm.selectPostType(type)" 
               ng-class="type.name === vm.selection.postType.name ? 'active' : ''">
@@ -17,31 +47,6 @@
       
     </li>
 
-
-    <li class="sidebar-category" ng-if="vm.hasPrograms">
-       <a href="#">Programs</a>
-    </li>
-    <li class="sidebar-item" ng-repeat="p in vm.programs" ng-if="vm.hasPrograms"> 
-      <a href="#" ng-click="vm.selectProgram(p.id)" ng-class="p.id === vm.selection.program.id ? 'active' : ''">{{p.name}}
-        <div style="position: absolute;right: 30px;display: inline-block; vertical-align: middle;" 
-                ng-if="p.newItems > 0">
-            <span class="badge badge-danger" >2</span>
-        </div>
-      </a>
-    </li>
-
-    <li class="sidebar-category" ng-if="vm.hasClasses">
-       <a href="#">Classes</a>
-    </li>
-    <li class="sidebar-item" ng-repeat="c in vm.visibleClasses" ng-if="vm.hasClasses">
-      <a href="#" ng-click="vm.selectClass(c.id)" ng-class="c.id === vm.selection.class.id ? 'active' : ''">
-        {{c.name}}
-        <div style="position: absolute;right: 30px;display: inline-block; vertical-align: middle;" 
-              ng-if="c.newItems > 0">
-          <span class="badge badge-danger" >2</span>
-        </div>
-      </a>
-    </li>
     
   </ul>
   <div class="sidebar-footer">

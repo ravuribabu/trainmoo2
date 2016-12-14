@@ -19,6 +19,10 @@ login.controller('loginController', function($rootScope, $scope, $state, $locati
 								  	if (user && user._id ) {
 								  		console.log('Successfully loggedin!!');
 
+								  		$rootScope.user = {
+								  			id: user._id,
+								  			name: user.name
+								  		}
 								  		$state.go('app.apph.wall');
 								  		//$window.location.href = '/school';
 										//$state.go('index2.school', {userid:user.userid});

@@ -1,0 +1,15 @@
+<!-- visible only for trainers-->
+<button class="btn btn-default btn-sm btn-round btn-success" ng-class="vm.showReplyType==='submission'?'':' btn-outline'" ng-click="vm.showReplies('submission')"  style="height: 30px;">Completed ({{vm.submissionsCount}})</button> 
+
+<!-- visible only for students-->
+<button class="btn btn-primary btn-sm btn-round btn-raised " ng-click="vm.onComplete()" style="height: 30px;" ng-if="!vm.userHasCompletedTask"><i class="icon fa-check" aria-hidden="true"></i>I have completed</button>
+<button class="btn btn-success btn-sm btn-round btn-raised " style="height: 30px;" ng-if="vm.userHasCompletedTask" ng-disabled="vm.userHasCompletedTask"><i class="icon fa-check" aria-hidden="true"></i>Completed</button>
+
+<!-- visible only for trainers & students-->
+
+<button class="btn btn-default btn-sm btn-round btn-info btn-outline " ng-class="vm.showReplyType ==='reply'?'':' btn-outline'"  ng-click="vm.showReplies('reply')" style="height: 30px; margin-left: 20px;">Q&amp;A ({{vm.qaCount}})</button>
+
+<button class="btn btn-default btn-sm btn-round btn-outline " ng-click="vm.showPost('reply')"  style="height: 30px;"><i class="icon fa-reply" aria-hidden="true"></i>Ask Question?</button>
+
+<!-- visible only for trainers-->
+<button class="btn btn-default btn-sm btn-round btn-outline btn-warning"   style="height: 30px; margin-left: 20px;">Pending (10)</button> 

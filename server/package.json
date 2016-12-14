@@ -26,6 +26,7 @@
     "mongoose": "^4.6.1",
     "mongoose-deep-populate": "^3.0.0",
     "morgan": "^1.7.0",
+    "node-cache": "^4.1.0",
     "passport": "^0.3.2",
     "passport-google-oauth": "^1.0.0",
     "passport-local": "^1.0.0",

@@ -36,7 +36,7 @@
         
         <div class="row">
           <div class="col-md-4 text-left">     
-           <input type="text" ng-model="customSelected" placeholder="Add user to class " uib-typeahead="user as user.firstname for user in vm.schoolusers  | filter:{firstname:$viewValue} | limitTo:8" typeahead-template-url="customTemplate.html" class="form-control" typeahead-show-hint="true"  typeahead-on-select="itemSelected($item, $model, $label, $event);customSelected=''" typeahead-min-length="2" typeahead-wait-ms="100" width="200px" />
+           <input type="text" ng-model="customSelected" placeholder="Add user to class " uib-typeahead="user as user.name for user in vm.schoolusers  | filter:{name:$viewValue} | limitTo:8" typeahead-template-url="customTemplate.html" class="form-control" typeahead-show-hint="true"  typeahead-on-select="itemSelected($item, $model, $label, $event);customSelected=''" typeahead-min-length="2" typeahead-wait-ms="100" width="200px" />
           </div>  
         </div>
 

@@ -1,4 +1,4 @@
-angular.module('templates.app', ['comment/comment.tpl.html', 'events/calendar.tpl.html', 'login/login.tpl.html', 'login/signup.tpl.html', 'nav/nav.tpl.html', 'post/post.tpl.html', 'richtext/richtext.tpl.html', 'richtext/richtextCard.tpl.html', 'school/class/classEdit.tpl.html', 'school/pdfview.tpl.html', 'school/school.tpl.html', 'school/schoolEdit.tpl.html', 'school/users/classUser.tpl.html', 'school/users/classUsers.tpl.html', 'shared/app.tpl.html', 'shared/apph.tpl.html', 'shared/apptop.tpl.html', 'shared/gallery.tpl.html', 'shared/gmap.tpl.html', 'shared/pdfviewer.tpl.html', 'user/directive/userCard.tpl.html', 'user/userEdit.tpl.html', 'userList/userList.tpl.html', 'wall/wall.tpl.html']);
+angular.module('templates.app', ['comment/comment.tpl.html', 'comment/replies.tpl.html', 'comment/submitActions.tpl.html', 'comment/taskActions.tpl.html', 'events/calendar.tpl.html', 'events/eventDetails.tpl.html', 'events/events.tpl.html', 'login/login.tpl.html', 'login/signup.tpl.html', 'nav/nav.tpl.html', 'post/post.tpl.html', 'richtext/richtext.tpl.html', 'richtext/richtextCard.tpl.html', 'school/appSchool.tpl.html', 'school/class/classEdit.tpl.html', 'school/pdfview.tpl.html', 'school/school.tpl.html', 'school/schoolEdit.tpl.html', 'school/users/classUser.tpl.html', 'school/users/classUsers.tpl.html', 'shared/app.tpl.html', 'shared/apph.tpl.html', 'shared/apptop.tpl.html', 'shared/gallery.tpl.html', 'shared/gmap.tpl.html', 'user/directive/userCard.tpl.html', 'user/userEdit.tpl.html', 'userList/userList.tpl.html', 'wall/wall.tpl.html']);
 
 angular.module("comment/comment.tpl.html", []).run(["$templateCache", function($templateCache) {
   $templateCache.put("comment/comment.tpl.html",
@@ -37,43 +37,32 @@ angular.module("comment/comment.tpl.html", []).run(["$templateCache", function($
     "            \n" +
     "			<div gallery files=\"msg.files\" readonly=\"true\" ng-if=\"msg.files && msg.files.length > 0\"></div>\n" +
     "\n" +
-    "			<div class=\"comment-actions pull-left\">\n" +
+    "			<div class=\"comment-actions\">\n" +
     "\n" +
-    "				<div ng-if=\"!vm.showSubmitActions\">\n" +
-    "					<button class=\"btn btn-default btn-sm btn-round btn-outline \" ng-click=\"vm.showReply()\" style=\"height: 30px;\"><i class=\"icon fa-reply\" aria-hidden=\"true\"></i>Reply</button>\n" +
-    "\n" +
-    "					<button class=\"btn btn-default btn-sm btn-round btn-outline \"  ng-click=\"vm.showAllReplies()\" style=\"height: 30px;\" ng-if=\"replies.length > 2 && vm.showFewReplies\">All replies ({{replies.length}})</button>\n" +
+    "				<div ng-if=\"!vm.showSubmitActions &&  !vm.showTaskActions\">\n" +
+    "					\n" +
+    "					<button class=\"btn btn-default btn-sm btn-round btn-outline \" ng-click=\"showPost('reply')\" style=\"height: 30px;\"><i class=\"icon fa-reply\" aria-hidden=\"true\"></i>Reply</button>\n" +
     "\n" +
     "				</div>\n" +
     "\n" +
-    "				<div ng-if=\"vm.showSubmitActions\">\n" +
-    "					\n" +
-    "					<button class=\"btn btn-default btn-sm btn-round btn-success\" ng-class=\"vm.visibleReplyType==='submission'?'':' btn-outline'\" ng-click=\"vm.showAllReplies('submission')\"  ng-if=\"vm.showSubmitActions\" style=\"height: 30px;\">Submissions ({{vm.submissionsCount}})</button> \n" +
-    "\n" +
-    "					<button class=\"btn btn-default btn-sm btn-round btn-outline \" ng-click=\"vm.showSubmission()\" style=\"height: 30px;\"><i class=\"icon fa-reply\" aria-hidden=\"true\"></i>Submit</button>\n" +
-    "					\n" +
-    "					<button class=\"btn btn-default btn-sm btn-round btn-info btn-outline \" ng-if=\"vm.showSubmitActions\" ng-class=\"vm.visibleReplyType==='reply'?'':' btn-outline'\"  ng-click=\"vm.showAllReplies()\" style=\"height: 30px; margin-left: 20px;\">Q&amp;A ({{vm.qaCount}})</button>\n" +
-    "\n" +
-    "					<button class=\"btn btn-default btn-sm btn-round btn-outline \" ng-if=\"vm.showSubmitActions\"  ng-click=\"vm.showReply()\"  style=\"height: 30px;\"><i class=\"icon fa-reply\" aria-hidden=\"true\"></i>Question?</button>\n" +
-    "					\n" +
-    "					\n" +
-    "					<button class=\"btn btn-default btn-sm btn-round btn-outline btn-warning\"   style=\"height: 30px; margin-left: 20px;\">Pending (10)</button> \n" +
-    "				</div>\n" +
+    "				<submit-actions msg=\"msg\" ng-if=\"vm.showSubmitActions\" show-replies=\"showReplies(type)\" show-post=\"showPost(type)\"/>\n" +
+    "				<task-actions msg=\"msg\" ng-if=\"vm.showTaskActions\" show-replies=\"showReplies(type)\" show-post=\"showPost(type)\"/>\n" +
+    "				\n" +
     "			</div>\n" +
-    "			\n" +
-    "			<div class=\"comment-reply\" ng-if=\"vm.showReplyBox\" >\n" +
-    "				<post parent=\"msg.parent || msg\" response-type=\"reply\" placeholder=\"Enter your question/response here..\"></post>\n" +
+    "\n" +
+    "			<div class=\"comment-reply\" ng-if=\"vm.postType ==='reply'\" >\n" +
+    "				<post parent=\"msg.parent || msg\" response-type=\"{{msg.responseType || 'reply'}}\" placeholder=\"Enter question/response..\"></post>\n" +
     "			</div>\n" +
     "\n" +
     "			\n" +
-    "			<div class=\"comment-reply\" ng-if=\"vm.showSubmitBox\" >\n" +
-    "				<post parent=\"msg.parent || msg\" response-type=\"submission\" placeholder=\"Enter comments & submit assignment..\"></post>\n" +
+    "			<div class=\"comment-reply\" ng-if=\"vm.postType === 'submission' \" >\n" +
+    "				<post parent=\"msg.parent || msg\" response-type=\"{{msg.responseType || 'submission'}}\" placeholder=\"Submit assignment..\"></post>\n" +
     "			</div>\n" +
     "\n" +
     "		</div>\n" +
     "\n" +
-    "		<div class=\"comments\">\n" +
-    "			<comment msg=\"reply\" ng-repeat=\"reply in vm.visibleReplies\"></comment>\n" +
+    "		<div class=\"comments\" ng-if=\"msg.replies && msg.replies.length > 0\">\n" +
+    "			<replies comments=\"vm.selectedReplies\"></replies>\n" +
     "		</div>\n" +
     "	</div>\n" +
     "\n" +
@@ -84,13 +73,338 @@ angular.module("comment/comment.tpl.html", []).run(["$templateCache", function($
     "");
 }]);
 
+angular.module("comment/replies.tpl.html", []).run(["$templateCache", function($templateCache) {
+  $templateCache.put("comment/replies.tpl.html",
+    "<div ng-if=\"vm.showFew\" style=\"text-align: right\">\n" +
+    "	<small>Showing {{vm.visibleReplies.length}} of {{vm.total}} <a href=\"#\" ng-click=\"vm.showAll()\" style=\"margin-left: 20px;\">Show all</a></small>\n" +
+    "</div>\n" +
+    "<div ng-if=\"!vm.showFew\" style=\"text-align: right\">\n" +
+    "	<small> {{vm.total}} responses</small>\n" +
+    "</div>\n" +
+    "\n" +
+    "<comment msg=\"reply\" ng-repeat=\"reply in vm.visibleReplies\"></comment>");
+}]);
+
+angular.module("comment/submitActions.tpl.html", []).run(["$templateCache", function($templateCache) {
+  $templateCache.put("comment/submitActions.tpl.html",
+    "<!-- visible only for trainers-->\n" +
+    "<button class=\"btn btn-default btn-sm btn-round btn-success\" ng-class=\"vm.showReplyType==='submission'?'':' btn-outline'\" ng-click=\"vm.showReplies('submission')\"  style=\"height: 30px;\">Submissions ({{vm.submissionsCount}})</button> \n" +
+    "\n" +
+    "<!-- visible only for students-->\n" +
+    "<button class=\"btn btn-default btn-sm btn-round btn-outline \" ng-click=\"vm.showPost('submission')\" style=\"height: 30px;\"><i class=\"icon fa-reply\" aria-hidden=\"true\"></i>Submit</button>\n" +
+    "\n" +
+    "<!-- visible only for trainers & students-->\n" +
+    "\n" +
+    "<button class=\"btn btn-default btn-sm btn-round btn-info btn-outline \" ng-class=\"vm.showReplyType ==='reply'?'':' btn-outline'\"  ng-click=\"vm.showReplies('reply')\" style=\"height: 30px; margin-left: 20px;\">Q&amp;A ({{vm.qaCount}})</button>\n" +
+    "\n" +
+    "<button class=\"btn btn-default btn-sm btn-round btn-outline \" ng-click=\"vm.showPost('reply')\"  style=\"height: 30px;\"><i class=\"icon fa-reply\" aria-hidden=\"true\"></i>Ask Question?</button>\n" +
+    "\n" +
+    "<!-- visible only for trainers-->\n" +
+    "<button class=\"btn btn-default btn-sm btn-round btn-outline btn-warning\"   style=\"height: 30px; margin-left: 20px;\">Pending (10)</button> ");
+}]);
+
+angular.module("comment/taskActions.tpl.html", []).run(["$templateCache", function($templateCache) {
+  $templateCache.put("comment/taskActions.tpl.html",
+    "<!-- visible only for trainers-->\n" +
+    "<button class=\"btn btn-default btn-sm btn-round btn-success\" ng-class=\"vm.showReplyType==='submission'?'':' btn-outline'\" ng-click=\"vm.showReplies('submission')\"  style=\"height: 30px;\">Completed ({{vm.submissionsCount}})</button> \n" +
+    "\n" +
+    "<!-- visible only for students-->\n" +
+    "<button class=\"btn btn-primary btn-sm btn-round btn-raised \" ng-click=\"vm.onComplete()\" style=\"height: 30px;\" ng-if=\"!vm.userHasCompletedTask\"><i class=\"icon fa-check\" aria-hidden=\"true\"></i>I have completed</button>\n" +
+    "<button class=\"btn btn-success btn-sm btn-round btn-raised \" style=\"height: 30px;\" ng-if=\"vm.userHasCompletedTask\" ng-disabled=\"vm.userHasCompletedTask\"><i class=\"icon fa-check\" aria-hidden=\"true\"></i>Completed</button>\n" +
+    "\n" +
+    "<!-- visible only for trainers & students-->\n" +
+    "\n" +
+    "<button class=\"btn btn-default btn-sm btn-round btn-info btn-outline \" ng-class=\"vm.showReplyType ==='reply'?'':' btn-outline'\"  ng-click=\"vm.showReplies('reply')\" style=\"height: 30px; margin-left: 20px;\">Q&amp;A ({{vm.qaCount}})</button>\n" +
+    "\n" +
+    "<button class=\"btn btn-default btn-sm btn-round btn-outline \" ng-click=\"vm.showPost('reply')\"  style=\"height: 30px;\"><i class=\"icon fa-reply\" aria-hidden=\"true\"></i>Ask Question?</button>\n" +
+    "\n" +
+    "<!-- visible only for trainers-->\n" +
+    "<button class=\"btn btn-default btn-sm btn-round btn-outline btn-warning\"   style=\"height: 30px; margin-left: 20px;\">Pending (10)</button> ");
+}]);
+
 angular.module("events/calendar.tpl.html", []).run(["$templateCache", function($templateCache) {
   $templateCache.put("events/calendar.tpl.html",
-    "<div class=\"page bg-white\" >\n" +
-    "	<div class=\"page-content padding-top-25 padding-left-5 padding-right-5 container-fluid  \">\n" +
-    "	    <div class=\"row\" style=\"width: 100%; margin: 0 auto;\">\n" +
-    "	    	<calendar/>\n" +
+    "");
+}]);
+
+angular.module("events/eventDetails.tpl.html", []).run(["$templateCache", function($templateCache) {
+  $templateCache.put("events/eventDetails.tpl.html",
+    "<form class=\"modal-content\" name=\"Form\" id=\"form\" novalidate ng-submit=\"vm.form.submit(Form)\" >\n" +
+    "\n" +
+    "  <div class=\"modal-header\">\n" +
+    "      <button type=\"button\" class=\"close\" data-dismiss=\"modal\" aria-label=\"Close\" ng-click=\"vm.cancel()\">\n" +
+    "        <span aria-hidden=\"true\">×</span>\n" +
+    "      </button>\n" +
+    "      <h4 class=\"modal-title\">Event</h4>\n" +
+    "  </div>\n" +
+    "\n" +
+    "  <div class=\"modal-body\">\n" +
+    "\n" +
+    "    <div class=\"form-group\">\n" +
+    "      <label for=\"title\" class=\"control-label\">Title</label>\n" +
+    "      <input type=\"text\" id=\"title\" class=\"form-control\" placeholder=\"Title\" ng-model=\"vm.event.title\" required>\n" +
+    "      <span class=\"error text-small block\" ng-if=\"Form.title.$dirty && Form.title.$error.required\">Title is required.</span>\n" +
+    "    </div>\n" +
+    "\n" +
+    "    <div class=\"form-group\">\n" +
+    "     <label for=\"message\" class=\"control-label\">Message</label>\n" +
+    "      <textarea id=\"message\" name=\"message\" class=\"form-control\" rows=\"3\" placeholder=\"Type your message\" ng-model=\"vm.event.details\" required></textarea>\n" +
+    "      <span class=\"error text-small block\" ng-if=\"Form.message.$dirty && Form.message.$error.required\">Message is required.</span>\n" +
+    "    </div>\n" +
+    "\n" +
+    "    <div class=\"form-group\">\n" +
+    "        <div class=\"checkbox checkbox-primary\">\n" +
+    "            <label class=\"control-label\">\n" +
+    "              <input type=\"checkbox\" ng-model=\"vm.event.isAllDay\" ng-click=\"vm.setAllday(vm.event.isAllDay)\">\n" +
+    "              All Day\n" +
+    "            </label>\n" +
+    "        </div>\n" +
+    "    </div>\n" +
+    "      \n" +
+    "\n" +
+    "    <!-- <div class=\"col-md-6\" style=\"padding-left: 0px;\"> -->\n" +
+    "      <div class=\"form-group\">\n" +
+    "          <label class=\"control-label\">From</label>\n" +
+    "          <div>\n" +
+    "             <div class=\"input-group\" style=\"float: left; width: 200px;\">\n" +
+    "                  <span class=\"input-group-addon\">\n" +
+    "                    <i class=\"icon wb-calendar\" aria-hidden=\"true\"></i>\n" +
+    "                  </span>\n" +
+    "                  <input type=\"text\" id=\"startDate\" class=\"form-control\" datepicker ng-model=\"vm.event.startDate\" ng-change=\"vm.onStartDateChange()\">\n" +
+    "              </div>\n" +
+    "              <div class=\"input-group\" style=\"width: 150px;\">\n" +
+    "                  <span class=\"input-group-addon\">\n" +
+    "                    <i class=\"icon wb-time\" aria-hidden=\"true\"></i>\n" +
+    "                  </span>\n" +
+    "                  <input type=\"text\" class=\"form-control ui-timepicker-input\" timepicker ng-model=\"vm.event.startTime\" ng-disabled=\"vm.event.isAllDay\" ng-change=\"vm.onStartTimeChange()\">\n" +
+    "              </div>\n" +
+    "          </div>\n" +
+    "      </div>\n" +
+    "   <!--  </div>\n" +
+    "\n" +
+    "    <div class=\"col-md-6\"> -->\n" +
+    "      <div class=\"form-group\">\n" +
+    "          <label class=\"control-label\">To</label>\n" +
+    "          <div>\n" +
+    "             <div class=\"input-group\" style=\"float: left; width: 200px;\">\n" +
+    "                  <span class=\"input-group-addon\">\n" +
+    "                    <i class=\"icon wb-calendar\" aria-hidden=\"true\"></i>\n" +
+    "                  </span>\n" +
+    "                  <input type=\"text\" class=\"form-control datepair-date datepair-end\" datepicker ng-model=\"vm.event.endDate\" start-date=\"vm.event.startDate\" ng-change=\"vm.onEndDateChange()\">\n" +
+    "              </div>\n" +
+    "              <div class=\"input-group\" style=\"width: 150px; \"   >\n" +
+    "                  <span class=\"input-group-addon\">\n" +
+    "                    <i class=\"icon wb-time\" aria-hidden=\"true\"></i>\n" +
+    "                  </span>\n" +
+    "                  <input type=\"text\" class=\"form-control datepair-time datepair-end ui-timepicker-input\" timepicker ng-model=\"vm.event.endTime\" start-time=\"vm.event.startTime\"  ng-disabled=\"vm.event.isAllDay\" ng-change=\"vm.onEndTimeChange()\">\n" +
+    "              </div>\n" +
+    "          </div>\n" +
+    "      </div>\n" +
+    "    <!-- </div> -->\n" +
+    "\n" +
+    "\n" +
+    "\n" +
+    "    <div class=\"form-group\">\n" +
+    "        <label class=\"control-label\">\n" +
+    "           Repeat \n" +
+    "        </label>\n" +
+    "        <div class=\"btn-group dropdown\" style=\"margin-left: 10px;\">\n" +
+    "          <a href=\"#\" class=\"dropdown-toggle\" data-toggle=\"dropdown\" aria-expanded=\"false\">\n" +
+    "            {{vm.event.repeat}}\n" +
+    "            <span class=\"caret\"></span>\n" +
+    "          </a>\n" +
+    "          <ul class=\"dropdown-menu bullet\" aria-labelledby=\"exampleBulletDropdown1\" role=\"menu\">\n" +
+    "            <li role=\"presentation\"><a href=\"javascript:void(0)\" role=\"menuitem\" ng-repeat=\"v in ['daily', 'weekly', 'monthly', 'none']\" ng-click=\"vm.setFrequency(v)\">{{v}}</a></li>\n" +
+    "          </ul>\n" +
+    "        </div>\n" +
+    "\n" +
+    "        <div class=\"checkbox checkbox-primary animate-if\" style=\"display: inline-block; margin: 0px; padding: 0px 0px 0px 10px;\" ng-if=\"vm.event.repeat != 'none'\">\n" +
+    "            <label>\n" +
+    "              <input type=\"checkbox\" ng-model=\"vm.event.isCustom\" ng-click=\"vm.selectCustom()\">\n" +
+    "              Custom\n" +
+    "            </label>\n" +
+    "        </div>\n" +
+    "\n" +
+    "        <span style=\"margin-left: 20px;\">{{vm.repeatText}}</span>\n" +
+    "    </div>\n" +
+    "\n" +
+    "\n" +
+    "\n" +
+    "    <div class=\"col-md-12 form-group\" uib-collapse=\"!vm.event.isCustom\" style=\"border: 1px solid #eae6e6; border-radius: 5px; padding: 10px;\">\n" +
+    "\n" +
+    "      <div ng-if=\"vm.event.repeat === 'daily'\" class=\"animate-if\">\n" +
+    "        Every <input type=\"number\" class=\"form-control\" style=\"width: 70px; display: inline;\" ng-model=\"vm.event.daily.every\"/> day(s).\n" +
+    "      </div>\n" +
+    "\n" +
+    "      <div ng-if=\"vm.event.repeat === 'weekly'\" class=\"animate-if\">\n" +
+    "        Every <input type=\"number\" class=\"form-control\" style=\"width: 70px; display: inline;\" ng-model=\"vm.event.weekly.every\"/> week(s) on <br/>\n" +
+    "        <div class=\"btn-group\" aria-label=\"Basic example\" role=\"group\" style=\"margin-top: 10px\"> \n" +
+    "          <button type=\"button\" \n" +
+    "              style=\"margin-right: 2px;\" \n" +
+    "              ng-class=\" vm.isWeekDaySelected(w.value)? 'btn-raised btn-info' : ''\"\n" +
+    "              ng-click=\"vm.selectWeekDay(w.value)\"\n" +
+    "              class=\"btn btn-default \" \n" +
+    "              ng-repeat=\"w in [{label: 'M', value: 1 }, {label: 'T', value: 2 },{label: 'W', value: 3 },{label: 'T', value: 4 },{label: 'F', value: 5 }, {label: 'S', value: 6 }, {label: 'S', value: 0 },] track by $index\">{{w.label}}</button>\n" +
+    "        </div>\n" +
+    "      </div>\n" +
+    "\n" +
+    "      <div ng-if=\"vm.event.repeat === 'monthly'\" class=\"animate-if\">\n" +
+    "        Every <input type=\"number\" class=\"form-control\" style=\"width: 70px; display: inline;\" ng-model=\"vm.event.monthly.every\" /> month(s) on <br/>\n" +
+    "        \n" +
+    "        <div class=\"col-md-6\">\n" +
+    "          <div class=\"checkbox checkbox-primary\">\n" +
+    "              <label>\n" +
+    "                <input type=\"checkbox\" ng-model=\"vm.event.monthly.iseach\" ng-click=\"vm.selectMonthlyEach()\">\n" +
+    "                Each\n" +
+    "              </label>\n" +
+    "          </div>\n" +
+    "          <div class=\"btn-group\" aria-label=\"Basic example\" role=\"group\" style=\"margin-top: 10px; width: 264px;\"> \n" +
+    "            <button type=\"button\" \n" +
+    "                ng-disabled=\"vm.event.monthly.isonthe\"\n" +
+    "                style=\"padding: 6px; width: 35px; margin-right: 2px; margin-bottom: 2px\" \n" +
+    "                class=\"btn btn-default \" \n" +
+    "                ng-class=\" vm.isMonthDaySelected($index+1)? 'btn-raised btn-info' : ''\"\n" +
+    "               ng-click=\"vm.selectMonthDay($index+1)\"\n" +
+    "                ng-repeat=\"w in vm.monthDays track by $index\">{{$index+1}}</button>\n" +
+    "          </div> \n" +
+    "        </div>\n" +
+    "        \n" +
+    "        <div class=\"col-md-6\">\n" +
+    "          <div class=\"checkbox checkbox-primary\">\n" +
+    "                <label>\n" +
+    "                  <input type=\"checkbox\" ng-model=\"vm.event.monthly.isonthe\" ng-click=\"vm.selectMonthlyOnthe()\">\n" +
+    "                  On the\n" +
+    "                </label>\n" +
+    "          </div>\n" +
+    "          <div class=\"col-md-6\">\n" +
+    "            <div class=\"form-group\" >\n" +
+    "                <select id=\"trainingstyle\" class=\"form-control \" ng-model=\"vm.event.monthly.seq\" ui-select2 style=\"width: 100%\">\n" +
+    "                  <option ng-repeat=\" p in vm.monthly.seq \"  >{{p}}</option>\n" +
+    "                </select>\n" +
+    "            </div>\n" +
+    "          </div>\n" +
+    "          <div class=\"col-md-6\">\n" +
+    "            <div class=\"form-group\">\n" +
+    "                <select id=\"trainingstyle\" class=\"form-control \" ng-model=\"vm.event.monthly.day\" ui-select2 style=\"width: 100%\" >\n" +
+    "                  <option ng-repeat=\"p in vm.monthly.days\"  >{{p}}</option>\n" +
+    "                </select>\n" +
+    "            </div>\n" +
+    "          </div>\n" +
+    "        </div>\n" +
+    "      </div>\n" +
+    "\n" +
+    "    </div>\n" +
+    "\n" +
+    "    <div class=\"form-group col-md-12 animate-if\" ng-if=\"vm.event.repeat && vm.event.repeat != 'none'\" style=\"padding: 0px\">\n" +
+    "\n" +
+    "      <div style=\"float: left; margin-top: 5px; margin-right: 10px;\">\n" +
+    "         <label style=\"display: inline-block;\">End repeat: </label>\n" +
+    "         <div class=\"btn-group dropdown\" style=\"margin-left: 10px;\">\n" +
+    "           <a href=\"#\" class=\"dropdown-toggle\" data-toggle=\"dropdown\" aria-expanded=\"false\">{{vm.event.endRepeat}} <span class=\"caret\"></span></a>\n" +
+    "           <ul class=\"dropdown-menu bullet\" aria-labelledby=\"exampleBulletDropdown1\" role=\"menu\">\n" +
+    "              <li role=\"presentation\"><a href=\"javascript:void(0)\" role=\"menuitem\" ng-repeat=\"v in ['Never', 'After', 'On Date']\" ng-click=\"vm.setEndRepeat(v)\">{{v}}</a></li>\n" +
+    "            </ul>\n" +
+    "          </div>\n" +
+    "          <div style=\"display: inline; margin-left: 10px\" class=\"animate-if\" ng-if=\"vm.event.endRepeat==='After'\"> \n" +
+    "            <input type=\"number\" class=\"form-control\" ng-model=\"vm.event.endAfter\" style=\"display: inline;width: 70px;\">\n" +
+    "            <label>sessions</label>\n" +
+    "          </div>\n" +
+    "      </div>    \n" +
+    "      <div ng-if=\"vm.event.endRepeat==='On Date'\" style=\"padding: 0px;\" class=\"animate-if\">\n" +
+    "\n" +
+    "        <div class=\"input-group \" style=\"width: 200px; margin-left: 10px;\" >\n" +
+    "            <span class=\"input-group-addon\">\n" +
+    "              <i class=\"icon wb-calendar\" aria-hidden=\"true\"></i>\n" +
+    "            </span>\n" +
+    "            <input type=\"text\" id=\"startDate\" class=\"form-control\" datepicker ng-model=\"vm.event.endOn\">\n" +
+    "         </div>\n" +
+    "      </div>\n" +
+    "    </div>\n" +
+    "\n" +
+    "    <div class=\"form-group\">\n" +
+    "      <div gallery files=\"vm.event.attachments\" type='image' gallery-title=\"Attachments\"></div>\n" +
+    "    </div>\n" +
+    "\n" +
+    "    <div class=\"form-group\" id=\"editColor\">\n" +
+    "      <label class=\"control-label\">Color:</label>\n" +
+    "      <div class=\"form-control\" style=\"border: none;\">\n" +
+    "        <ul class=\"color-selector\">\n" +
+    "          <li class=\"bg-blue-600\">\n" +
+    "            <input type=\"radio\" data-color=\"blue|600\" name=\"colorChosen\" id=\"editColorChosen2\" ng-model=\"vm.event.color\" ng-value=\"'#1e88e5'\">\n" +
+    "            <label for=\"editColorChosen2\"></label>\n" +
+    "          </li>\n" +
+    "          <li class=\"bg-green-600\">\n" +
+    "            <input type=\"radio\" data-color=\"green|600\" name=\"colorChosen\" id=\"editColorChosen3\"  ng-model=\"vm.event.color\" ng-value=\"'#43a047'\">\n" +
+    "            <label for=\"editColorChosen3\"></label>\n" +
+    "          </li>\n" +
+    "          <li class=\"bg-cyan-600\">\n" +
+    "            <input type=\"radio\" data-color=\"cyan|600\" name=\"colorChosen\" id=\"editColorChosen4\"  ng-model=\"vm.event.color\" ng-value=\"'#00acc1'\">\n" +
+    "            <label for=\"editColorChosen4\"></label>\n" +
+    "          </li>\n" +
+    "          <li class=\"bg-orange-600\">\n" +
+    "            <input type=\"radio\" data-color=\"orange|600\" name=\"colorChosen\" id=\"editColorChosen5\"  ng-model=\"vm.event.color\" ng-value=\"'#fb8c00'\">\n" +
+    "            <label for=\"editColorChosen4\"></label>\n" +
+    "          </li>\n" +
+    "          <li class=\"bg-red-600\">\n" +
+    "            <input type=\"radio\" data-color=\"red|600\" name=\"colorChosen\" id=\"editColorChosen6\"  ng-model=\"vm.event.color\" ng-value=\"'#e53935'\">\n" +
+    "            <label for=\"editColorChosen6\"></label>\n" +
+    "          </li>\n" +
+    "          <li class=\"bg-blue-grey-600\">\n" +
+    "            <input type=\"radio\" data-color=\"blue-grey|600\" name=\"colorChosen\" id=\"editColorChosen7\"  ng-model=\"vm.event.color\" ng-value=\"'#546e7a'\">\n" +
+    "            <label for=\"editColorChosen7\"></label>\n" +
+    "          </li>\n" +
+    "          <li class=\"bg-purple-600\">\n" +
+    "            <input type=\"radio\" data-color=\"purple|600\" name=\"colorChosen\" id=\"editColorChosen8\"  ng-model=\"vm.event.color\" ng-value=\"'#8e24aa'\">\n" +
+    "            <label for=\"editColorChosen8\"></label>\n" +
+    "          </li>\n" +
+    "        </ul>\n" +
+    "      </div>\n" +
+    "    </div>\n" +
+    "\n" +
+    "<!-- \n" +
+    "    <div style=\"text-align: left;\">\n" +
+    "         <a href=\"#\" class=\"btn btn-success btn-raised\" ng-click=\"vm.update()\" ng-if=\"vm.event._id\">Accept</a>\n" +
+    "         <a href=\"#\" class=\"btn btn-danger btn-raised\" ng-click=\"vm.update()\" ng-if=\"vm.event._id\">Decline</a>\n" +
+    "    </div> -->\n" +
+    "    <div style=\"text-align: right;\">\n" +
+    "        <button type=\"submit\" class=\"btn btn-primary btn-raised\" ng-if=\"vm.event._id\">Save</button>\n" +
+    "        <button type=\"submit\"  class=\"btn btn-primary btn-raised\"  ng-if=\"!vm.event._id\">Create</button>\n" +
+    "        <a href=\"#\"  class=\"btn btn-danger btn-raised\" ng-click=\"vm.delete()\"  ng-if=\"vm.event._id\">Delete</button>\n" +
+    "        <a href=\"#\"  class=\"btn btn-default btn-raised\" ng-click=\"vm.cancel()\"  ng-if=\"!vm.event._id\">Cancel</button>\n" +
+    "    </div>\n" +
+    "\n" +
+    "\n" +
+    "  </div>\n" +
+    "\n" +
+    "    \n" +
+    "\n" +
+    "\n" +
+    "</form>\n" +
+    "");
+}]);
+
+angular.module("events/events.tpl.html", []).run(["$templateCache", function($templateCache) {
+  $templateCache.put("events/events.tpl.html",
+    "<div class=\"row\">\n" +
+    "	<div id=\"wrapper\">\n" +
+    "		\n" +
+    "		<wallnav />\n" +
+    "\n" +
+    "		<div id=\"page-content-wrapper\" style=\"padding-left: 5px; padding-right: 5px; padding-bottom: 0px; padding-top: 5px; \">\n" +
+    "			<div class=\"page-header padding-top-10 padding-bottom-10 \">\n" +
+    "			    <span class=\"page-title\"><i class=\"icon fa-bank\" aria-hidden=\"true\"></i>Kushi Painting School</span>\n" +
+    "			    <div class=\"page-header-actions\">\n" +
+    "			    	<button type=\"button\" class=\"btn btn-raised  btn-primary btn-sm\"><i class=\"icon fa-plus\" aria-hidden=\"true\"></i>Event </button>\n" +
+    "			    </div>\n" +
+    "			</div>\n" +
+    "\n" +
+    "			<div class=\"panel\">\n" +
+    "				<div class=\"panel-body\">	\n" +
+    "					<calendar events=\"vm1.events\" on-select-event=\"vm1.onSelectEvent(event)\" on-select-slot=\"vm1.onSelectSlot(slotInfo)\" on-view=\"vm1.onView(view)\" on-navigate=\"vm1.onNavigate(date, view)\" view=\"week\"/>\n" +
+    "				</div>\n" +
+    "			</div>\n" +
     "		</div>\n" +
+    "\n" +
     "	</div>\n" +
     "</div>\n" +
     "");
@@ -230,6 +544,36 @@ angular.module("nav/nav.tpl.html", []).run(["$templateCache", function($template
     "    <!-- <li class=\"sidebar-category\">\n" +
     "       <a href=\"#\">View Posts</a>\n" +
     "    </li> -->\n" +
+    "    \n" +
+    "\n" +
+    "    <li class=\"sidebar-category\" ng-if=\"vm.hasPrograms\">\n" +
+    "       Programs\n" +
+    "    </li>\n" +
+    "    <li class=\"sidebar-item\" ng-repeat=\"p in vm.programs\" ng-if=\"vm.hasPrograms\"> \n" +
+    "      <a href=\"#\" ng-click=\"vm.selectProgram(p.id)\" ng-class=\"p.id === vm.selection.program.id ? 'active' : ''\">{{p.name}}\n" +
+    "        <div style=\"position: absolute;right: 30px;display: inline-block; vertical-align: middle;\" \n" +
+    "                ng-if=\"p.newItems > 0\">\n" +
+    "            <span class=\"badge badge-danger\" >2</span>\n" +
+    "        </div>\n" +
+    "      </a>\n" +
+    "    </li>\n" +
+    "\n" +
+    "    <li class=\"sidebar-category\" ng-if=\"vm.hasClasses\">\n" +
+    "      Classes\n" +
+    "    </li>\n" +
+    "    <li class=\"sidebar-item\" ng-repeat=\"c in vm.visibleClasses\" ng-if=\"vm.hasClasses\">\n" +
+    "      <a href=\"#\" ng-click=\"vm.selectClass(c.id)\" ng-class=\"c.id === vm.selection.class.id ? 'active' : ''\">\n" +
+    "        {{c.name}}\n" +
+    "        <div style=\"position: absolute;right: 30px;display: inline-block; vertical-align: middle;\" \n" +
+    "              ng-if=\"c.newItems > 0\">\n" +
+    "          <span class=\"badge badge-danger\" >2</span>\n" +
+    "        </div>\n" +
+    "      </a>\n" +
+    "    </li>\n" +
+    "\n" +
+    "    <li class=\"sidebar-category\" ng-if=\"vm.hasClasses\">\n" +
+    "      Post Type\n" +
+    "    </li>\n" +
     "    <li class=\"sidebar-item\" ng-repeat=\"type in vm.postTypes\">\n" +
     "      <a href=\"#\" ng-click=\"vm.selectPostType(type)\" \n" +
     "              ng-class=\"type.name === vm.selection.postType.name ? 'active' : ''\">\n" +
@@ -244,31 +588,6 @@ angular.module("nav/nav.tpl.html", []).run(["$templateCache", function($template
     "      \n" +
     "    </li>\n" +
     "\n" +
-    "\n" +
-    "    <li class=\"sidebar-category\" ng-if=\"vm.hasPrograms\">\n" +
-    "       <a href=\"#\">Programs</a>\n" +
-    "    </li>\n" +
-    "    <li class=\"sidebar-item\" ng-repeat=\"p in vm.programs\" ng-if=\"vm.hasPrograms\"> \n" +
-    "      <a href=\"#\" ng-click=\"vm.selectProgram(p.id)\" ng-class=\"p.id === vm.selection.program.id ? 'active' : ''\">{{p.name}}\n" +
-    "        <div style=\"position: absolute;right: 30px;display: inline-block; vertical-align: middle;\" \n" +
-    "                ng-if=\"p.newItems > 0\">\n" +
-    "            <span class=\"badge badge-danger\" >2</span>\n" +
-    "        </div>\n" +
-    "      </a>\n" +
-    "    </li>\n" +
-    "\n" +
-    "    <li class=\"sidebar-category\" ng-if=\"vm.hasClasses\">\n" +
-    "       <a href=\"#\">Classes</a>\n" +
-    "    </li>\n" +
-    "    <li class=\"sidebar-item\" ng-repeat=\"c in vm.visibleClasses\" ng-if=\"vm.hasClasses\">\n" +
-    "      <a href=\"#\" ng-click=\"vm.selectClass(c.id)\" ng-class=\"c.id === vm.selection.class.id ? 'active' : ''\">\n" +
-    "        {{c.name}}\n" +
-    "        <div style=\"position: absolute;right: 30px;display: inline-block; vertical-align: middle;\" \n" +
-    "              ng-if=\"c.newItems > 0\">\n" +
-    "          <span class=\"badge badge-danger\" >2</span>\n" +
-    "        </div>\n" +
-    "      </a>\n" +
-    "    </li>\n" +
     "    \n" +
     "  </ul>\n" +
     "  <div class=\"sidebar-footer\">\n" +
@@ -430,13 +749,16 @@ angular.module("richtext/richtextCard.tpl.html", []).run(["$templateCache", func
     "	.card {\n" +
     "	    box-shadow: 0 4px 8px 0 rgba(0,0,0,0.2);\n" +
     "	    transition: 0.3s;\n" +
+    "    	padding: 5px;\n" +
+    "    	background: #F3F7F9;\n" +
     "	}\n" +
+    "	\n" +
     "	.card:hover {\n" +
     "	    box-shadow: 0 8px 16px 0 rgba(0,0,0,0.2);\n" +
     "	}\n" +
     "</style>\n" +
     " \n" +
-    "<div class=\"card\" style=\"margin-top: 10px;padding:5px;height: auto;cursor: pointer;    border: 1px solid #f3f2f2;\">\n" +
+    "<div style=\"margin-top: 10px;padding:5px;height: auto;cursor: pointer; border: 1px solid #f3f2f2; background: #F3F7F9;\" >\n" +
     "	 <div class=\"media\">\n" +
     "		<div class=\"media-left\" ng-if=\"rtpost.richtext.previewImg\">\n" +
     "		    <img class=\"media-object\" ng-src=\"{{rtpost.richtext.previewImg}}\" alt=\"...\">\n" +
@@ -449,193 +771,190 @@ angular.module("richtext/richtextCard.tpl.html", []).run(["$templateCache", func
     "</div>");
 }]);
 
+angular.module("school/appSchool.tpl.html", []).run(["$templateCache", function($templateCache) {
+  $templateCache.put("school/appSchool.tpl.html",
+    "<div class=\"row\">\n" +
+    "	<div id=\"wrapper\">\n" +
+    "		\n" +
+    "		<wallnav />\n" +
+    "\n" +
+    "		<div ui-view ng-cloak></div>\n" +
+    "\n" +
+    "	</div>\n" +
+    "</div>\n" +
+    "\n" +
+    "");
+}]);
+
 angular.module("school/class/classEdit.tpl.html", []).run(["$templateCache", function($templateCache) {
   $templateCache.put("school/class/classEdit.tpl.html",
     "<div ng-controller=\"classEditController as vm\">\n" +
     "\n" +
     "<form name=\"Form\" id=\"form\" novalidate ng-submit=\"form.submit(Form)\" >\n" +
     "\n" +
-    "<div class=\"page-header padding-left-40 padding-top-10 padding-bottom-0\">\n" +
-    "  <h1 class=\"page-title\"> <i class=\"icon fa-language\" aria-hidden=\"true\"></i>  {{class.name}}&nbsp;&nbsp;&nbsp;&nbsp;</h1>\n" +
-    "  <button  class=\"btn btn-raised btn-primary\" type=\"submit\"><i class=\"icon fa-save\" aria-hidden=\"true\"></i> Save </button>\n" +
-    "  <span class=\"text-extra-small\" ng-if=\"!Form.$dirty\">&nbsp;&nbsp;&nbsp;&nbsp;All changes are saved</span>\n" +
-    "</div>\n" +
+    "<div id=\"page-content-wrapper\" style=\"padding-left: 5px; padding-right: 5px; padding-bottom: 0px; padding-top: 5px; \">\n" +
     "\n" +
-    "<div class=\"row\">\n" +
-    "  <div class=\"col-md-12\">\n" +
-    "    <div id=\"panel_edit_account\" >\n" +
-    "      <fieldset ng-disabled=\"disableForm\">\n" +
-    "            <div class=\"row\">\n" +
-    "                <div class=\"col-md-5\">\n" +
-    "\n" +
-    "                    <div class=\"form-group\" ng-class=\"{'has-error':Form.name.$dirty && Form.name.$invalid, 'has-success':Form.name.$valid}\">\n" +
-    "                        <label class=\"control-label\"> Name  <span class=\"symbol required\"></label>\n" +
-    "                        <input type=\"text\" class=\"form-control underline\" id=\"name\" name=\"name\" ng-model=\"class.name\" required >\n" +
-    "                        <span class=\"error text-small block\" ng-if=\"Form.name.$dirty && Form.name.$error.required\">Name is required.</span>\n" +
-    "                    </div>\n" +
-    "\n" +
-    "                    <div class=\"form-group\" ng-if=\"vm.isClass\">\n" +
-    "                        <label for=\"trainingstyle\" class=\"control-label\">Program</label>\n" +
-    "                        <select id=\"trainingstyle\" class=\"form-control \" ng-model=\"class.program\" ui-select2 style=\"width: 100%\">\n" +
-    "                          <option ng-repeat=\"p in vm.programs\" value=\"{{p._id}}\" >{{p.name}}</option>\n" +
-    "                        </select>\n" +
-    "                    </div>\n" +
-    "\n" +
-    "\n" +
-    "                      \n" +
-    "                    <div class=\"form-group\" >\n" +
-    "                        <label for=\"categories\" class=\"control-label\">Category</label>\n" +
-    "                        <select id=\"categories\" class=\"form-control \" multiple  ng-model=\"class.categories\" ui-select2 style=\"width: 100%\">\n" +
-    "                          <option ng-repeat=\"item in vm.categories\" ng-bind=\"item.value\" value=\"{{item.value}}\"></option>\n" +
-    "                        </select>\n" +
-    "                        <p class=\"help-block text-small\">select 3 categories</p>\n" +
-    "                    </div>\n" +
-    "                    \n" +
-    "\n" +
-    "                    <div class=\"form-group\" >\n" +
-    "                        <label for=\"trainingstyle\" class=\"control-label\">Medium</label>\n" +
-    "                        <select id=\"trainingstyle\" class=\"form-control \" multiple ng-model=\"class.medium\" ui-select2 style=\"width: 100%\">\n" +
-    "                          <option ng-repeat=\"option in vm.mediums\">{{option.value}}</option>\n" +
-    "                        </select>\n" +
-    "                        <p class=\"help-block text-small\">select 3 main mediums of teaching</p>\n" +
-    "                    </div>\n" +
-    "                    \n" +
-    "\n" +
-    "                    <div class=\"form-group\">\n" +
-    "                        <label class=\"control-label\"> Phone <i class=\"icon fa-phone\" aria-hidden=\"true\"></i> </label>\n" +
-    "                        <input type=\"text\" class=\"form-control\" id=\"phone\" name=\"phone\"  ui-mask=\"(999) 999-9999\"  ng-model=\"class.phone\">\n" +
-    "                        <p class=\"help-block text-small\">(999) 999.9999</p>\n" +
-    "                    </div>\n" +
-    "\n" +
-    "                    <div class=\"form-group\">\n" +
-    "                        <label class=\"control-label\"> Website </label>\n" +
-    "                        <input type=\"text\" class=\"form-control\" ng-model=\"class.website\"  >\n" +
-    "                        <p class=\"help-block text-small\">www.myclass.com</p>\n" +
-    "                    </div>\n" +
-    "\n" +
-    "                </div>\n" +
-    "                <div class=\"col-md-offset-1 col-md-5\" ng-cloak>\n" +
-    "\n" +
-    "                    <div class=\"row\">\n" +
-    "                        <div class=\"col-md-5\">\n" +
-    "                          <div class=\"form-group\">\n" +
-    "                              <label class=\"control-label\"> Capacity </label>\n" +
-    "                              <select id=\"classCapacity\" class=\"form-control \" ng-model=\"class.capacity\" ui-select2 style=\"width: 100%\">\n" +
-    "                                <option ng-repeat=\"option in vm.classCapacity\">{{option.value}}</option>\n" +
-    "                              </select>\n" +
-    "                          </div>\n" +
-    "                        </div>\n" +
-    "                        <div class=\"col-md-offset-1 col-md-5\">\n" +
-    "                          <div class=\"form-group\">\n" +
-    "                              <label class=\"control-label\"> Cost <i class=\"icon fa-money\" aria-hidden=\"true\"></i> </label>\n" +
-    "                              <input type=\"text\" class=\"form-control underline\" ng-model=\"class.cost\"  >\n" +
-    "                          </div>\n" +
-    "                        </div>\n" +
-    "                    </div>\n" +
-    "                    \n" +
-    "                    <div class=\"row\">\n" +
-    "                      <div class=\"col-md-5\">\n" +
-    "                        <div class=\"form-group\">\n" +
-    "                            <label class=\"control-label\"> Start </label>\n" +
-    "                            <datepicker date-format=\"MM/dd/yyyy\" selector=\"form-control\">\n" +
-    "                                <div class=\"input-group\">\n" +
-    "                                    <input class=\"form-control\" placeholder=\"Choose a date\" ng-model=\"class.start\" />\n" +
-    "                                    <span class=\"input-group-addon\" style=\"cursor: pointer\">\n" +
-    "                                     <i class=\"fa fa-lg fa-calendar\"></i>\n" +
-    "                                    </span>\n" +
-    "                                </div>\n" +
-    "                            </datepicker>\n" +
-    "                        </div>\n" +
-    "                      </div>\n" +
-    "                      <div class=\"col-md-offset-1 col-md-5\">\n" +
-    "                        <div class=\"form-group\">\n" +
-    "                            <label class=\"control-label\"> End </label>\n" +
-    "                            <datepicker date-format=\"MM/dd/yyyy\" selector=\"form-control\">\n" +
-    "                                <div class=\"input-group\">\n" +
-    "                                    <input class=\"form-control\" placeholder=\"Choose a date\" ng-model=\"class.end\" />\n" +
-    "                                    <span class=\"input-group-addon\" style=\"cursor: pointer\">\n" +
-    "                                     <i class=\"fa fa-lg fa-calendar\"></i>\n" +
-    "                                    </span>\n" +
-    "                                </div>\n" +
-    "                            </datepicker>\n" +
-    "                        </div>\n" +
-    "                      </div>\n" +
-    "                    </div>\n" +
-    "                    \n" +
-    "                    <div class=\"height-200 margin-top-20 padding-20\" style=\"border: 2px solid #e4eaec;border-radius: 5px;\">                          \n" +
-    "                      <h3>Contacts</h3>\n" +
-    "                    </div>\n" +
-    "                  \n" +
-    "                </div>\n" +
-    "            </div>\n" +
-    "\n" +
-    "            <div class=\"row\">\n" +
-    "              <div class=\"col-md-12 margin-top-20\">\n" +
-    "                 <div class=\"form-group\" >\n" +
-    "                          <label class=\"control-label \"> About {{class.name}} </label>\n" +
-    "                          <div id=\"react\" draft content=\"class.profile\"> </div>\n" +
-    "                  </div>\n" +
-    "              </div>            \n" +
-    "\n" +
-    "\n" +
-    "\n" +
-    "\n" +
-    "\n" +
-    "              <div class=\"col-md-12 margin-top-20\" ng-init=\"sectionAdd=false\">  \n" +
-    "                  <label class=\"control-label \"> Curriculum </label><br>\n" +
-    "                  <div class=\"panel panel-bordered\" style=\"border: 1px solid #e4eaec; border-radius: 5px;\">\n" +
-    "                    <div class=\"panel-body padding-10\" style=\" min-height: 200px;\" id=\"classSections\">\n" +
-    "                      <ul class=\"list-group list-group-full\">\n" +
-    "                        <li class=\"list-group-item padding-right-40\" ng-repeat=\"section in class.sections\">\n" +
-    "                          <div ng-if=\"section.edit\" class=\"padding-10\">\n" +
-    "                            <input type=\"text\" ng-model=\"section.title\" class=\"form-control\" placeholder=\"Enter section title\" /><br>\n" +
-    "                            <textarea rows=\"4\" ng-model=\"section.summary\" class=\"form-control\" style=\"width: 100%\" placeholder=\"Section details\"></textarea> <br>\n" +
-    "                            <button class=\"btn btn-primary btn-round\" ng-click=\"section.edit = false\">DONE</button> \n" +
-    "                          </div>\n" +
-    "                          <div ng-if=\"!section.edit\">\n" +
-    "                            <h5 style=\"display: inline-block;\"> {{section.title}} </h5><div style=\"display: inline-block; \" class=\"pull-right\"> <a href=\"#\" ng-click=\"section.edit = true\"><i class=\"icon fa-edit\" aria-hidden=\"true\" ></i></a> &nbsp;&nbsp;<a href=\"#\" ng-click=\"removeSection(section.seq)\"> <i class=\"icon fa-remove\" aria-hidden=\"true\"></i></a></div>\n" +
-    "                            <p class=\"padding-left-10\" style=\"white-space: pre-wrap;\">{{section.summary}}</p>\n" +
-    "                          </div>\n" +
-    "                        </li>\n" +
-    "                      </ul>\n" +
-    "                    </div>\n" +
-    "\n" +
-    "                    <div class=\"panel-footer padding-left-10\">\n" +
-    "                      <div ng-if=\"!sectionAdd\"><button class=\"btn btn-primary btn-round\" ng-click=\"showAddSection()\">Create Section</button> &nbsp;&nbsp;<span class=\" label label-round label-success\" ng-if=\"showSuccess\"> {{successMessage}} </span>  </div>\n" +
-    "                      <div ng-if=\"sectionAdd\" class=\"padding-10\">\n" +
-    "                        <h5>New Section</h5>\n" +
-    "                        <input type=\"text\" ng-model=\"newSection.title\" class=\"form-control\" placeholder=\"Enter section title\" /><br>\n" +
-    "                        <textarea rows=\"4\" ng-model=\"newSection.summary\" class=\"form-control\" style=\"width: 100%\" placeholder=\"Section details\"></textarea> <br>\n" +
-    "                        <button class=\"btn btn-primary btn-round\" ng-click=\"addNewSection()\">ADD</button> <button class=\"btn btn-default btn-round\" ng-click=\"hideAddSection()\">Cancel</button>\n" +
-    "                      </div>\n" +
-    "                    </div>\n" +
-    "\n" +
-    "                  </div>\n" +
-    "              </div>\n" +
-    "\n" +
-    "\n" +
-    "\n" +
-    "\n" +
-    "\n" +
-    "\n" +
-    "              <div class=\"col-md-12 margin-top-20\" >\n" +
-    "                <div class=\"form-group\" >\n" +
-    "                        <label class=\"control-label \"> Location </label>\n" +
-    "                        <div class=\"gmap height-300\" placeid=\"class.placeid\" address=\"class.address\" ng-cloak></div>\n" +
-    "                </div>\n" +
-    "              </div>\n" +
-    "              <div class=\"col-md-12 margin-top-20\">\n" +
-    "                <div gallery files=\"class.gallery\" type='image' gallery-title=\"Photo Gallery\"></div>\n" +
-    "              </div>\n" +
-    "              \n" +
-    "              <div class=\"col-md-12 margin-top-20\">\n" +
-    "                <div gallery files=\"class.attachments\" type='pdf' gallery-title=\"Additional Information\"></div>\n" +
-    "              </div>\n" +
-    "\n" +
-    "      </fieldset>\n" +
-    "       \n" +
+    "  <div class=\"page-header padding-top-10 padding-bottom-10 \">\n" +
+    "    <h1 class=\"page-title\"> <i class=\"icon fa-language\" aria-hidden=\"true\"></i>  {{class.name}}&nbsp;&nbsp;&nbsp;&nbsp;</h1>\n" +
+    "    \n" +
+    "    <span class=\"text-extra-small\" ng-if=\"!Form.$dirty\">&nbsp;&nbsp;&nbsp;&nbsp;All changes are saved</span>\n" +
+    "    <div class=\"page-header-actions\">\n" +
+    "       <button type=\"button\" class=\"btn btn-raised  btn-default btn-sm\" ui-sref=\"app.apph.apps.classusers({schoolid: vm.schoolid, classid: vm.classid})\"  uib-tooltip=\"Users\" tooltip-placement=\"bottom\"  tooltip-trigger=\"'mouseenter'\" tooltip-append-to-body=\"true\"><i class=\"icon fa-users\" aria-hidden=\"true\"></i> </button>\n" +
+    "       <button type=\"button\" class=\"btn btn-raised  btn-default btn-sm\" ui-sref=\"app.apph.events\"  uib-tooltip=\"Calendar\" tooltip-placement=\"bottom\"  tooltip-trigger=\"'mouseenter'\" tooltip-append-to-body=\"true\"><i class=\"icon fa-calendar \" aria-hidden=\"true\"></i> </button>\n" +
+    "      <button  class=\"btn btn-raised btn-primary\" type=\"submit\"><i class=\"icon fa-save\" aria-hidden=\"true\"></i> Save </button>\n" +
     "    </div>\n" +
     "  </div>\n" +
+    "\n" +
+    "  <div class=\"panel\">\n" +
+    "      <div class=\"panel-body\" style=\"padding: 10px;\">  \n" +
+    "\n" +
+    "            <ul class=\"nav nav-tabs nav-tabs-line\" data-plugin=\"nav-tabs\" role=\"tablist\">\n" +
+    "                <li class=\"active\" role=\"presentation\"><a data-toggle=\"tab\" href=\"#introTab\" aria-controls=\"introTab\" role=\"tab\" aria-expanded=\"false\">Intro</a></li>\n" +
+    "                <li role=\"presentation\"><a data-toggle=\"tab\" href=\"#contactsTab\" aria-controls=\"contactsTab\" role=\"tab\" aria-expanded=\"false\">Contacts</a></li>\n" +
+    "                <li role=\"presentation\"><a data-toggle=\"tab\" href=\"#summaryTab\" aria-controls=\"summaryTab\" role=\"tab\" aria-expanded=\"false\">Summary</a></li>\n" +
+    "                <li role=\"presentation\"><a data-toggle=\"tab\" href=\"#curriculumTab\" aria-controls=\"curriculumTab\" role=\"tab\" aria-expanded=\"true\">Curriculum</a></li>\n" +
+    "                <li role=\"presentation\"><a data-toggle=\"tab\" href=\"#locationTab\" aria-controls=\"locationTab\" role=\"tab\" aria-expanded=\"true\">Location</a></li>\n" +
+    "                <li role=\"presentation\"><a data-toggle=\"tab\" href=\"#attachmentsTab\" aria-controls=\"attachmentsTab\" role=\"tab\" aria-expanded=\"true\">Attachments</a></li>\n" +
+    "            </ul>\n" +
+    "\n" +
+    "            <div class=\"tab-content padding-top-20\">\n" +
+    "                <div class=\"tab-pane active\" id=\"introTab\" role=\"tabpanel\">\n" +
+    "                 \n" +
+    "                  <div class=\"col-md-5\">\n" +
+    "\n" +
+    "                      <div class=\"form-group\" ng-class=\"{'has-error':Form.name.$dirty && Form.name.$invalid, 'has-success':Form.name.$valid}\">\n" +
+    "                          <label class=\"control-label\"> Name  <span class=\"symbol required\"></label>\n" +
+    "                          <input type=\"text\" class=\"form-control underline\" id=\"name\" name=\"name\" ng-model=\"class.name\" required >\n" +
+    "                          <span class=\"error text-small block\" ng-if=\"Form.name.$dirty && Form.name.$error.required\">Name is required.</span>\n" +
+    "                      </div>\n" +
+    "\n" +
+    "                      <div class=\"form-group\" ng-if=\"vm.isClass\">\n" +
+    "                          <label for=\"trainingstyle\" class=\"control-label\">Program</label>\n" +
+    "                          <select id=\"trainingstyle\" class=\"form-control \" ng-model=\"class.program\" ui-select2 style=\"width: 100%\">\n" +
+    "                            <option ng-repeat=\"p in vm.programs\" value=\"{{p._id}}\" >{{p.name}}</option>\n" +
+    "                          </select>\n" +
+    "                      </div>\n" +
+    "\n" +
+    "\n" +
+    "                        \n" +
+    "                      <div class=\"form-group\" >\n" +
+    "                          <label for=\"categories\" class=\"control-label\">Category</label>\n" +
+    "                          <select id=\"categories\" class=\"form-control \" multiple  ng-model=\"class.categories\" ui-select2 style=\"width: 100%\">\n" +
+    "                            <option ng-repeat=\"item in vm.categories\" ng-bind=\"item.value\" value=\"{{item.value}}\"></option>\n" +
+    "                          </select>\n" +
+    "                          <p class=\"help-block text-small\">select 3 categories</p>\n" +
+    "                      </div>\n" +
+    "                      \n" +
+    "\n" +
+    "                      <div class=\"form-group\" >\n" +
+    "                          <label for=\"trainingstyle\" class=\"control-label\">Medium</label>\n" +
+    "                          <select id=\"trainingstyle\" class=\"form-control \" multiple ng-model=\"class.medium\" ui-select2 style=\"width: 100%\">\n" +
+    "                            <option ng-repeat=\"option in vm.mediums\">{{option.value}}</option>\n" +
+    "                          </select>\n" +
+    "                          <p class=\"help-block text-small\">select 3 main mediums of teaching</p>\n" +
+    "                      </div>\n" +
+    "                      \n" +
+    "\n" +
+    "                      <div class=\"form-group\">\n" +
+    "                          <label class=\"control-label\"> Phone <i class=\"icon fa-phone\" aria-hidden=\"true\"></i> </label>\n" +
+    "                          <input type=\"text\" class=\"form-control\" id=\"phone\" name=\"phone\"  ui-mask=\"(999) 999-9999\"  ng-model=\"class.phone\" style=\"width: 200px;\">\n" +
+    "                          <p class=\"help-block text-small\">(999) 999.9999</p>\n" +
+    "                      </div>\n" +
+    "\n" +
+    "                      <div class=\"form-group\">\n" +
+    "                          <label class=\"control-label\"> Website </label>\n" +
+    "                          <input type=\"text\" class=\"form-control\" ng-model=\"class.website\"  >\n" +
+    "                          <p class=\"help-block text-small\">www.myclass.com</p>\n" +
+    "                      </div>\n" +
+    "\n" +
+    "                  </div>\n" +
+    "                  <div class=\"col-md-offset-1 col-md-5\" ng-cloak>\n" +
+    "\n" +
+    "                      <div class=\"form-group\">\n" +
+    "                          <label class=\"control-label\"> Capacity </label>\n" +
+    "                          <select id=\"classCapacity\" class=\"form-control \" ng-model=\"class.capacity\" ui-select2 style=\"width: 200px;\">\n" +
+    "                            <option ng-repeat=\"option in vm.classCapacity\">{{option.value}}</option>\n" +
+    "                          </select>\n" +
+    "                      </div>\n" +
+    "                      <div class=\"form-group\">\n" +
+    "                          <label class=\"control-label\"> Cost <i class=\"icon fa-money\" aria-hidden=\"true\"></i> </label>\n" +
+    "                          <input type=\"text\" class=\"form-control underline\" ng-model=\"class.cost\" maskmoney width=\"200px;\">\n" +
+    "                      </div>\n" +
+    "\n" +
+    "                      <div class=\"form-group\">\n" +
+    "                        <label class=\"control-label\">Schedule <i class=\"icon fa-calendar-o\" aria-hidden=\"true\"></i></label>\n" +
+    "                        <a href=\"#\" ng-click=\"openEvent()\"> \n" +
+    "                          <div class=\"height-50 \">\n" +
+    "                            <span class=\"form-control text-azure\" style=\"border: none;\">{{vm.schedule.repeatText}}</span>\n" +
+    "                          </div>\n" +
+    "                        </a>\n" +
+    "                      </div>      \n" +
+    "                  </div>\n" +
+    "                </div>\n" +
+    "\n" +
+    "                <div class=\"tab-pane\" id=\"contactsTab\" role=\"tabpanel\">\n" +
+    "                  <div class=\"height-200 margin-top-20 padding-20\" style=\"border: 2px solid #e4eaec;border-radius: 5px;\">                          \n" +
+    "                    <h3>Contacts</h3>\n" +
+    "                  </div>\n" +
+    "                </div>\n" +
+    "                <div class=\"tab-pane\" id=\"summaryTab\" role=\"tabpanel\">\n" +
+    "                  <div class=\"form-group\" >\n" +
+    "                          <label class=\"control-label \"> About {{class.name}} </label>\n" +
+    "                          <richtext on-publish=\"onPublish()\" on-cancel=\"onCancel()\" richtextid=\"{{richtextid}}\" readonly=\"false\"/>\n" +
+    "                  </div>\n" +
+    "                </div>\n" +
+    "                <div class=\"tab-pane\" id=\"curriculumTab\" role=\"tabpanel\">\n" +
+    "                  <div class=\"form-group\">\n" +
+    "                    <label class=\"control-label \"> Curriculum </label><br>\n" +
+    "                    <div class=\"panel panel-bordered\" style=\"border: 1px solid #e4eaec; border-radius: 5px;\">\n" +
+    "                      <div class=\"panel-body padding-10\" style=\" min-height: 200px;\" id=\"classSections\">\n" +
+    "                        <ul class=\"list-group list-group-full\">\n" +
+    "                          <li class=\"list-group-item padding-right-40\" ng-repeat=\"section in class.sections\">\n" +
+    "                            <div ng-if=\"section.edit\" class=\"padding-10\">\n" +
+    "                              <input type=\"text\" ng-model=\"section.title\" class=\"form-control\" placeholder=\"Enter section title\" /><br>\n" +
+    "                              <textarea rows=\"4\" ng-model=\"section.summary\" class=\"form-control\" style=\"width: 100%\" placeholder=\"Section details\"></textarea> <br>\n" +
+    "                              <button class=\"btn btn-primary btn-round\" ng-click=\"section.edit = false\">DONE</button> \n" +
+    "                            </div>\n" +
+    "                            <div ng-if=\"!section.edit\">\n" +
+    "                              <h5 style=\"display: inline-block;\"> {{section.title}} </h5><div style=\"display: inline-block; \" class=\"pull-right\"> <a href=\"#\" ng-click=\"section.edit = true\"><i class=\"icon fa-edit\" aria-hidden=\"true\" ></i></a> &nbsp;&nbsp;<a href=\"#\" ng-click=\"removeSection(section.seq)\"> <i class=\"icon fa-remove\" aria-hidden=\"true\"></i></a></div>\n" +
+    "                              <p class=\"padding-left-10\" style=\"white-space: pre-wrap;\">{{section.summary}}</p>\n" +
+    "                            </div>\n" +
+    "                          </li>\n" +
+    "                        </ul>\n" +
+    "                      </div>\n" +
+    "\n" +
+    "                      <div class=\"panel-footer padding-left-10\">\n" +
+    "                        <div ng-if=\"!sectionAdd\"><button class=\"btn btn-primary btn-round\" ng-click=\"showAddSection()\">Create Section</button> &nbsp;&nbsp;<span class=\" label label-round label-success\" ng-if=\"showSuccess\"> {{successMessage}} </span>  </div>\n" +
+    "                        <div ng-if=\"sectionAdd\" class=\"padding-10\">\n" +
+    "                          <h5>New Section</h5>\n" +
+    "                          <input type=\"text\" ng-model=\"newSection.title\" class=\"form-control\" placeholder=\"Enter section title\" /><br>\n" +
+    "                          <textarea rows=\"4\" ng-model=\"newSection.summary\" class=\"form-control\" style=\"width: 100%\" placeholder=\"Section details\"></textarea> <br>\n" +
+    "                          <button class=\"btn btn-primary btn-round\" ng-click=\"addNewSection()\">ADD</button> <button class=\"btn btn-default btn-round\" ng-click=\"hideAddSection()\">Cancel</button>\n" +
+    "                        </div>\n" +
+    "                      </div>\n" +
+    "\n" +
+    "                    </div>\n" +
+    "                  </div>\n" +
+    "                </div>\n" +
+    "                <div class=\"tab-pane\" id=\"locationTab\" role=\"tabpanel\">\n" +
+    "                  <div class=\"form-group\" >\n" +
+    "                          <label class=\"control-label \"> Location </label>\n" +
+    "                          <div class=\"gmap height-300\" placeid=\"class.placeid\" address=\"class.address\" ng-cloak></div>\n" +
+    "                  </div>\n" +
+    "                </div>\n" +
+    "                <div class=\"tab-pane\" id=\"attachmentsTab\" role=\"tabpanel\">\n" +
+    "                  <div class=\"margin-top-20\">\n" +
+    "                    <div gallery files=\"class.gallery\" type='image' gallery-title=\"Photo Gallery\"></div>\n" +
+    "                  </div>\n" +
+    "                  \n" +
+    "                  <div class=\"margin-top-20\">\n" +
+    "                    <div gallery files=\"class.attachments\" type='pdf' gallery-title=\"Additional Information\"></div>\n" +
+    "                  </div>\n" +
+    "                </div>\n" +
+    "              </div>\n" +
+    "      </div>\n" +
+    "  </div>\n" +
+    "\n" +
     "</div>\n" +
     "\n" +
     "</form>\n" +
@@ -652,292 +971,97 @@ angular.module("school/pdfview.tpl.html", []).run(["$templateCache", function($t
 
 angular.module("school/school.tpl.html", []).run(["$templateCache", function($templateCache) {
   $templateCache.put("school/school.tpl.html",
-    "<style type=\"text/css\">\n" +
-    "	.highlight:hover {\n" +
-    "	  /*background-color: #e3f2fd !important;*/\n" +
-    "	  box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);\n" +
-    "	}\n" +
+    "<div id=\"page-content-wrapper\" style=\"padding-left: 5px; padding-right: 5px; padding-bottom: 0px; padding-top: 5px; \">\n" +
     "\n" +
-    "	.icon-wrap {\n" +
-    "	  color: inherit; /* blue colors for links too */\n" +
-    "  	  text-decoration: inherit; /* no underline */\n" +
+    "	<div class=\"page-header padding-top-10 padding-bottom-10 \">\n" +
+    "	    <span class=\"page-title\"><i class=\"icon fa-bank\" aria-hidden=\"true\"></i>Kushi Painting School</span> &nbsp;&nbsp;&nbsp;<button type=\"button\" class=\"btn btn-raised btn-info  btn-sm\">Programs <span class=\"badge\">1</span> </button>&nbsp;&nbsp;&nbsp;<button type=\"button\" class=\"btn btn-raised btn-info  btn-sm\">Classes <span class=\"badge\">2</span> </button>\n" +
     "\n" +
-    "	  margin: 5px 5px;\n" +
-    "	  text-align: center;\n" +
-    "	  display: inline-block;\n" +
-    "	}\n" +
-    "	.icon-wrap:hover {\n" +
-    "		color: inherit; /* blue colors for links too */\n" +
-    "  	  text-decoration: inherit; /* no underline */\n" +
-    "	  color: #fff;\n" +
-    "	  background-color: #62a8ea;\n" +
-    "	}\n" +
-    "\n" +
-    "	[ng\\:cloak], [ng-cloak], .ng-cloak {\n" +
-    "	    display: none !important;\n" +
-    "	  }\n" +
-    "</style>\n" +
-    "\n" +
-    "<div class=\"page-header padding-left-40 padding-top-10 padding-bottom-0 \">\n" +
-    "    <span class=\"page-title\"><i class=\"icon fa-bank\" aria-hidden=\"true\"></i>Kushi Painting School</span> &nbsp;&nbsp;&nbsp;<button type=\"button\" class=\"btn btn-raised btn-info  btn-sm\">Programs <span class=\"badge\">1</span> </button>&nbsp;&nbsp;&nbsp;<button type=\"button\" class=\"btn btn-raised btn-info  btn-sm\">Classes <span class=\"badge\">2</span> </button>\n" +
-    "\n" +
-    "    <div class=\"page-header-actions\">\n" +
-    "    	<button type=\"button\" class=\"btn btn-raised  btn-default btn-sm\" ui-sref=\"app.appt.schoolusers({schoolid: schoolid})\" ><i class=\"icon fa-users\" aria-hidden=\"true\"></i> </button>\n" +
-    "        <button type=\"button\" class=\"btn btn-raised  btn-default  btn-sm\" ui-sref=\"app.appt.schoolEdit\" ><i class=\"icon fa-edit\" aria-hidden=\"true\"></i> </button>\n" +
-    "	    <button type=\"button\" class=\"btn btn-raised btn-default  btn-sm\" ui-sref=\"app.appt.program({schoolid: schoolid, classid: ''})\"><i class=\"icon fa-plus\" aria-hidden=\"true\"></i> Program </button>\n" +
-    "	    <button type=\"button\" class=\"btn btn-raised btn-default  btn-sm\" ui-sref=\"app.appt.class({schoolid: schoolid, classid: ''})\"><i class=\"icon fa-plus\" aria-hidden=\"true\"></i> Class </button>\n" +
-    "    </div>\n" +
-    "</div>\n" +
-    "\n" +
-    "\n" +
-    "<!-- TABLE -->\n" +
-    "<div class=\"row margin-10\"> \n" +
-    "	<div class=\"col-md-12\">\n" +
-    "		<div class=\"panel panel-white no-radius no-margin\">\n" +
-    "			<div class=\"panel-body app-mail-box\">\n" +
-    "				<table class=\"table no-margin\">\n" +
-    "					<tbody>\n" +
-    "						<tr ng-repeat=\"clazz in classes\" ng-cloak>\n" +
-    "							<td class=\"max-width-100 hidden-xs\">\n" +
-    "								<div class=\"icons-effect padding-10\">\n" +
-    "									<img src=\"assets/images/avatar-1-small.jpg\" class=\"img-rounded img-responsive\" style=\"height: 70px;\" alt=\"\">\n" +
-    "								</div>\n" +
-    "							</td>\n" +
-    "							<td>\n" +
-    "								<div class=\"padding-10\">\n" +
-    "									<div class=\"title\">\n" +
-    "										<a ui-sref=\"app.appt.program({schoolid: schoolid, classid: clazz._id})\" ng-if=\"clazz.type === 'program'\"> <strong style=\"margin-right: 20px\">{{clazz.name}}</strong> <span class=\"label label-info\">{{clazz.type}} </span></a> \n" +
-    "										<a ui-sref=\"app.appt.class({schoolid: schoolid, classid: clazz._id})\" ng-if=\"clazz.type === 'class'\"\"><strong style=\"margin-right: 20px\">{{clazz.name}}</strong><span class=\"label label-info\">Class </span> </a> \n" +
-    "\n" +
-    "									</div>\n" +
-    "									<span class=\"abstract\">Reiciendis iactant eligendi. Vestrae </span>\n" +
-    "									<div class=\"abstract\">\n" +
-    "										<a href=\"#\" class=\"margin-right-10 \">\n" +
-    "											<i class=\"fa fa-user \"></i> Rambabu Ravuri\n" +
-    "										</a>\n" +
-    "										<span class='time'><i class=\"fa fa-clock-o \"></i>10-11am Mon-Tue-Fri</span>\n" +
-    "									</div>									\n" +
-    "								</div>\n" +
-    "							</td>\n" +
-    "							<td class=\"hidden-xs\">\n" +
-    "								<div class=\"block padding-10\">\n" +
-    "											<a ui-sref=\"app.appt.classusers({schoolid: schoolid, classid: clazz._id})\" class=\"margin-right-10 text-small block\">\n" +
-    "												<i class=\"fa fa-users\"></i> Users\n" +
-    "											</a>\n" +
-    "											<a href=\"#\" class=\"margin-right-10 block  text-small\">\n" +
-    "												<i class=\"fa fa-bar-chart \"></i> Grades \n" +
-    "											</a>\n" +
-    "											\n" +
-    "											<a href=\"#\" class=\"block  text-small\">\n" +
-    "												<i class=\"fa fa-money \"></i> Payment\n" +
-    "											</a>\n" +
-    "											\n" +
-    "											<a href=\"#\" class=\"block  text-small\">\n" +
-    "												<i class=\"fa fa-calendar \"></i> Time table\n" +
-    "											</a>\n" +
-    "\n" +
-    "										</div>\n" +
-    "							</td>\n" +
-    "							<td class=\"visible-lg\">\n" +
-    "							 <div class=\"padding-10\">\n" +
-    "								<div class=\"col-xs-4 text-center\">\n" +
-    "									<div class=\"counter\">\n" +
-    "										<div class=\"counter-label\">Students</div>\n" +
-    "										<div class=\"counter-number\">200</div>\n" +
-    "									</div>\n" +
-    "								</div>\n" +
-    "								<div class=\"col-xs-4 no-padding text-center\">\n" +
-    "									<div class=\"counter\">\n" +
-    "										<div class=\"counter-label\">Classes</div>\n" +
-    "										<div class=\"counter-number\">200</div>\n" +
-    "									</div>\n" +
-    "								</div>\n" +
-    "								<div class=\"col-xs-4 no-padding text-center\">\n" +
-    "									<div class=\"counter\">\n" +
-    "										<div class=\"counter-label\">Posts</div>\n" +
-    "										<div class=\"counter-number\">200</div>\n" +
-    "									</div>\n" +
-    "								</div>\n" +
-    "							  </div>\n" +
-    "							</td>\n" +
-    "						</tr>\n" +
-    "						\n" +
-    "					</tbody>\n" +
-    "				</table>\n" +
-    "			</div>\n" +
-    "			<div class=\"panel-footer no-border\">\n" +
-    "				<p class=\"no-margin\">\n" +
-    "					<a href=\"#\"><i class=\"fa fa-arrow-circle-o-down text-green\"></i></a>\n" +
-    "					<span class=\"text-light margin-left-10\">Show more details </span>\n" +
-    "				</p>\n" +
-    "			</div>\n" +
-    "		</div>\n" +
+    "	    <div class=\"page-header-actions\">\n" +
+    "	    	<button type=\"button\" class=\"btn btn-raised  btn-default btn-sm\" ui-sref=\"app.apph.apps.schoolusers({schoolid: schoolid})\"  uib-tooltip=\"Users\" tooltip-placement=\"bottom\"  tooltip-trigger=\"'mouseenter'\" tooltip-append-to-body=\"true\"><i class=\"icon fa-users\" aria-hidden=\"true\"></i> </button>\n" +
+    "	        <button type=\"button\" class=\"btn btn-raised  btn-default  btn-sm\" ui-sref=\"app.apph.apps.schoolEdit\" uib-tooltip=\"Edit School\" tooltip-placement=\"bottom\"  tooltip-trigger=\"'mouseenter'\" tooltip-append-to-body=\"true\"><i class=\"icon fa-edit\" aria-hidden=\"true\"></i> </button>\n" +
+    "		    <button type=\"button\" class=\"btn btn-raised btn-default  btn-sm\" ui-sref=\"app.apph.apps.program({schoolid: schoolid, classid: ''})\" uib-tooltip=\"Create Program\" tooltip-placement=\"bottom\"  tooltip-trigger=\"'mouseenter'\" tooltip-append-to-body=\"true\"><i class=\"icon fa-plus\" aria-hidden=\"true\"></i> Program </button>\n" +
+    "		    <button type=\"button\" class=\"btn btn-raised btn-default  btn-sm\" ui-sref=\"app.apph.apps.class({schoolid: schoolid, classid: ''})\" uib-tooltip=\"Create Class\" tooltip-placement=\"bottom\"  tooltip-trigger=\"'mouseenter'\" tooltip-append-to-body=\"true\"><i class=\"icon fa-plus\" aria-hidden=\"true\"></i> Class </button>\n" +
+    "	    </div>\n" +
     "	</div>\n" +
-    "</div>\n" +
     "\n" +
-    "\n" +
-    "<!-- \n" +
-    "\n" +
-    "<div class=\"row margin-20\" ng-cloak> \n" +
-    "	<div class=\"col-md-3\" ng-repeat=\"i in [1, 2 , 3 ]\" >\n" +
-    "\n" +
-    "		<div class=\"widget widget-shadow highlight\" >\n" +
-    "			<div class=\"widget-body padding-20\">\n" +
-    "				<a class=\"avatar pull-left margin-right-20\" href=\"javascript:void(0)\">\n" +
-    "					<img src=\"assets/images/avatar-1-small.jpg\" alt=\"\">\n" +
-    "				</a>\n" +
-    "				<div style=\"overflow:hidden;\">\n" +
-    "					<div class=\"font-size-18 margin-bottom-5\">Bodybuilding 101 &nbsp;&nbsp;&nbsp;<span class=\"pull-right\"><i class=\"icon fa-edit\" aria-hidden=\"true\"></i>&nbsp;&nbsp;<i class=\"icon fa-plus\" aria-hidden=\"true\"></i></span> </div>\n" +
-    "					<div class=\"font-size-12 margin-bottom-10\">Rambabu Ravuri &nbsp;&nbsp;&nbsp;&nbsp; Mon, Tue 10-11AM</div>			    \n" +
-    "				</div>\n" +
-    "\n" +
-    "		  		<p>\n" +
-    "		            Reiciendis iactant eligendi. Vestrae \n" +
-    "		          </p>\n" +
-    "		         <p ><a href=\"#\" class=\"icon-wrap\"> <i class=\"icon fa-book\" aria-hidden=\"true\"></i>&nbsp;&nbsp;<span>Syllabus</span></a>&nbsp;&nbsp;\n" +
-    "		         	<a href=\"#\" class=\"icon-wrap\"> <i class=\"icon fa-money\" aria-hidden=\"true\"></i>&nbsp;&nbsp;<span>Payment</span></a> &nbsp;&nbsp;\n" +
-    "		         	<a href=\"#\" class=\"icon-wrap\"> <i class=\"icon fa-bar-chart\" aria-hidden=\"true\"></i>&nbsp;&nbsp;<span>Grades</span></a> &nbsp;&nbsp;\n" +
-    "				<a href=\"#\" class=\"icon-wrap\"> <i class=\"icon fa-location-arrow\" aria-hidden=\"true\"></i>&nbsp;&nbsp;<span>Bellandur</span></a>&nbsp;&nbsp;\n" +
-    "				<a href=\"#\" class=\"icon-wrap\"> <i class=\"icon fa-tags\" aria-hidden=\"true\"></i>&nbsp;&nbsp;<span>Fitness, Bodybuilding</span></a>&nbsp;&nbsp;\n" +
-    "				<a href=\"#\" class=\"icon-wrap\"> <i class=\"icon fa-bank\" aria-hidden=\"true\"></i>&nbsp;&nbsp;<span>In Class</span></a> </p>\n" +
-    "\n" +
-    "\n" +
-    "			</div>\n" +
-    "\n" +
-    "			<div class=\"widget-footer padding-10\" style=\"height:70px;background-color: #e4eaec;\">\n" +
-    "			    <div class=\"row\">\n" +
-    "			    	<div class=\"col-xs-3 \">\n" +
-    "			    		<div class=\"counter\">\n" +
-    "	                    <span class=\"counter-number\">10</span>\n" +
-    "	                    <div class=\"counter-label \"><a ui-sref=\"app.classes({programid: '{{program._id}}'})\">Classes</a></div>\n" +
-    "	                  </div>\n" +
-    "			    	</div>\n" +
-    "			    	<div class=\"col-xs-3 \">\n" +
-    "			    		<div class=\"counter\">\n" +
-    "	                    <span class=\"counter-number\">11</span>\n" +
-    "	                    <div class=\"counter-label \"><a ui-sref=\"app.classusers({classid: '{{program._id}}'})\">Students</a></div>\n" +
-    "	                  </div>\n" +
-    "			    	</div>\n" +
-    "			    	<div class=\"col-xs-3 \">\n" +
-    "			    		<div class=\"counter\">\n" +
-    "	                    <span class=\"counter-number\">22</span>\n" +
-    "	                    <div class=\"counter-label \"><a ui-sref=\"app.classevents({classid: '{{program._id}}'})\">Events</a></div>\n" +
-    "	                  </div>\n" +
-    "			    	</div>\n" +
-    "			    	<div class=\"col-xs-3 \">\n" +
-    "			    		<div class=\"counter\">\n" +
-    "	                    <span class=\"counter-number\">2</span>\n" +
-    "	                    <div class=\"counter-label \"><a href=\"/app/wall\">Posts</a></div>\n" +
-    "	                  </div>\n" +
-    "			    	</div>\n" +
-    "			    </div>\n" +
-    "			</div>	\n" +
-    "\n" +
-    "		</div>\n" +
-    "	</div>\n" +
-    "</div>\n" +
-    "\n" +
-    "\n" +
-    "<div class=\"page-profile\" ng-cloak>\n" +
-    "\n" +
-    "<div class=\"modal fade modal-fill-in\">\n" +
-    "  <div class=\"modal-dialog\">\n" +
-    "    <div class=\"modal-content\">\n" +
-    "      <div class=\"modal-header\">\n" +
-    "        <button type=\"button\" class=\"close\" data-dismiss=\"modal\" aria-label=\"Close\">\n" +
-    "          <span aria-hidden=\"true\">×</span>\n" +
-    "        </button>\n" +
-    "        <h4 class=\"modal-title\" id=\"exampleFillInModalTitle\">Set The Messages</h4>\n" +
-    "      </div>\n" +
-    "      <div class=\"modal-body\">\n" +
-    "        <form>\n" +
-    "          <div class=\"row\">\n" +
-    "            <div class=\"col-lg-4 form-group\">\n" +
-    "              <input type=\"text\" class=\"form-control\" name=\"firstName\" placeholder=\"First Name\">\n" +
-    "            </div>\n" +
-    "            <div class=\"col-lg-4 form-group\">\n" +
-    "              <input type=\"email\" class=\"form-control\" name=\"lastName\" placeholder=\"Last Name\">\n" +
-    "            </div>\n" +
-    "            <div class=\"col-lg-4 form-group\">\n" +
-    "              <input type=\"email\" class=\"form-control\" name=\"email\" placeholder=\"Your Email\">\n" +
-    "            </div>\n" +
-    "            <div class=\"col-lg-12\">\n" +
-    "              <textarea class=\"form-control\" rows=\"5\" placeholder=\"Type your message\"></textarea>\n" +
-    "            </div>\n" +
-    "          </div>\n" +
-    "        </form>\n" +
-    "      </div>\n" +
-    "    </div>\n" +
-    "  </div>\n" +
-    "</div>\n" +
-    "	<div class=\"page\">\n" +
-    "		<div class=\"page-header  padding-bottom-10\" >\n" +
-    "          <ol class=\"breadcrumb\">\n" +
-    "            <li><a href=\"/app/wall\">Home</a></li>\n" +
-    "            <li  ng-if=\"isClass\"><a href=\"/app/classes\">Programs</a></li>\n" +
-    "          </ol>\n" +
-    "          <h1 class=\"page-title\">{{title}}</h1>\n" +
-    "         </div>\n" +
-    "\n" +
-    "	    <div class=\"page-content container-fluid padding-left-5 padding-right-5 padding-top-20\">\n" +
-    "			<div class=\"row\">\n" +
-    "				<div class=\"col-md-3 col-sm-4 col-xs-12\"  ng-repeat=\"program in classes\">\n" +
-    "					<div class=\"panel  box margin-10\" style=\"height:300px;\">\n" +
-    "						<div class=\"panel-heading padding-10\" style=\"height:80px;\">\n" +
-    "							<div class=\"panel-title padding-5\" ><h5 class=\"margin-bottom-0\">{{program.name}} </h5><span class=\"label label-sm label-round label-info\">{{program.status}}</span></div>\n" +
-    "							<div class=\"panel-actions\">\n" +
-    "								<a class=\"text-action\" ui-sref=\"app.class({ classid: '{{program._id}}', type: 'program'})\"><i class=\"icon wb-edit\" aria-hidden=\"true\"></i></a>\n" +
+    "	<div class=\"panel\">\n" +
+    "		<div class=\"panel-body\" style=\"padding: 0px;\">	\n" +
+    "			<table class=\"table no-margin\">\n" +
+    "				<tbody>\n" +
+    "					<tr ng-repeat=\"clazz in classes\" ng-cloak>\n" +
+    "						<td class=\"max-width-100 hidden-xs\">\n" +
+    "							<div class=\"icons-effect padding-10\">\n" +
+    "								<img src=\"assets/images/avatar-1-small.jpg\" class=\"img-rounded img-responsive\" style=\"height: 70px;\" alt=\"\">\n" +
     "							</div>\n" +
-    "						</div> \n" +
-    "							\n" +
-    "						<div class=\"panel-body padding-10\" style=\"min-height: 150px;max-height: 150px;overflow-y: scroll;\">\n" +
-    "							<div responsive-text text=\"program.details\" style=\"min-height:50px;\"></div> \n" +
-    "							<p><i class=\"icon fa-location-arrow\" aria-hidden=\"true\"></i>&nbsp;&nbsp;<span ng-if=\"program.location\">{{program.location}}</span></p>\n" +
-    "							<p><i class=\"icon fa-tags\" aria-hidden=\"true\"></i>&nbsp;&nbsp;<span ng-if=\"program.categories\">{{program.categories}}</span></p>\n" +
-    "							<p ><i class=\"icon fa-bank\" aria-hidden=\"true\"></i>&nbsp;&nbsp;<span ng-if=\"program.style\">{{program.style}}</span></p>\n" +
-    "							\n" +
-    "					    </div>	\n" +
-    "					    <div class=\"panel-footer padding-10\" style=\"height:70px; background-color: #e4eaec;\">\n" +
-    "						    <div class=\"row\">\n" +
-    "						    	<div class=\"col-xs-3 \">\n" +
-    "						    		<div class=\"counter\">\n" +
-    "				                    <span class=\"counter-number\">{{program.classes}}</span>\n" +
-    "				                    <div class=\"counter-label \"><a ui-sref=\"app.classes({programid: '{{program._id}}'})\">Classes</a></div>\n" +
-    "				                  </div>\n" +
-    "						    	</div>\n" +
-    "						    	<div class=\"col-xs-3 \">\n" +
-    "						    		<div class=\"counter\">\n" +
-    "				                    <span class=\"counter-number\">{{program.students}}</span>\n" +
-    "				                    <div class=\"counter-label \"><a ui-sref=\"app.classusers({classid: '{{program._id}}'})\">Students</a></div>\n" +
-    "				                  </div>\n" +
-    "						    	</div>\n" +
-    "						    	<div class=\"col-xs-3 \">\n" +
-    "						    		<div class=\"counter\">\n" +
-    "				                    <span class=\"counter-number\">{{program.events}}</span>\n" +
-    "				                    <div class=\"counter-label \"><a ui-sref=\"app.classevents({classid: '{{program._id}}'})\">Events</a></div>\n" +
-    "				                  </div>\n" +
-    "						    	</div>\n" +
-    "						    	<div class=\"col-xs-3 \">\n" +
-    "						    		<div class=\"counter\">\n" +
-    "				                    <span class=\"counter-number\">{{program.posts}}</span>\n" +
-    "				                    <div class=\"counter-label \"><a href=\"/app/wall\">Posts</a></div>\n" +
-    "				                  </div>\n" +
-    "						    	</div>\n" +
-    "						    </div>\n" +
-    "						</div>					\n" +
-    "					</div>\n" +
-    "				</div>\n" +
-    "			</div>\n" +
-    "	\n" +
-    "		</div>\n" +
-    "		<div class=\"site-action\">\n" +
-    "		    <a type=\"button\" class=\"site-action-toggle btn-raised btn btn-success btn-floating\" ui-sref=\"app.class({type:'{{type}}', programid: '{{programid}}'})\">\n" +
-    "		      <i class=\"front-icon wb-plus animation-scale-up\" aria-hidden=\"true\"></i>\n" +
-    "		    </a>\n" +
+    "						</td>\n" +
+    "						<td>\n" +
+    "							<div class=\"padding-10\">\n" +
+    "								<div class=\"title\">\n" +
+    "									<a ui-sref=\"app.apph.apps.program({schoolid: schoolid, classid: clazz._id})\" ng-if=\"clazz.type === 'program'\"> <strong style=\"margin-right: 20px\">{{clazz.name}}</strong> <span class=\"label label-info\">{{clazz.type}} </span></a> \n" +
+    "									<a ui-sref=\"app.apph.apps.class({schoolid: schoolid, classid: clazz._id})\" ng-if=\"clazz.type === 'class'\"\"><strong style=\"margin-right: 20px\">{{clazz.name}}</strong><span class=\"label label-info\">Class </span> </a> \n" +
+    "\n" +
+    "								</div>\n" +
+    "								<span class=\"abstract\">Reiciendis iactant eligendi. Vestrae </span>\n" +
+    "								<div class=\"abstract\">\n" +
+    "									<a href=\"#\" class=\"margin-right-10 \">\n" +
+    "										<i class=\"fa fa-user \"></i> Rambabu Ravuri\n" +
+    "									</a>\n" +
+    "									<span class='time'><i class=\"fa fa-clock-o \"></i>10-11am Mon-Tue-Fri</span>\n" +
+    "								</div>									\n" +
+    "							</div>\n" +
+    "						</td>\n" +
+    "						<td class=\"hidden-xs\">\n" +
+    "							<div class=\"block padding-10\">\n" +
+    "										<a ui-sref=\"app.apph.apps.classusers({schoolid: schoolid, classid: clazz._id})\" class=\"margin-right-10 text-small block\">\n" +
+    "											<i class=\"fa fa-users\"></i> Users\n" +
+    "										</a>\n" +
+    "										<a href=\"#\" class=\"margin-right-10 block  text-small\">\n" +
+    "											<i class=\"fa fa-bar-chart \"></i> Grades \n" +
+    "										</a>\n" +
+    "										\n" +
+    "										<a href=\"#\" class=\"block  text-small\">\n" +
+    "											<i class=\"fa fa-money \"></i> Payment\n" +
+    "										</a>\n" +
+    "										\n" +
+    "										<a href=\"#\" class=\"block  text-small\">\n" +
+    "											<i class=\"fa fa-calendar \"></i> Time table\n" +
+    "										</a>\n" +
+    "\n" +
+    "									</div>\n" +
+    "						</td>\n" +
+    "						<td class=\"visible-lg\">\n" +
+    "						 <div class=\"padding-10\">\n" +
+    "							<div class=\"col-xs-4 text-center\">\n" +
+    "								<div class=\"counter\">\n" +
+    "									<div class=\"counter-label\">Students</div>\n" +
+    "									<div class=\"counter-number\">200</div>\n" +
+    "								</div>\n" +
+    "							</div>\n" +
+    "							<div class=\"col-xs-4 no-padding text-center\">\n" +
+    "								<div class=\"counter\">\n" +
+    "									<div class=\"counter-label\">Classes</div>\n" +
+    "									<div class=\"counter-number\">200</div>\n" +
+    "								</div>\n" +
+    "							</div>\n" +
+    "							<div class=\"col-xs-4 no-padding text-center\">\n" +
+    "								<div class=\"counter\">\n" +
+    "									<div class=\"counter-label\">Posts</div>\n" +
+    "									<div class=\"counter-number\">200</div>\n" +
+    "								</div>\n" +
+    "							</div>\n" +
+    "						  </div>\n" +
+    "						</td>\n" +
+    "					</tr>\n" +
+    "					\n" +
+    "				</tbody>\n" +
+    "			</table>\n" +
+    "\n" +
     "		</div>\n" +
     "	</div>\n" +
     "</div>\n" +
-    " -->");
+    "\n" +
+    "\n" +
+    "");
 }]);
 
 angular.module("school/schoolEdit.tpl.html", []).run(["$templateCache", function($templateCache) {
@@ -1072,57 +1196,75 @@ angular.module("school/schoolEdit.tpl.html", []).run(["$templateCache", function
 
 angular.module("school/users/classUser.tpl.html", []).run(["$templateCache", function($templateCache) {
   $templateCache.put("school/users/classUser.tpl.html",
+    "<style type=\"text/css\">\n" +
+    "    \n" +
+    "    .role {\n" +
+    "\n" +
+    "      margin : 0px 10px 10px 0px;\n" +
+    "      \n" +
+    "    }\n" +
+    "\n" +
+    "</style>\n" +
+    "\n" +
     "<div class=\"modal-header\">\n" +
-    "    <h3 class=\"modal-title\" id=\"modal-title\">Student</h3>\n" +
+    "    <h3 class=\"modal-title\" id=\"modal-title\">{{userType}}</h3>\n" +
     "</div>\n" +
     "\n" +
-    "<form name=\"Form\" id=\"form\" novalidate ng-submit=\"form.submit(Form)\" >\n" +
+    "<form name=\"Form\" id=\"form\" novalidate ng-submit=\"vm.form.submit(Form)\" >\n" +
     "\n" +
     "<div class=\"modal-body\">\n" +
-    "    <div class=\"form-group\" ng-class=\"{'has-error':Form.email.$dirty && Form.email.$invalid, 'has-success':Form.email.$valid}\">\n" +
+    "\n" +
+    "    <div class=\"form-group\">\n" +
+    "      <label class=\"control-label\">Register</label>\n" +
+    "      <div class=\"form-control no-border\">\n" +
+    "        <a href=\"#\" class=\"btn btn-raised role\" ng-class=\"vm.user.type === userType? 'btn-success' : 'btn-default'\" ng-repeat=\"userType in ['teacher', 'admin', 'student', 'parent']\" ng-click=\"vm.selectUserType(userType)\">{{userType}}</a>\n" +
+    "      </div>\n" +
+    "    </div>\n" +
+    "\n" +
+    "\n" +
+    "    <div class=\"form-group \">\n" +
+    "      <label class=\"control-label\">Using</label>\n" +
+    "      <div class=\"form-control no-border\">\n" +
+    "        <a href=\"#\" class=\"btn btn-raised margin-right-10\" ng-class=\"vm.user.registerUsing === type? 'btn-success' : 'btn-default'\" ng-repeat=\"type in ['email', 'mobile']\" ng-click=\"vm.selectRegisterType(type)\">{{type}}</a>\n" +
+    "      </div>\n" +
+    "    </div>\n" +
+    "\n" +
+    "    <div class=\"form-group\">\n" +
     "        <label>\n" +
-    "            Email<span class=\"symbol required\">\n" +
+    "            Email\n" +
     "        </label>\n" +
-    "        <input type=\"email\"  class=\"form-control\" name=\"email\" ng-model=\"user.email\" required>\n" +
+    "        <input type=\"email\"  class=\"form-control\" name=\"email\" ng-model=\"vm.user.email\"  ng-required=\"vm.user.registerUsing === 'Email'\">\n" +
     "        <span class=\"error text-small block\" ng-if=\"Form.email.$dirty && Form.email.$error.required\">Email is required.</span>\n" +
+    "        <span class=\"error text-small block\" ng-if=\"Form.email.$error.email\">Enter valid email.</span>\n" +
     "    </div>\n" +
-    "    <div class=\"row\">\n" +
-    "      <div class=\"col-xs-6\">\n" +
-    "        <div class=\"form-group\" ng-class=\"{'has-error':Form.firstname.$dirty && Form.firstname.$invalid, 'has-success':Form.firstname.$valid}\">\n" +
-    "            <label>\n" +
-    "                First Name<span class=\"symbol required\">\n" +
-    "            </label>\n" +
-    "            <input type=\"text\"  class=\"form-control\" ng-model=\"user.firstname\" name=\"firstname\" required>\n" +
-    "            <span class=\"error text-small block\" ng-if=\"Form.firstname.$dirty && Form.firstname.$error.required\">Firstname is required.</span>\n" +
-    "        </div>\n" +
-    "      </div>\n" +
-    "      <div class=\"col-xs-6\">\n" +
-    "        <div class=\"form-group\" ng-class=\"{'has-error':Form.lastname.$dirty && Form.lastname.$invalid, 'has-success':Form.lastname.$valid}\">\n" +
-    "            <label>\n" +
-    "                Last Name<span class=\"symbol required\">\n" +
-    "            </label>\n" +
-    "            <input type=\"text\" class=\"form-control\" ng-model=\"user.lastname\" name=\"lastname\" required>\n" +
-    "            <span class=\"error text-small block\" ng-if=\"Form.lastname.$dirty && Form.lastname.$error.required\">Lastname is required.</span>\n" +
-    "        </div>\n" +
-    "      </div>\n" +
+    "\n" +
+    "    <div class=\"form-group\">\n" +
+    "        <label>\n" +
+    "            Mobile\n" +
+    "        </label>\n" +
+    "        <input type=\"text\"  class=\"form-control\" name=\"mobile\" ng-model=\"vm.user.mobile\" ng-required=\"vm.user.registerUsing === 'Mobile'\" ui-mask=\"(999) 999 - 9999\" ui-options=\"{clearOnBlur: false, addDefaultPlaceholder: false}\">\n" +
+    "        <span class=\"error text-small block\" ng-if=\"Form.mobile.$dirty && Form.mobile.$error.required\">Mobile is required.</span>\n" +
     "    </div>\n" +
-    "    \n" +
-    "    <div class=\"form-group form-material\"  ng-class=\"{'has-error':Form.role.$dirty && Form.role.$invalid, 'has-success':Form.role.$valid}\">\n" +
-    "      <label class=\"pull-left\">Add as &nbsp;<span class=\"symbol required\"></label>\n" +
-    "      <div class=\"radio-custom radio-success inline small\" ng-repeat=\"userType in ['teacher', 'admin', 'student', 'parent']\" >\n" +
-    "        <input type=\"radio\" ng-model=\"user.type\" ng-value=\"userType\" id=\"{{userType}}\" checked=\"false\" name=\"role\" />\n" +
-    "        <label for=\"{{userType}}\">{{userType}}</label>\n" +
-    "      </div>\n" +
-    "      <span class=\"error text-small block\" ng-if=\"Form.role.$dirty && Form.role.$error.required\">Role is required.</span>\n" +
-    "    </div>  \n" +
+    "\n" +
+    "\n" +
+    "    <div class=\"form-group\">\n" +
+    "        <label>\n" +
+    "            Name\n" +
+    "        </label>\n" +
+    "        <input type=\"text\"  class=\"form-control\" ng-model=\"vm.user.name\" name=\"name\" required>\n" +
+    "        <span class=\"error text-small block\" ng-if=\"Form.name.$dirty && Form.name.$error.required\">Name is required.</span>\n" +
+    "    </div>\n" +
+    "\n" +
     "</div>\n" +
     "  <div class=\"modal-footer\">\n" +
-    "      <button class=\"btn btn-primary btn-outline btn-round\" type=\"submit\">\n" +
-    "          Ok\n" +
-    "      </button>\n" +
-    "      <button class=\"btn btn-default btn-outline btn-round\" ng-click=\"cancel()\">\n" +
+    "      <button class=\"btn btn-default btn-raised\" ng-click=\"cancel()\">\n" +
     "          Cancel\n" +
     "      </button>\n" +
+    "\n" +
+    "      <button class=\"btn btn-primary btn-raised\" type=\"submit\">\n" +
+    "          Save User\n" +
+    "      </button>\n" +
+    "      \n" +
     "  </div>\n" +
     "\n" +
     "</form>\n" +
@@ -1169,7 +1311,7 @@ angular.module("school/users/classUsers.tpl.html", []).run(["$templateCache", fu
     "        \n" +
     "        <div class=\"row\">\n" +
     "          <div class=\"col-md-4 text-left\">     \n" +
-    "           <input type=\"text\" ng-model=\"customSelected\" placeholder=\"Add user to class \" uib-typeahead=\"user as user.firstname for user in vm.schoolusers  | filter:{firstname:$viewValue} | limitTo:8\" typeahead-template-url=\"customTemplate.html\" class=\"form-control\" typeahead-show-hint=\"true\"  typeahead-on-select=\"itemSelected($item, $model, $label, $event);customSelected=''\" typeahead-min-length=\"2\" typeahead-wait-ms=\"100\" width=\"200px\" />\n" +
+    "           <input type=\"text\" ng-model=\"customSelected\" placeholder=\"Add user to class \" uib-typeahead=\"user as user.name for user in vm.schoolusers  | filter:{name:$viewValue} | limitTo:8\" typeahead-template-url=\"customTemplate.html\" class=\"form-control\" typeahead-show-hint=\"true\"  typeahead-on-select=\"itemSelected($item, $model, $label, $event);customSelected=''\" typeahead-min-length=\"2\" typeahead-wait-ms=\"100\" width=\"200px\" />\n" +
     "          </div>  \n" +
     "        </div>\n" +
     "\n" +
@@ -1243,7 +1385,8 @@ angular.module("shared/app.tpl.html", []).run(["$templateCache", function($templ
     "          <ul class=\"nav navbar-toolbar navbar-left navbar-toolbar-right\">\n" +
     "\n" +
     "            <li><a href=\"#\" ui-sref=\"app.apph.wall\"><i class=\"wb-icon wb-home\" aria-hidden=\"true\"></i>&nbsp; Home </a></li>\n" +
-    "            <li><a  ui-sref=\"app.appt.school\"><i class=\"wb-icon wb-settings active\" aria-hidden=\"true\"></i>&nbsp; School</a></li>\n" +
+    "            <li><a  ui-sref=\"app.apph.apps.school\"><i class=\"wb-icon wb-settings active\" aria-hidden=\"true\"></i>&nbsp; School</a></li>\n" +
+    "            <li><a  ui-sref=\"app.apph.events\"><i class=\"wb-icon wb-calendar\" aria-hidden=\"true\"></i>&nbsp;Calendar</a></li>\n" +
     "            <li><a href=\"#\"><i class=\"wb-icon wb-dashboard\" aria-hidden=\"true\"></i>&nbsp;Dashboard</a></li>\n" +
     "\n" +
     "          </ul>\n" +
@@ -1608,28 +1751,6 @@ angular.module("shared/gmap.tpl.html", []).run(["$templateCache", function($temp
     "  <div id=\"locateText\">Current Location&nbsp;&nbsp;<i class=\"icon fa-location-arrow\" aria-hidden=\"true\"></i></div>\n" +
     "</div>\n" +
     "<div class=\"gmapview height-300\"></div>\n" +
-    "");
-}]);
-
-angular.module("shared/pdfviewer.tpl.html", []).run(["$templateCache", function($templateCache) {
-  $templateCache.put("shared/pdfviewer.tpl.html",
-    "<div class=\"page-header padding-left-40 padding-top-10 padding-bottom-0\">\n" +
-    "  <h1 class=\"page-title\"></i>{{title}}&nbsp;</h1>\n" +
-    "  <div class=\"page-header-actions\">\n" +
-    "    <button class=\"btn btn-round btn-primary btn-pill-left\" ng-click=\"goPrevious()\">Prev</button>\n" +
-    "    <button class=\"btn btn-round btn-primary btn-pill-right\" ng-click=\"goNext()\">Next</button>\n" +
-    "    <span>Page: </span>\n" +
-    "    <input type=\"text\" min=1 ng-model=\"pageNum\" style=\"width: 30px\">\n" +
-    "    <span> / {{pageCount}}</span>\n" +
-    "  </div>\n" +
-    "\n" +
-    "</div>\n" +
-    "\n" +
-    "<div class=\"row\">\n" +
-    "	<div class=\"col-md-12\">\n" +
-    " 	 <canvas id=\"pdf\" class=\"rotate0 canvas\" style=\"padding: 20px\"></canvas>\n" +
-    " 	</div>\n" +
-    "</div>\n" +
     "");
 }]);
 

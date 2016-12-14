@@ -15,40 +15,8 @@ module.exports = function(router) {
 					}
 				})
 			})
+			
 	router.route('/users')
-			// .post(function(req, res){
-
-			// 	console.log("POST USERS");
-
-			// 	var userJson = req.body;
-			// 	console.log(userJson);
-			// 	User.create(userJson, function(err, user){
-			// 		if (err) {
-			// 			console.log('Could not create user: ' + err);
-			// 			res.status(500).send(err);
-			// 		}
-			// 		else {
-			// 			console.log('CREDENTIAL ID: ' +userJson.credential._id + ' USERID:  ' +  user._id);
-
-			// 			User.findById(userJson.credential._id, function(err, credential){
-			// 		  						if (err) {
-			// 		  							res.send(err);
-			// 		  							return;
-			// 		  						}
-			// 		  						credential.name = userJson.credential.name;
-			// 		  						credential.userType = userJson.credential.userType;
-			// 		  						credential.user = user._id;
-			// 		  						credential.save(function(err){
-			// 			  						if (err) res.send(err);
-			// 			  						else
-			// 			  							res.send(user._id);
-			// 			  					});
-			// 		  					});
-
-			// 		}
-			// 	});
-			// })
-
 			.get(function(req, res){
 				console.log("GET USERS");
 				User.find({})
@@ -61,19 +29,6 @@ module.exports = function(router) {
 					}
 				});
 			});
-
-	// router.route('/credential/:crendetialid')
-	// 	  .get(function(req, res) {
-	// 	  	User
-	// 	  	.findById(req.params.crendetialid, function(err, user){
-	// 	  		if (err) {
-	// 	  			res.send(err);
-	// 	  		} else {
-	// 	  			res.json(user);
-	// 	  		}
-	// 	  	});
-
-	// 	  });
 
 	router.route('/users/:user_id')
 		  .get(function(req, res) {

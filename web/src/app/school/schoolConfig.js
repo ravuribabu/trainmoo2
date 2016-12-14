@@ -4,36 +4,33 @@ var school = require('angular').module('school');
 
 school.config(function($stateProvider, $urlRouterProvider, $locationProvider) {
 
-	$stateProvider.
-    	state('app.appt.school', {
+	$stateProvider
+        .state('app.apph.apps', {
+            url: '/apps',
+            templateUrl: 'school/appSchool.tpl.html',
+        }).
+    	state('app.apph.apps.school', {
             url: "/school",
             templateUrl: "school/school.tpl.html",
             controller: 'schoolController'
-        }).
-        state('app.appt.schoolEdit', {
+        })
+        .
+        state('app.apph.apps.schoolEdit', {
             url: "/schoolEdit",
             templateUrl: "school/schoolEdit.tpl.html",
-        }).state('app.appt.pdf', {
-            url: "/pdfview/:fileid/:caption",
-            templateUrl: "school/pdfview.tpl.html",
-            controller: function($scope, $stateParams, $location){
-                $scope.title = $stateParams.caption;
-                var path = $location.$$protocol + "://" + $location.$$host + ":" + $location.$$port;
-                $scope.pdfUrl = path + '/api/img/download/thumbnail/' + $stateParams.fileid ;
-            },
-            controllerAs: 'vm'
-        }).state('app.appt.program', {
+        })
+        .state('app.apph.apps.program', {
             url: "/school/:schoolid/program/:classid",
             templateUrl: "school/class/classEdit.tpl.html",
-        }).state('app.appt.class', {
-            url: "school/:schoolid/class/:classid",
+        }).state('app.apph.apps.class', {
+            url: "/school/:schoolid/class/:classid",
             templateUrl: "school/class/classEdit.tpl.html",
-        }).state('app.appt.schoolusers', {
+        }).state('app.apph.apps.schoolusers', {
                 url: "/school/:schoolid/users",
                 templateUrl: "school/users/classUsers.tpl.html",
                 controller: "schoolUsersController",
                 controllerAs: "vm"
-        }).state('app.appt.classusers', {
+        }).state('app.apph.apps.classusers', {
             url: "/school/:schoolid/class/:classid/users",
             templateUrl: "school/users/classUsers.tpl.html",
             controller: "classUsersController",

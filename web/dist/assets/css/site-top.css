@@ -7419,7 +7419,7 @@ div.widget-title {
   padding-top: 10px;
 }
 .comments .comment .comment:first-child {
-  border-top: 1px solid #e0e0e0;
+  border-top: 1px solid #f1f1f1;
 }
 .comments .comment .comment:last-child {
   border-bottom: none;
@@ -7488,7 +7488,7 @@ div.widget-title {
 
 
 .comment-reply {
-  margin: 42px 0 10px;
+  /*margin: 42px 0 10px;*/
 }
 .comment-reply .form-group:last-child {
   margin-bottom: 0;
@@ -7813,6 +7813,20 @@ div.widget-title {
   background-color: #fff;
   border-color: #f44336;
 }
+
+.error:before {
+  background-color: #3f51b5;
+}
+.error:after {
+  background-color: #eee;
+}
+.error  {
+  color: #f44336;
+  background-color: #fff;
+  border-color: #f44336;
+}
+
+
 .pearl.done:before,
 .pearl.done:after {
   background-color: #3f51b5;
@@ -9308,7 +9322,7 @@ div.widget-title {
 }
 .color-selector > li label {
   position: relative;
-  font-family: "Material-Design-Iconic-Font";
+  font-family: "Web Icons";
   font-style: normal;
   font-weight: normal;
   font-variant: normal;
@@ -9323,7 +9337,7 @@ div.widget-title {
   font-size: 16px;
   line-height: 1;
   color: #fff;
-  content: '\f26b';
+  content: "\f192";
 }
 .color-selector > li.color-selector-disabled {
   background-color: #bdbdbd !important;

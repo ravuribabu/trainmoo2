@@ -71,42 +71,84 @@ module.exports = function(router) {
 			  	});
 		  }).post(function(req, res){
 		  		var userRequest = req.body;
-				
-				ClassUser.create(userRequest, function(err, user){
-					if (err) { 
-						console.log(err);
-						res.status(500).send(err);
-					}
-					else { 
 
-						//Add user to schoolusers list as well.
-						Class.findById(user.class, function(err, claz) {
-							if (err) {
-								return;
-							}
-							SchoolUser.find({ school: claz.school, email: user.email }, function(err, users) {
-								if (users && users.length > 0) {
-									return; //user exists
-								}
-
-								//add user
-								const schoolUser = {
-									school: claz.school,
-									email: user.email,
-									firstname: user.firstname,
-									lastname: user.lastname,
-									type: user.type
-								};
-								SchoolUser.create(schoolUser, function(err, schoolUser) {
-									console.log('User is added to to school list as well');
-								});
-							});
-						});
+		  		console.log('RECEIVED: ' + JSON.stringify(userRequest));
+		  		//IF class user exists return with failure
+		  		var p1 = new Promise(function(resolve, reject){
+		  			ClassUser.find({ $or : [{ email: userRequest.email }, { mobile: userRequest.mobile }]})
+		  				 .exec(function(err, classUsers) {
+		  				 	if (err) {
+		  				 		reject(err);
+		  				 	} else {
+		  				 		if (classUsers && classUsers.length > 0) {
+		  				 			resolve(classUsers[0]);
+		  				 		}
+		  				 	}
+		  				 });
+		  		});
 
 
-						res.send(user); 
-					}
-				}); 
+		  		//If school user exists, add to classuser
+		  		var p2 = new Promise(function(resolve, reject){
+		  			SchoolUser.find({ $or : [{ email: userRequest.email }, { mobile: userRequest.mobile }]})
+		  				 .exect(function(err, schoolUsers) {
+		  				 	if (err) {
+		  				 		reject(err);
+		  				 	} else {
+		  				 		if (schoolUsers && schoolUsers.length > 0) {
+		  				 			resolve(schoolUsers[0]);
+		  				 		}
+		  				 	}
+		  				 });
+		  		});
+		  			
+
+		  		//If does not exist in class and school
+		  		Promise.all([p1, p2])
+		  				.then(function(results){
+		  					let classUser = results[0];
+		  					let schoolUser = results[1];
+
+		  					console.log('classUser: ' + JSON.stringify(classUser) + ' schooluser: ' + JSON.stringify(schoolUser));
+		  					if (classUser || schoolUser) {
+		  						res.status(409).send(classUser || schoolUser);
+		  					} else {
+		  						ClassUser.create(userRequest, function(err, user){
+									if (err) { 
+										console.log(err);
+										res.status(500).send(err);
+									}
+									else { 
+
+										//Add user to schoolusers list as well.
+										Class.findById(user.class, function(err, claz) {
+											if (err) {
+												return;
+											}
+											SchoolUser.find({ school: claz.school, email: user.email }, function(err, users) {
+												if (users && users.length > 0) {
+													return; //user exists
+												}
+
+												//add user
+												const schoolUser = {
+													school: claz.school,
+													email: user.email,
+													firstname: user.firstname,
+													lastname: user.lastname,
+													type: user.type
+												};
+												SchoolUser.create(schoolUser, function(err, schoolUser) {
+													console.log('User is added to to school list as well');
+												});
+											});
+										});
+										res.send(user); 
+									}
+								}); 
+		  					}
+		  				});
+		  		
 		  }).put(function(req, res){
 
 		  	var userRequest = req.body;

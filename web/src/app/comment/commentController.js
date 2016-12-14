@@ -16,7 +16,7 @@ comment.directive('comment', function(){
 	};
 });
 
-comment.controller('commentController', function($scope, $uibModal, postFactory, $stateParams){
+comment.controller('commentController', function($scope, $uibModal, postFactory, $stateParams, $aside){
 	
 	var vm = this;
 	var _ = require('lodash');
@@ -30,13 +30,26 @@ comment.controller('commentController', function($scope, $uibModal, postFactory,
 
 		vm.isreply = $scope.msg.parent?true:false;
 		vm.hasReplies = $scope.msg.replies && $scope.msg.replies.length > 0;
-		vm.showSubmitActions = $scope.msg.submittable && !vm.isreply
+		vm.showSubmitActions = $scope.msg.submittable && $scope.msg.type != 'Task' && !vm.isreply;
+		vm.showTaskActions = $scope.msg.submittable && $scope.msg.type == 'Task' && !vm.isreply;
 		vm.hasRichtext = ($scope.msg.richtext?true:false);
-		
-		vm.showReplyBox = false;
-		vm.showSubmitBox = false;
-		vm.showReply = () => { vm.showReplyBox = !vm.showReplyBox ; vm.showSubmitBox = false; vm.showAllReplies('reply');}
-		vm.showSubmission = () => { vm.showSubmitBox = !vm.showSubmitBox ; vm.showReplyBox = false; vm.showAllReplies('submission');}
+				
+		$scope.showPost = (type) => { 
+			vm.postType = type;
+			console.log('showPost:' + type);
+		}
+
+
+		$scope.showReplies = (type) => {
+			if (!type) {
+				type = 'reply';
+			}
+			vm.repliesType = type;
+			vm.selectedReplies = ($scope.msg.replies.filter((r) => { return r.responseType === type}));
+			console.log('show replies' + type);
+		}
+		vm.repliesType = 'reply';
+		$scope.showReplies('reply');
 
 		if ($scope.msg.dueby) {
 			const current = moment(new Date());
@@ -45,47 +58,28 @@ comment.controller('commentController', function($scope, $uibModal, postFactory,
 		}
 
 		if (!vm.isReply){
-			$scope.replies = $scope.msg.replies;
-			initializeReplies($scope.replies);
+			vm.replies = $scope.msg.replies;
+			//initializeReplies($scope.replies);
 		}
+
+
 		//loadReplies();
 	}	
 
-	vm.showFewReplies = true;
-	vm.showAllReplies = function (type) {
-		if (!type) { type = 'reply'}
-		vm.showFewReplies = false;
-		vm.visibleReplies = $scope.replies.filter((r) => { return r.responseType === type });
-		vm.visibleReplyType = type;
-	}
-
-	//Show only latest 2 replies - latest at the bottom
-	function initializeReplies(replies) {
-		if (replies && replies.length > 2) {
-			vm.visibleReplies = vm.showFewReplies? replies.slice(-2) : replies;
-		}	
-
-		if (replies && replies.length<= 2) {
-			vm.showFewReplies = false;
-			vm.visibleReplies = replies;
-		}
-
-		if (vm.showSubmitActions) {
-			vm.submissionsCount = replies.filter((r)=>  { return r.responseType === 'submission' } ).length;
-			vm.qaCount = replies.filter((r)=> { return r.responseType === 'reply' }).length;
-			vm.totalStudentsCount = 20;
-			vm.remainingCount = 10;
-			//vm.showAllReplies('submission');
-		} 
-	}
-
+	
 
 	function loadReplies() {
 		if (!vm.isReply){
 				postFactory.getReplies($scope.msg._id)
 							.success(function(data){
-								$scope.replies = data;
-								initializeReplies($scope.replies);
+								vm.replies = data;
+								const msg = $scope.msg;
+								msg.replies = data;
+
+								$scope.msg = {};
+								Object.assign($scope.msg, msg);
+								$scope.showReplies(vm.postType);
+								//initializeReplies($scope.replies);
 							})
 							.error(function(err){
 								console.log(err);
@@ -104,7 +98,7 @@ comment.controller('commentController', function($scope, $uibModal, postFactory,
 	}
 
 	$scope.$on('POST_CREATED', function(event, parent){
-		if ($scope.msg._id === parent._id) {
+		if ($scope.msg._id === parent) {
 			event.stopPropagation();
 			loadReplies();
 		}
@@ -112,11 +106,12 @@ comment.controller('commentController', function($scope, $uibModal, postFactory,
 
 	vm.openRichtext = () => {
 		const richtextid = $scope.msg.richtext.id
-		var modalInstance = $uibModal.open({
+		var modalInstance = $aside.open({
 		            templateUrl: 'richtext/richtext.tpl.html',
 		            size: 'lg',
 		            backdrop: true,
 		            controller: 'richtextController',
+		            placement: 'right',
 		            resolve:  {
 		            	params: function() {
 			            		return {

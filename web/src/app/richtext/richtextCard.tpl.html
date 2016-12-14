@@ -2,13 +2,16 @@
 	.card {
 	    box-shadow: 0 4px 8px 0 rgba(0,0,0,0.2);
 	    transition: 0.3s;
+    	padding: 5px;
+    	background: #F3F7F9;
 	}
+	
 	.card:hover {
 	    box-shadow: 0 8px 16px 0 rgba(0,0,0,0.2);
 	}
 </style>
  
-<div class="card" style="margin-top: 10px;padding:5px;height: auto;cursor: pointer;    border: 1px solid #f3f2f2;">
+<div style="margin-top: 10px;padding:5px;height: auto;cursor: pointer; border: 1px solid #f3f2f2; background: #F3F7F9;" >
 	 <div class="media">
 		<div class="media-left" ng-if="rtpost.richtext.previewImg">
 		    <img class="media-object" ng-src="{{rtpost.richtext.previewImg}}" alt="...">

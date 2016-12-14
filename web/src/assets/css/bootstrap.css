@@ -5258,7 +5258,7 @@ button.close {
 }
 .tooltip {
   position: absolute;
-  z-index: 1900;
+  z-index: 10000;
   display: block;
   font-family: "Roboto", sans-serif;
   font-size: 12px;
@@ -5377,8 +5377,8 @@ button.close {
   left: 0;
   z-index: 1800;
   display: none;
-  max-width: 276px;
-  padding: 1px;
+/*  max-width: 276px;
+*/  padding: 1px;
   font-family: "Roboto", sans-serif;
   font-size: 14px;
   font-style: normal;

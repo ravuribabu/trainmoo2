@@ -2,8 +2,6 @@
 
 var wall = require('angular').module('wall');
 var moment = require('moment');
-require('../../../node_modules/pdfjs-dist/build/pdf.combined');
-require('../shared/ng-pdf');
 
 wall.controller('wallController',
 	function($scope, $rootScope, $stateParams, postFactory, userFactory){
@@ -32,7 +30,6 @@ wall.controller('wallController',
 			event.stopPropagation();
 			$scope.$broadcast('WALL_NAV_CHANGED', criteria);
 
-			console.log('Criteria: ' + JSON.stringify(criteria, null, '\t'));
 			let classids = [];
 			criteria.program && classids.push(criteria.program.id);
 			criteria.class && classids.push(criteria.class.id);
@@ -49,12 +46,9 @@ wall.controller('wallController',
 
 		function loadMessages(classids, postType){
 
-			console.log('Query posts: ' + _.join(classids, ', '));
 			postFactory.getPosts(classids, postType)
 			   .success(function(data){
 				   	$scope.posts = data;
-				   	// var selection = $scope.filter.selection();
-				   	// $scope.posts = _.filter($scope.posts, function(p){return (_.indexOf(selection, p.type) >= 0); });
 			   })
 			   .error(function(err){
 			   	console.log(err);

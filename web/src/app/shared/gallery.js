@@ -3,10 +3,10 @@
 window.PhotoSwipe = require('../../../node_modules/photoswipe/dist/photoswipe');
 window.PhotoSwipeUI_Default = require('../../../node_modules/photoswipe/dist/photoswipe-ui-default');
 require('ng-photoswipe');
-require('../../../node_modules/pdfjs-dist/build/pdf.combined');
-require('./ng-pdf');
+// require('../../../node_modules/pdfjs-dist/build/pdf.combined');
+// require('./ng-pdf');
 
-var gallery = require('angular').module('gallery', ['ngPhotoswipe', 'pdf']);
+var gallery = require('angular').module('gallery', ['ngPhotoswipe']);
 
 gallery.config(function (flowFactoryProvider) {
 

@@ -6,8 +6,7 @@ var mongoose = require('mongoose');
 
 module.exports = function(router) {
 
-	router
-		.route('/school/user/:userid')
+	router.route('/school/user/:userid')
 		.delete(function(req, res){
 			//TODO: Mark it inactive in shcool and all classes / programs
 			var p1 = new Promise(function(resolve, reject) {
@@ -34,7 +33,6 @@ module.exports = function(router) {
 					.then(results => res.status(200).json({message: 'successfully deleted'}));
 
 		  });
-
 
 	router.route('/school/:schoolid/users')
 		  .get(function(req, res){
@@ -80,7 +78,5 @@ module.exports = function(router) {
 		  		}
 		  	});
 		  });
-
-
 	
 };

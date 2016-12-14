@@ -6,20 +6,16 @@ var Schema = mongoose.Schema;
 
 var ClassUserSchema = new Schema({
   
-  'class': {type:Schema.Types.ObjectId, ref: 'Class', required: true },
+  school: {type:Schema.Types.ObjectId, ref: 'School', required: true },
+  'class': {type:Schema.Types.ObjectId, ref: 'Class' }, //If null => entitlement at school level
   user: {type:Schema.Types.ObjectId, ref: 'User'},
 
   status: { type: String, enum: ['active', 'suspended']} ,
   payment: { type: String, enum: ['pending', 'partial', 'completed']} ,
-  type: { type: String, enum: ['teacher', 'student', 'parent', 'admin'], required: true} ,
-
-  //Stage till user is created
-  email: String,
-  firstname: String,
-  lastname: String,
 
   created_at: Date,
-  updated_at: Date,
+  updated_at: Date
+
 });
 
 // on every save, add the date

@@ -33,43 +33,32 @@
             
 			<div gallery files="msg.files" readonly="true" ng-if="msg.files && msg.files.length > 0"></div>
 
-			<div class="comment-actions pull-left">
+			<div class="comment-actions">
 
-				<div ng-if="!vm.showSubmitActions">
-					<button class="btn btn-default btn-sm btn-round btn-outline " ng-click="vm.showReply()" style="height: 30px;"><i class="icon fa-reply" aria-hidden="true"></i>Reply</button>
-
-					<button class="btn btn-default btn-sm btn-round btn-outline "  ng-click="vm.showAllReplies()" style="height: 30px;" ng-if="replies.length > 2 && vm.showFewReplies">All replies ({{replies.length}})</button>
+				<div ng-if="!vm.showSubmitActions &&  !vm.showTaskActions">
+					
+					<button class="btn btn-default btn-sm btn-round btn-outline " ng-click="showPost('reply')" style="height: 30px;"><i class="icon fa-reply" aria-hidden="true"></i>Reply</button>
 
 				</div>
 
-				<div ng-if="vm.showSubmitActions">
-					
-					<button class="btn btn-default btn-sm btn-round btn-success" ng-class="vm.visibleReplyType==='submission'?'':' btn-outline'" ng-click="vm.showAllReplies('submission')"  ng-if="vm.showSubmitActions" style="height: 30px;">Submissions ({{vm.submissionsCount}})</button> 
-
-					<button class="btn btn-default btn-sm btn-round btn-outline " ng-click="vm.showSubmission()" style="height: 30px;"><i class="icon fa-reply" aria-hidden="true"></i>Submit</button>
-					
-					<button class="btn btn-default btn-sm btn-round btn-info btn-outline " ng-if="vm.showSubmitActions" ng-class="vm.visibleReplyType==='reply'?'':' btn-outline'"  ng-click="vm.showAllReplies()" style="height: 30px; margin-left: 20px;">Q&amp;A ({{vm.qaCount}})</button>
-
-					<button class="btn btn-default btn-sm btn-round btn-outline " ng-if="vm.showSubmitActions"  ng-click="vm.showReply()"  style="height: 30px;"><i class="icon fa-reply" aria-hidden="true"></i>Question?</button>
-					
-					
-					<button class="btn btn-default btn-sm btn-round btn-outline btn-warning"   style="height: 30px; margin-left: 20px;">Pending (10)</button> 
-				</div>
+				<submit-actions msg="msg" ng-if="vm.showSubmitActions" show-replies="showReplies(type)" show-post="showPost(type)"/>
+				<task-actions msg="msg" ng-if="vm.showTaskActions" show-replies="showReplies(type)" show-post="showPost(type)"/>
+				
 			</div>
-			
-			<div class="comment-reply" ng-if="vm.showReplyBox" >
-				<post parent="msg.parent || msg" response-type="reply" placeholder="Enter your question/response here.."></post>
+
+			<div class="comment-reply" ng-if="vm.postType ==='reply'" >
+				<post parent="msg.parent || msg" response-type="{{msg.responseType || 'reply'}}" placeholder="Enter question/response.."></post>
 			</div>
 
 			
-			<div class="comment-reply" ng-if="vm.showSubmitBox" >
-				<post parent="msg.parent || msg" response-type="submission" placeholder="Enter comments & submit assignment.."></post>
+			<div class="comment-reply" ng-if="vm.postType === 'submission' " >
+				<post parent="msg.parent || msg" response-type="{{msg.responseType || 'submission'}}" placeholder="Submit assignment.."></post>
 			</div>
 
 		</div>
 
-		<div class="comments">
-			<comment msg="reply" ng-repeat="reply in vm.visibleReplies"></comment>
+		<div class="comments" ng-if="msg.replies && msg.replies.length > 0">
+			<replies comments="vm.selectedReplies"></replies>
 		</div>
 	</div>
 
