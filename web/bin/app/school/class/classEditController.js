@@ -1,7 +1,7 @@
 var moment = require('moment');
 var school = require('angular').module('school');
 
-school.controller('classEditController', function($scope, $stateParams, $location, appForm, lookupService, schoolFactory, SweetAlert, alertify, $interval, $aside, eventFactory){
+school.controller('classEditController', function($scope, $stateParams, $location, appForm, lookupService, schoolFactory, SweetAlert, alertify, $interval, $aside, eventFactory, $timeout){
 
   var vm = this;
   var _ = require('lodash');
@@ -76,16 +76,42 @@ school.controller('classEditController', function($scope, $stateParams, $locatio
     vm.schedule = {}
     eventFactory.getSchedule(vm.classid)
                 .success(function(event){
-                  vm.schedule = event;
-                  vm.schedule.repeatText = eventFactory.getRepeatText(vm.schedule);
-                })
+                      vm.schedule = event;
+                      vm.schedule.repeatText = getRepeatText(vm.schedule);//eventFactory.getRepeatText(vm.schedule);
+                      if (!vm.schedule.repeatText) {
+                        vm.schedule.repeatText = 'Select schedule';
+                      }
+                    })
                 .error(function(err){
-                  console.log(err);
-                })
+                      console.log(err);
+                    })
 
+    const dayName = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
 
+    function getRepeatText(schedule) {
+      if (!schedule) {
+        return 'Select schedule';
+      }
 
+       var text = moment(schedule.start).format('ha') + '-' + moment(schedule.end).format('ha') 
 
+       const days = schedule.weekly.days;
+       if (days.length === 7) {
+        text = text + ' Mon to Fri' ;
+       } else {
+        
+        text = text + ' ' + days.map((day) => {
+                                    return dayName[day];
+                                  })
+                                .join('-');
+
+       }
+
+       return text;
+    }
+    vm.resizeMap = function() {
+      $timeout(function(){$scope.$broadcast('GMAP_RESIZE');}, 100);  
+    }
 
     $scope.form = new appForm.AppForm(angular, function(form){
 
@@ -136,6 +162,7 @@ school.controller('classEditController', function($scope, $stateParams, $locatio
   $scope.showAddSection = function() {
     $scope.sectionAdd = true;
     $scope.newSection = {
+      summary: ''
     }
   }
 
@@ -160,7 +187,8 @@ school.controller('classEditController', function($scope, $stateParams, $locatio
               });
 
       modalInstance.result.then(function (event) {
-          vm.event = event;
+          vm.schedule = event;
+          vm.schedule.repeatText = getRepeatText(vm.schedule);
           //loadEvents(vm.currentDate, vm.currentView);
         }, function () {
           console.log('Modal dismissed at: ' + new Date());

@@ -35,10 +35,10 @@ core.directive('commentEditor', function(){
       });
 
       scope.$watch('content', function(value){
-		let draftContent = scope.content; 
-		let commentEditor = <CommentEditor content={draftContent} placeholder={placeholder} update={setContent} readonly={readonly} onSelect={scope.onSelect} />;
-		reactElem = ReactDOM.render(commentEditor, elm[0]);
-      });
+  		let draftContent = scope.content; 
+  		let commentEditor = <CommentEditor content={draftContent} placeholder={placeholder} update={setContent} readonly={readonly} onSelect={scope.onSelect} />;
+  		reactElem = ReactDOM.render(commentEditor, elm[0]);
+        });
 
       
 

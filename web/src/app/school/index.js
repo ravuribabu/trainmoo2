@@ -14,6 +14,5 @@ require('./schoolConfig');
 require('./class/classEditController');
 require('./users/classUsersController');
 require('./users/schoolUsersController');
-require('./users/classUserController');
 require('./users/schoolUserController');
 

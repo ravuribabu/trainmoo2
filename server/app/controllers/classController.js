@@ -84,7 +84,9 @@ module.exports = function(router) {
 
     router.route('/programsclasses/:schoolid')
 	  .get(function(req, res){
-	  		Class.find( { school: req.params.schoolid } ).exec(function(err, classes){
+	  		Class.find( { school: req.params.schoolid } )
+	  			 .populate('program')
+	  			 .exec(function(err, classes){
 			  		if (err) {
 			  			console.log(err);
 			  			res.send(err);

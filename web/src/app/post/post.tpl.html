@@ -32,16 +32,16 @@
                     <div class="message-input"> 
                       <comment-editor id="react" content="vm.post.text" placeholder="{{vm.placeholder}}" readonly="false" on-select="vm.editStarted()" on-reset="vm.reset(true)"> </comment-editor>
                       <div class="message-input-actions btn-group" style="z-index: 1000;">
-                        <a class="btn btn-pure btn-icon btn-default" type="button" ng-click="vm.openCalendar()">
+                        <a class="btn btn-pure btn-icon btn-default" type="button" ng-click="vm.openCalendar()" uib-tooltip="Emojis" tooltip-placement="bottom"  tooltip-trigger="'mouseenter'" tooltip-append-to-body="true">
                           <i class="icon wb-emoticon" aria-hidden="true"></i>
                         </a>
-                        <a class="btn btn-pure btn-icon btn-default" type="button" ng-click="vm.uploadImages()">
+                        <a class="btn btn-pure btn-icon btn-default" type="button" ng-click="vm.uploadImages()" uib-tooltip="Attach Images" tooltip-placement="bottom"  tooltip-trigger="'mouseenter'" tooltip-append-to-body="true">
                           <i class="icon wb-image" aria-hidden="true"></i>
                         </a>
-                        <a class="btn btn-pure btn-icon btn-default" type="button" ng-click="vm.uploadFiles()">
+                        <a class="btn btn-pure btn-icon btn-default" type="button" ng-click="vm.uploadFiles()" uib-tooltip="Attach Files" tooltip-placement="bottom"  tooltip-trigger="'mouseenter'" tooltip-append-to-body="true">
                           <i class="icon wb-paperclip" aria-hidden="true"></i>
                         </a>
-                        <a class="btn btn-pure btn-icon btn-default" type="button" ng-click="vm.openRichtext()">
+                        <a class="btn btn-pure btn-icon btn-default" type="button" ng-click="vm.openRichtext()" uib-tooltip="Publish a Post" tooltip-placement="bottom"  tooltip-trigger="'mouseenter'" tooltip-append-to-body="true">
                           <i class="icon wb-pencil" aria-hidden="true"></i>
                         </a>
                       </div>
@@ -63,11 +63,11 @@
                       </div>
 
                       <div style="display: inline-block" ng-if="vm.selection.programLabel">
-                        <span class="label label-success post-label">{{vm.selection.programLabel}}</span>
+                        <span class="label label-default post-label">{{vm.selection.programLabel}}</span>
                       </div>
 
                       <div style="display: inline-block" ng-if="vm.selection.classLabel">
-                        <span class="label label-success post-label">{{vm.selection.classLabel}}</span>
+                        <span class="label label-default post-label">{{vm.selection.classLabel}}</span>
                       </div>
                     </div>
               </div>
@@ -88,14 +88,14 @@
               <hr />
               <div class="form-group">
                 <label class="control-label" for="datepicker">Due by</label>
-                <datepicker date-format="MM/dd/yyyy" selector="form-control"  id="datepicker" style="float: initial;">
-                    <div class="input-group">
-                        <input class="form-control" ng-model="vm.post.dueby" />
-                        <span class="input-group-addon" style="cursor: pointer">
-                          <i class="fa fa-lg fa-calendar"></i>
-                        </span>
-                    </div>
-                </datepicker>
+                
+                <div class="input-group" style="float: left; width: 200px;">
+                  <span class="input-group-addon">
+                    <i class="icon wb-calendar" aria-hidden="true"></i>
+                  </span>
+                  <input type="text" id="startDate" class="form-control" datepicker ng-model="vm.post.deuby">
+                </div>
+
               </div>
 
               <div class="form-group">

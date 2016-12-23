@@ -4,6 +4,7 @@ import React, {Component} from 'react';
 import RichEditor from '../shared/rte/RichEditor';
 import ReactDOM from 'react-dom';
 import {Editor, EditorState, ContentState, RichUtils, Entity, convertToRaw, convertFromRaw, convertFromHTML, getVisibleSelectionRect, AtomicBlockUtils, CompositeDecorator} from 'draft-js';
+import {Modal, Header, Button, Popover, Tooltip, Overlay, OverlayTrigger, FormGroup, ControlLabel, FormControl, HelpBlock} from 'react-bootstrap';
 
 
 export default class RichText extends React.Component {
@@ -14,10 +15,9 @@ export default class RichText extends React.Component {
 
 		this.service = this.props.service;
 		this.state = { dataLoaded : false }
-
 		let autosaveInprogress = false;
 		
-		this.update = (content, currentContent) => {
+		this.update = (content) => {
 			
 			this.setState({
 				content: content
@@ -30,44 +30,22 @@ export default class RichText extends React.Component {
 					autosaveInprogress = false;
 				}, 3000);
 			}
-			
-			this.currentContent = currentContent;
 		}
 
 		this.save = () => {
 			this.props.onCancel();
 		}
 
+
 		this.autosave = () => {
+			
 			this.draft.text = this.state.content;
 			this.draft.title = this.state.title;
 
-			const imgs = this.currentContent
-					.getBlocksAsArray()
-					.filter(f => { return (f.getType() === 'atomic') } )
-					.map((contentBlock) => {
-						 
-						var images = contentBlock.getCharacterList()
-									.map((c) => {
-										const entityKey = c.getEntity();
-										if (entityKey){
-													const entity = Entity.get(entityKey);
-													if (entity.type === 'image') {
-														return entity.data.src.link;
-													}
-										}
-									});
-						if (images && images.length > 0) {
-							return images.get(0);
-						}
-					})
-					.filter(x => {return x;});
-
-
-			if (imgs && imgs.length > 0) {
-				this.draft.previewImg = imgs[0];
-			}
-			this.draft.previewText = this.currentContent.getPlainText().replace(/  +/g, ' ').replace(/^\s*[\r\n]/gm).substring(0, 200);
+			
+			this.draft.previewImg = this.editor.previewImage();
+			this.draft.previewText = this.editor.previewText();
+		
 			
 			this.service.updateRichtext(this.draft)
 						.success((data) => {
@@ -133,6 +111,14 @@ export default class RichText extends React.Component {
 			return (<div> Loading .... </div>);
 		}
 
+		const saveTooltip = (
+		  <Tooltip id="tooltip">Save the draft & exit.</Tooltip>
+		);
+
+		const publishTooltip = (
+		  <Tooltip id="tooltip">Publish the draft.</Tooltip>
+		);
+
 		return (
 
 		<div className="row padding-0 margin-0">
@@ -143,8 +129,12 @@ export default class RichText extends React.Component {
 		    	</div>
 
 		    	<div className="col-md-4 margin-top-20">
-		    		<button className="btn btn-round btn-outline btn-primary" onClick={this.save}>Save</button>
-		    		<button className="btn btn-round btn-outline btn-primary margin-left-20" onClick={this.publish}>Publish</button>
+		    		<OverlayTrigger placement="top" overlay={saveTooltip}>
+		    			<button className="btn btn-raised  btn-default" onClick={this.save}>Save</button>
+		    		</OverlayTrigger>
+		    		<OverlayTrigger placement="top" overlay={publishTooltip}>
+		    			<button className="btn btn-raised  btn-primary margin-left-20" onClick={this.publish}>Publish</button>
+		    		</OverlayTrigger>
 		    	</div>
 	    	</div>
 	    	}
@@ -156,7 +146,7 @@ export default class RichText extends React.Component {
 			<div className="col-md-12" style={{position:"inherit"}}>
 				<div id="outer">
 					<div id="inner">
-						<RichEditor content={this.state.content} readonly={readonly} update={this.update}/>
+						 <RichEditor ref={(editor) => {this.editor = editor;}} content={this.state.content} readonly={readonly} update={this.update}/>
 					</div>
 				</div>
 			</div>

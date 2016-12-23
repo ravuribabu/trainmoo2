@@ -1,13 +1,13 @@
 <div id="page-content-wrapper" style="padding-left: 5px; padding-right: 5px; padding-bottom: 0px; padding-top: 5px; ">
 
 	<div class="page-header padding-top-10 padding-bottom-10 ">
-	    <span class="page-title"><i class="icon fa-bank" aria-hidden="true"></i>Kushi Painting School</span> &nbsp;&nbsp;&nbsp;<button type="button" class="btn btn-raised btn-info  btn-sm">Programs <span class="badge">1</span> </button>&nbsp;&nbsp;&nbsp;<button type="button" class="btn btn-raised btn-info  btn-sm">Classes <span class="badge">2</span> </button>
+	    <span class="page-title"><i class="icon fa-bank" aria-hidden="true"></i>{{school.name}}</span> 
 
 	    <div class="page-header-actions">
 	    	<button type="button" class="btn btn-raised  btn-default btn-sm" ui-sref="app.apph.apps.schoolusers({schoolid: schoolid})"  uib-tooltip="Users" tooltip-placement="bottom"  tooltip-trigger="'mouseenter'" tooltip-append-to-body="true"><i class="icon fa-users" aria-hidden="true"></i> </button>
 	        <button type="button" class="btn btn-raised  btn-default  btn-sm" ui-sref="app.apph.apps.schoolEdit" uib-tooltip="Edit School" tooltip-placement="bottom"  tooltip-trigger="'mouseenter'" tooltip-append-to-body="true"><i class="icon fa-edit" aria-hidden="true"></i> </button>
 		    <button type="button" class="btn btn-raised btn-default  btn-sm" ui-sref="app.apph.apps.program({schoolid: schoolid, classid: ''})" uib-tooltip="Create Program" tooltip-placement="bottom"  tooltip-trigger="'mouseenter'" tooltip-append-to-body="true"><i class="icon fa-plus" aria-hidden="true"></i> Program </button>
-		    <button type="button" class="btn btn-raised btn-default  btn-sm" ui-sref="app.apph.apps.class({schoolid: schoolid, classid: ''})" uib-tooltip="Create Class" tooltip-placement="bottom"  tooltip-trigger="'mouseenter'" tooltip-append-to-body="true"><i class="icon fa-plus" aria-hidden="true"></i> Class </button>
+		    <button type="button" class="btn btn-raised btn-primary  btn-sm" ui-sref="app.apph.apps.class({schoolid: schoolid, classid: ''})" uib-tooltip="Create Class" tooltip-placement="bottom"  tooltip-trigger="'mouseenter'" tooltip-append-to-body="true"><i class="icon fa-plus" aria-hidden="true"></i> Class </button>
 	    </div>
 	</div>
 
@@ -15,8 +15,8 @@
 		<div class="panel-body" style="padding: 0px;">	
 			<table class="table no-margin">
 				<tbody>
-					<tr ng-repeat="clazz in classes" ng-cloak>
-						<td class="max-width-100 hidden-xs">
+					<tr ng-repeat="clazz in classes" ng-cloak ng-class="clazz.program?'padding-left-20':''">
+						<td class="max-width-100 hidden-xs" >
 							<div class="icons-effect padding-10">
 								<img src="assets/images/avatar-1-small.jpg" class="img-rounded img-responsive" style="height: 70px;" alt="">
 							</div>
@@ -24,8 +24,8 @@
 						<td>
 							<div class="padding-10">
 								<div class="title">
-									<a ui-sref="app.apph.apps.program({schoolid: schoolid, classid: clazz._id})" ng-if="clazz.type === 'program'"> <strong style="margin-right: 20px">{{clazz.name}}</strong> <span class="label label-info">{{clazz.type}} </span></a> 
-									<a ui-sref="app.apph.apps.class({schoolid: schoolid, classid: clazz._id})" ng-if="clazz.type === 'class'""><strong style="margin-right: 20px">{{clazz.name}}</strong><span class="label label-info">Class </span> </a> 
+									<a ui-sref="app.apph.apps.program({schoolid: schoolid, classid: clazz._id})" ng-if="clazz.type === 'program'"> <strong style="margin-right: 20px">{{clazz.name}}</strong> <span class="label label-success">{{clazz.type}} </span></a> 
+									<a ui-sref="app.apph.apps.class({schoolid: schoolid, classid: clazz._id})" ng-if="clazz.type === 'class'""><strong style="margin-right: 20px">{{clazz.name}}</strong><span class="label label-default">Class </span> </a> 
 
 								</div>
 								<span class="abstract">Reiciendis iactant eligendi. Vestrae </span>
@@ -50,7 +50,7 @@
 											<i class="fa fa-money "></i> Payment
 										</a>
 										
-										<a href="#" class="block  text-small">
+										<a href="#" class="block  text-small" ui-sref="app.apph.events">
 											<i class="fa fa-calendar "></i> Time table
 										</a>
 

@@ -18,7 +18,7 @@ post.directive('post', function(){
 });
 
 
-post.controller('postController', function($rootScope, $scope, postFactory, SweetAlert, alertify, appForm, $uibModal){
+post.controller('postController', function($rootScope, $scope, postFactory, SweetAlert, alertify, appForm, $uibModal, $aside){
 
 	const vm = this;
 
@@ -227,9 +227,10 @@ post.controller('postController', function($rootScope, $scope, postFactory, Swee
 	//END OF $scope.$on
 
 	vm.openRichtext = () => {
-		var modalInstance = $uibModal.open({
+		var modalInstance = $aside.open({
 		            templateUrl: 'richtext/richtext.tpl.html',
 		            size: 'lg',
+		            placement: 'right',
 		            backdrop: true,
 		            controller: 'richtextController',
 		            resolve:  {
@@ -245,17 +246,23 @@ post.controller('postController', function($rootScope, $scope, postFactory, Swee
 		modalInstance.result.then(function (selectedItem) {
 			postFactory.getDraft()
     				.success(function(draft) { 
-    					vm.draft = draft;
-    					vm.post.richtext = {};
-    					vm.post.richtext.id = draft;
-    					vm.post.richtext.previewText = draft.previewText;
-    					vm.post.richtext.previewImg = draft.previewImg;
-    					vm.post.richtext.title = draft.title;
+    					
+    					if (draft.previewText){
+	    					
+	    					vm.draft = draft;
+	    					vm.post.richtext = {};
+	    					vm.post.richtext.id = draft;
+	    					vm.post.richtext.previewText = draft.previewText;
+	    					vm.post.richtext.previewImg = draft.previewImg;
+	    					vm.post.richtext.title = draft.title;
+
+	    					vm.showBlogPreview = true;
+	    				}
     				} )
     				.error(function(err) { 
     					console.log(err);
     				} );
-	      	vm.showBlogPreview = true;
+	      	
 	    }, function () {
 	      console.log('Modal dismissed at: ' + new Date());
 	    });

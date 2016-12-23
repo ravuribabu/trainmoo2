@@ -6,25 +6,34 @@
 		<div class="comment-body">
 			<a href="#" class="comment-author">{{vm.name}}</a> 
 
+			<div class="comment-meta">
+				<span class="date" > {{vm.posted}}</span>
+			</div>
+
 			<span ng-if="!vm.isreply">
 				<span ng-if="msg.type != 'Reply'" style="margin: 0px 5px;"> on&nbsp;<span class="text-azure">{{vm.classnames | listToString}}</span> </span>
+			</span>
+
+			<div class="comment-header-actions" ng-if="!vm.isreply">
 				
-				<div class="comment-meta">
-					<span class="label" 
-						ng-class="{'label-primary' : ['Message', 'Discussion', 'Blog'].indexOf(msg.type) >= 0 , 'label-danger' : ['Assignment', 'Task'].indexOf(msg.type) >= 0 , 'label-warning' :['Notification', 'Newsletter',  'Assessment'].indexOf(msg.type) >= 0 , 'label-info' :['Material'].indexOf(msg.type) >= 0 }" 
-						ng-if="msg.type != 'Reply'">
-						{{msg.type}}
-					</span>	
+				<div class="btn-group ">
+			        <button type="button" class="btn btn-pure btn-primary icon fa-bookmark-o"  aria-hidden="true"></button>
+			        <button type="button" class="btn btn-pure btn-primary  icon wb-star-outline" aria-hidden="true"></button>
+			        <button type="button" class="btn btn-pure btn-primary  icon wb-expand" aria-hidden="true"></button>
+			        <button type="button" class="btn btn-pure btn-primary  icon wb-close-mini" aria-hidden="true" ng-click="delete()"></button>
+			      </div>
+			      <div class="comment-meta">
 					<span class="label label-info margin-left-10" ng-if="msg.dueby">
 						Due {{vm.duein}}
 					</span>
+					<span class="label" 
+						ng-class="{'label-primary' : ['Message', 'Discussion', 'Blog'].indexOf(msg.type) >= 0 , 'label-danger' : ['Assignment', 'Task'].indexOf(msg.type) >= 0 , 'label-warning' :['Notification', 'Newsletter',  'Assessment'].indexOf(msg.type) >= 0 , 'label-info' :['Material'].indexOf(msg.type) >= 0 }" 
+						ng-if="msg.type != 'Reply'"
+						style="margin-left: 20px;">
+						{{msg.type}}
+					</span>	
+					
 				</div>
-			</span>
-			<span class="date" style="padding-left: 10px;"> {{vm.posted}}</span>
-
-			<div class="comment-header-actions" >
-				<button class="btn btn-pure btn-success icon fa-bookmark-o " ></button>
-				<button class="btn btn-pure btn-success icon fa-star-o" ></button>
 			</div>
 
 			<comment-editor id="react" content="msg.text" readonly="true" class="comment-content"> </comment-editor>

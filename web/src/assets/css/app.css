@@ -55,6 +55,11 @@
 }
 
 
+
+.btn-icon {
+  padding: 5px 10px ;
+}
+
 .color-box {
   width: 20px;
   height: 40px;
@@ -2964,5 +2969,17 @@ a.text-light:hover {
 
 .ng-aside.horizontal .modal-dialog {
   top: 40px !important;
+}
+
+
+
+
+.comment-body .comment-header-actions .btn-group{
+  opacity: 0;
+  transition: visibility 0s, opacity 0.5s linear;
+}
+
+.comment-body:hover .comment-header-actions .btn-group{
+  opacity: 1;
 }
 

@@ -1,8 +1,12 @@
 <div ng-if="vm.showFew" style="text-align: right">
-	<small>Showing {{vm.visibleReplies.length}} of {{vm.total}} <a href="#" ng-click="vm.showAll()" style="margin-left: 20px;">Show all</a></small>
+	<small>Showing {{vm.visibleReplies.length}} of {{vm.total}} <a href="#" ng-click="vm.showAll()" style="margin-left: 20px;" class="text-azure">Show all</a></small>
 </div>
-<div ng-if="!vm.showFew" style="text-align: right">
+<div ng-if="!vm.showFew && vm.total > 0" style="text-align: right">
 	<small> {{vm.total}} responses</small>
+</div>
+
+<div ng-if="vm.total === 0" style="text-align: right">
+	<small class="text-grey"> No responses</small>
 </div>
 
 <comment msg="reply" ng-repeat="reply in vm.visibleReplies"></comment>

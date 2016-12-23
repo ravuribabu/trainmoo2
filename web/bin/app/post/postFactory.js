@@ -11,6 +11,9 @@ post.factory('postFactory', function($http){
 		createPost: function(post, user_id) {
 			return $http.post('api/posts'   , post );
 		},
+		deletePost: function(id) {
+			return $http.delete('api/post/' + id);
+		},
 		getPosts: function(classids, postType) {
 			return $http.get('api/posts?classids=' + classids + '&postType=' + postType );
 		},

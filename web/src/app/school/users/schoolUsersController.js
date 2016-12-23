@@ -5,7 +5,7 @@ var angular = require('angular')
 var school = angular.module('school')
 
 school.controller('schoolUsersController',
-	function($scope, $state, $rootScope, $stateParams, $uibModal, schoolFactory, SweetAlert){
+	function($scope, $state, $rootScope, $stateParams, $uibModal, schoolFactory, SweetAlert, $aside){
 
 		var _ = require('lodash');
 		var vm = this;
@@ -15,6 +15,16 @@ school.controller('schoolUsersController',
 			vm.schoolid = $stateParams.schoolid;
 			vm.userType = 'student';
 			refreshUsers();
+
+			schoolFactory.getSchool(vm.schoolid)
+						.success(function(school){
+							vm.school = school;
+							vm.name = school.name;
+						})
+						.error(function(err){
+							SweetAlert.swal('error', JSON.stringiy(err));
+						});
+
 		}
 
 		function refreshUsers() {
@@ -36,11 +46,12 @@ school.controller('schoolUsersController',
 			SweetAlert.swal(
 		      {   
 		        title: "Delete user?",   
-		        text: "Are you sure you want to remove user from School!",   
+		        text: "Are you sure you want to remove user from " + vm.school.name + "!",   
 		        type: "warning",   
 		        showCancelButton: true,   
+		        cancelButtonText: "Do not remove user",
 		        confirmButtonColor: "#DD6B55",   
-		        confirmButtonText: "Yes, delete it!",   
+		        confirmButtonText: "Yes, remove from school!",   
 		        closeOnConfirm: true 
 		      }, 
 		        function(isConfirm)
@@ -60,7 +71,8 @@ school.controller('schoolUsersController',
 					email: '',
 					firstname: 'new',
 					lastname: 'user',
-					type: role,
+					type: 'student',
+					registerUsing: 'email',
 					school: vm.schoolid
 				}
 
@@ -69,12 +81,13 @@ school.controller('schoolUsersController',
 
 		function openModal(user){
 
-			var modalInstance = $uibModal.open({
-		            templateUrl: 'school/users/classUser.tpl.html',
+			var modalInstance = $aside.open({
+		            templateUrl: 'school/users/schoolUser.tpl.html',
 		            placement: 'right',
 		            size: 'md',
 		            backdrop: true,
 		            controller: 'schoolUserController',
+		            controllerAs: 'vm',
 		            resolve: {
 		            	'user': user
 		            }

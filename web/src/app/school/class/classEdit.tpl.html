@@ -23,7 +23,7 @@
                 <li role="presentation"><a data-toggle="tab" href="#contactsTab" aria-controls="contactsTab" role="tab" aria-expanded="false">Contacts</a></li>
                 <li role="presentation"><a data-toggle="tab" href="#summaryTab" aria-controls="summaryTab" role="tab" aria-expanded="false">Summary</a></li>
                 <li role="presentation"><a data-toggle="tab" href="#curriculumTab" aria-controls="curriculumTab" role="tab" aria-expanded="true">Curriculum</a></li>
-                <li role="presentation"><a data-toggle="tab" href="#locationTab" aria-controls="locationTab" role="tab" aria-expanded="true">Location</a></li>
+                <li role="presentation"><a data-toggle="tab" href="#locationTab" aria-controls="locationTab" role="tab" aria-expanded="true" ng-click="vm.resizeMap()">Location</a></li>
                 <li role="presentation"><a data-toggle="tab" href="#attachmentsTab" aria-controls="attachmentsTab" role="tab" aria-expanded="true">Attachments</a></li>
             </ul>
 
@@ -92,7 +92,7 @@
                       </div>
 
                       <div class="form-group">
-                        <label class="control-label">Schedule <i class="icon fa-calendar-o" aria-hidden="true"></i></label>
+                        <label class="control-label">Schedule <i class="icon fa-clock-o" aria-hidden="true"></i></label>
                         <a href="#" ng-click="openEvent()"> 
                           <div class="height-50 ">
                             <span class="form-control text-azure" style="border: none;">{{vm.schedule.repeatText}}</span>
@@ -109,38 +109,38 @@
                 </div>
                 <div class="tab-pane" id="summaryTab" role="tabpanel">
                   <div class="form-group" >
-                          <label class="control-label "> About {{class.name}} </label>
-                          <richtext on-publish="onPublish()" on-cancel="onCancel()" richtextid="{{richtextid}}" readonly="false"/>
+                          <rich-editor content="class.summary" placeholder="Enter class details" readonly="false"/>
                   </div>
                 </div>
                 <div class="tab-pane" id="curriculumTab" role="tabpanel">
                   <div class="form-group">
-                    <label class="control-label "> Curriculum </label><br>
-                    <div class="panel panel-bordered" style="border: 1px solid #e4eaec; border-radius: 5px;">
+                    <div class="panel" >
+                      <div class="panel-heading padding-left-10">
+                        <div ng-if="!sectionAdd" style="text-align: right;"><button class="btn btn-default btn-raised btn-sm" ng-click="showAddSection()"><i class="icon fa-plus" aria-hidden="true"></i>Section</button> &nbsp;&nbsp;<span class=" label label-round label-success" ng-if="showSuccess"> {{successMessage}} </span>  </div>
+                        <div ng-if="sectionAdd" class="padding-10 animate-if">
+                          <h5>New Section</h5>
+                          <input type="text" ng-model="newSection.title" class="form-control" placeholder="Enter section title" /><br>
+                          <rich-editor content="newSection.summary" placeholder="Enter class details" readonly="false"/>
+                          <button class="btn btn-default btn-raised btn-sm" ng-click="addNewSection()"><strong>Add</strong></button> <button class="btn btn-default btn-raised  btn-sm" ng-click="hideAddSection()" style="margin-left: 20px;">Cancel</button>
+                          <hr />
+                        </div>
+                      </div>
+
+
                       <div class="panel-body padding-10" style=" min-height: 200px;" id="classSections">
                         <ul class="list-group list-group-full">
                           <li class="list-group-item padding-right-40" ng-repeat="section in class.sections">
                             <div ng-if="section.edit" class="padding-10">
                               <input type="text" ng-model="section.title" class="form-control" placeholder="Enter section title" /><br>
-                              <textarea rows="4" ng-model="section.summary" class="form-control" style="width: 100%" placeholder="Section details"></textarea> <br>
-                              <button class="btn btn-primary btn-round" ng-click="section.edit = false">DONE</button> 
+                              <rich-editor content="section.summary" placeholder="Enter class details"  readonly="false"/>
+                              <button class="btn btn-default btn-round  btn-sm" ng-click="section.edit = false">Done</button> 
                             </div>
                             <div ng-if="!section.edit">
-                              <h5 style="display: inline-block;"> {{section.title}} </h5><div style="display: inline-block; " class="pull-right"> <a href="#" ng-click="section.edit = true"><i class="icon fa-edit" aria-hidden="true" ></i></a> &nbsp;&nbsp;<a href="#" ng-click="removeSection(section.seq)"> <i class="icon fa-remove" aria-hidden="true"></i></a></div>
-                              <p class="padding-left-10" style="white-space: pre-wrap;">{{section.summary}}</p>
+                              <h4 style="display: inline-block;"> {{section.title}} </h4><div style="display: inline-block; " class="pull-right"> <a href="#" ng-click="section.edit = true"><i class="icon fa-edit" aria-hidden="true" ></i></a> &nbsp;&nbsp;<a href="#" ng-click="removeSection(section.seq)"> <i class="icon fa-remove" aria-hidden="true"></i></a></div>
+                              <rich-editor content="section.summary" placeholder="Enter class details"  readonly="true"/>
                             </div>
                           </li>
                         </ul>
-                      </div>
-
-                      <div class="panel-footer padding-left-10">
-                        <div ng-if="!sectionAdd"><button class="btn btn-primary btn-round" ng-click="showAddSection()">Create Section</button> &nbsp;&nbsp;<span class=" label label-round label-success" ng-if="showSuccess"> {{successMessage}} </span>  </div>
-                        <div ng-if="sectionAdd" class="padding-10">
-                          <h5>New Section</h5>
-                          <input type="text" ng-model="newSection.title" class="form-control" placeholder="Enter section title" /><br>
-                          <textarea rows="4" ng-model="newSection.summary" class="form-control" style="width: 100%" placeholder="Section details"></textarea> <br>
-                          <button class="btn btn-primary btn-round" ng-click="addNewSection()">ADD</button> <button class="btn btn-default btn-round" ng-click="hideAddSection()">Cancel</button>
-                        </div>
                       </div>
 
                     </div>
@@ -148,8 +148,8 @@
                 </div>
                 <div class="tab-pane" id="locationTab" role="tabpanel">
                   <div class="form-group" >
-                          <label class="control-label "> Location </label>
                           <div class="gmap height-300" placeid="class.placeid" address="class.address" ng-cloak></div>
+                           <p class="help-block text-small">Drag and drop marker <i class="icon fa-map-marker" style="color: red;" aria-hidden="true"></i> to select your location.</p>
                   </div>
                 </div>
                 <div class="tab-pane" id="attachmentsTab" role="tabpanel">

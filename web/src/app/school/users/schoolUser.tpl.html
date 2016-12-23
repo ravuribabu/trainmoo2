@@ -1,0 +1,76 @@
+<style type="text/css">
+    
+    .role {
+
+      margin : 0px 10px 10px 0px;
+      
+    }
+
+</style>
+
+<div class="modal-header">
+    <h3 class="modal-title" id="modal-title">{{userType}}</h3>
+</div>
+
+<form name="Form" id="form" novalidate ng-submit="vm.form.submit(Form)" >
+
+<div class="modal-body">
+
+    <div class="form-group">
+      <label class="control-label">Register</label>
+      <div class="form-control no-border">
+        <a href="#" class="btn btn-raised role" ng-class="vm.user.type === userType? 'btn-success' : 'btn-default'" ng-repeat="userType in ['teacher', 'admin', 'student', 'parent']" ng-click="vm.selectUserType(userType)">{{userType}}</a>
+      </div>
+    </div>
+
+
+    <div class="form-group ">
+      <label class="control-label">Using</label>
+      <div class="form-control no-border">
+        <a href="#" class="btn btn-raised margin-right-10" ng-class="vm.user.registerUsing === type? 'btn-success' : 'btn-default'" ng-repeat="type in ['email', 'mobile']" ng-click="vm.selectRegisterType(type)">{{type}}</a>
+      </div>
+    </div>
+
+    <div class="form-group">
+        <label>
+            Email
+        </label>
+        <input type="email"  class="form-control" name="email" ng-model="vm.user.email"  ng-required="vm.user.registerUsing === 'Email'">
+        <span class="error text-small block" ng-if="Form.email.$dirty && Form.email.$error.required">Email is required.</span>
+        <span class="error text-small block" ng-if="Form.email.$error.email">Enter valid email.</span>
+    </div>
+
+    <div class="form-group">
+        <label>
+            Mobile
+        </label>
+        <input type="text"  class="form-control" name="mobile" ng-model="vm.user.mobile" ng-required="vm.user.registerUsing === 'Mobile'" ui-mask="(999) 999 - 9999" ui-options="{clearOnBlur: false, addDefaultPlaceholder: false}">
+        <span class="error text-small block" ng-if="Form.mobile.$dirty && Form.mobile.$error.required">Mobile is required.</span>
+    </div>
+
+
+    <div class="form-group">
+        <label>
+            Name
+        </label>
+        <input type="text"  class="form-control" ng-model="vm.user.name" name="name" required>
+        <span class="error text-small block" ng-if="Form.name.$dirty && Form.name.$error.required">Name is required.</span>
+    </div>
+
+</div>
+  <div class="modal-footer">
+      <button class="btn btn-default btn-raised" ng-click="cancel()">
+          Cancel
+      </button>
+
+      <button class="btn btn-primary btn-raised" type="submit" ng-if="vm.user._id">
+          Save User
+      </button>
+
+      <button class="btn btn-primary btn-raised" type="submit" ng-if="!(vm.user._id)">
+          Create User
+      </button>
+      
+  </div>
+
+</form>

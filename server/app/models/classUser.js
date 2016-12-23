@@ -8,7 +8,7 @@ var ClassUserSchema = new Schema({
   
   school: {type:Schema.Types.ObjectId, ref: 'School', required: true },
   'class': {type:Schema.Types.ObjectId, ref: 'Class' }, //If null => entitlement at school level
-  user: {type:Schema.Types.ObjectId, ref: 'User'},
+  schoolUser: {type:Schema.Types.ObjectId, ref: 'SchoolUser', required: true},
 
   status: { type: String, enum: ['active', 'suspended']} ,
   payment: { type: String, enum: ['pending', 'partial', 'completed']} ,

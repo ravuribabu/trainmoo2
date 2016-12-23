@@ -39,6 +39,11 @@ comment.controller('commentController', function($scope, $uibModal, postFactory,
 			console.log('showPost:' + type);
 		}
 
+		$scope.delete = () => {
+			if ($scope.msg._id) {
+				postFactory.deletePost($scope.msg._id);
+			}
+		}
 
 		$scope.showReplies = (type) => {
 			if (!type) {

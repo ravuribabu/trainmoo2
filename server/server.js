@@ -13,7 +13,7 @@ var cookieParser = require('cookie-parser');
 var path = require('path');
 
 require('./config/passport')(passport); // pass passport for configuration
-
+require('./app/schoolAuth');
 
 // configuration =================
 app.use(express.static(__dirname + '/../web/dist/'));                 // set the static files location /public/img will be /img for users

@@ -15,6 +15,7 @@ export default class CommentEditor extends React.Component {
 
     if (this.props.content){
       this.state = {
+
         editorState: EditorState.createWithContent(convertFromRaw(JSON.parse(this.props.content))),
         suggestions: mentions,
         selected: false

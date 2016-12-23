@@ -70,7 +70,7 @@ return {
 	},
 
 	saveOrUpdateClassUser: function(user) {
-		if (user._id) {
+		if (user.id) {
 			return $http.put('api/class/' + user.class + '/users', user);
 		} else {
 			return $http.post('api/class/' + user.class + '/users', user);
@@ -94,7 +94,17 @@ return {
 	},
 	deleteSchoolUser: function(userid) {
 		return $http.delete('api/school/user/' + userid);
+	},
+
+	saveOrUpdateUser(user) {
+		if (user.class) {
+			return this.saveOrUpdateClassUser(user);
+		} else {
+			return this.saveOrUpdateSchoolUser(user);
+		}
 	}
+
+
 
 
 

@@ -1,4 +1,4 @@
-angular.module('templates.app', ['comment/comment.tpl.html', 'comment/replies.tpl.html', 'comment/submitActions.tpl.html', 'comment/taskActions.tpl.html', 'events/calendar.tpl.html', 'events/eventDetails.tpl.html', 'events/events.tpl.html', 'login/login.tpl.html', 'login/signup.tpl.html', 'nav/nav.tpl.html', 'post/post.tpl.html', 'richtext/richtext.tpl.html', 'richtext/richtextCard.tpl.html', 'school/appSchool.tpl.html', 'school/class/classEdit.tpl.html', 'school/pdfview.tpl.html', 'school/school.tpl.html', 'school/schoolEdit.tpl.html', 'school/users/classUser.tpl.html', 'school/users/classUsers.tpl.html', 'shared/app.tpl.html', 'shared/apph.tpl.html', 'shared/apptop.tpl.html', 'shared/gallery.tpl.html', 'shared/gmap.tpl.html', 'user/directive/userCard.tpl.html', 'user/userEdit.tpl.html', 'userList/userList.tpl.html', 'wall/wall.tpl.html']);
+angular.module('templates.app', ['comment/comment.tpl.html', 'comment/replies.tpl.html', 'comment/submitActions.tpl.html', 'comment/taskActions.tpl.html', 'events/calendar.tpl.html', 'events/eventDetails.tpl.html', 'events/events.tpl.html', 'login/login.tpl.html', 'login/signup.tpl.html', 'nav/nav.tpl.html', 'post/post.tpl.html', 'richtext/richtext.tpl.html', 'richtext/richtextCard.tpl.html', 'school/appSchool.tpl.html', 'school/class/classEdit.tpl.html', 'school/pdfview.tpl.html', 'school/school.tpl.html', 'school/schoolEdit.tpl.html', 'school/users/classUsers.tpl.html', 'school/users/schoolUser.tpl.html', 'shared/app.tpl.html', 'shared/apph.tpl.html', 'shared/apptop.tpl.html', 'shared/gallery.tpl.html', 'shared/gmap.tpl.html', 'user/directive/userCard.tpl.html', 'user/userEdit.tpl.html', 'userList/userList.tpl.html', 'wall/wall.tpl.html']);
 
 angular.module("comment/comment.tpl.html", []).run(["$templateCache", function($templateCache) {
   $templateCache.put("comment/comment.tpl.html",
@@ -10,25 +10,34 @@ angular.module("comment/comment.tpl.html", []).run(["$templateCache", function($
     "		<div class=\"comment-body\">\n" +
     "			<a href=\"#\" class=\"comment-author\">{{vm.name}}</a> \n" +
     "\n" +
+    "			<div class=\"comment-meta\">\n" +
+    "				<span class=\"date\" > {{vm.posted}}</span>\n" +
+    "			</div>\n" +
+    "\n" +
     "			<span ng-if=\"!vm.isreply\">\n" +
     "				<span ng-if=\"msg.type != 'Reply'\" style=\"margin: 0px 5px;\"> on&nbsp;<span class=\"text-azure\">{{vm.classnames | listToString}}</span> </span>\n" +
+    "			</span>\n" +
+    "\n" +
+    "			<div class=\"comment-header-actions\" ng-if=\"!vm.isreply\">\n" +
     "				\n" +
-    "				<div class=\"comment-meta\">\n" +
-    "					<span class=\"label\" \n" +
-    "						ng-class=\"{'label-primary' : ['Message', 'Discussion', 'Blog'].indexOf(msg.type) >= 0 , 'label-danger' : ['Assignment', 'Task'].indexOf(msg.type) >= 0 , 'label-warning' :['Notification', 'Newsletter',  'Assessment'].indexOf(msg.type) >= 0 , 'label-info' :['Material'].indexOf(msg.type) >= 0 }\" \n" +
-    "						ng-if=\"msg.type != 'Reply'\">\n" +
-    "						{{msg.type}}\n" +
-    "					</span>	\n" +
+    "				<div class=\"btn-group \">\n" +
+    "			        <button type=\"button\" class=\"btn btn-pure btn-primary icon fa-bookmark-o\"  aria-hidden=\"true\"></button>\n" +
+    "			        <button type=\"button\" class=\"btn btn-pure btn-primary  icon wb-star-outline\" aria-hidden=\"true\"></button>\n" +
+    "			        <button type=\"button\" class=\"btn btn-pure btn-primary  icon wb-expand\" aria-hidden=\"true\"></button>\n" +
+    "			        <button type=\"button\" class=\"btn btn-pure btn-primary  icon wb-close-mini\" aria-hidden=\"true\" ng-click=\"delete()\"></button>\n" +
+    "			      </div>\n" +
+    "			      <div class=\"comment-meta\">\n" +
     "					<span class=\"label label-info margin-left-10\" ng-if=\"msg.dueby\">\n" +
     "						Due {{vm.duein}}\n" +
     "					</span>\n" +
+    "					<span class=\"label\" \n" +
+    "						ng-class=\"{'label-primary' : ['Message', 'Discussion', 'Blog'].indexOf(msg.type) >= 0 , 'label-danger' : ['Assignment', 'Task'].indexOf(msg.type) >= 0 , 'label-warning' :['Notification', 'Newsletter',  'Assessment'].indexOf(msg.type) >= 0 , 'label-info' :['Material'].indexOf(msg.type) >= 0 }\" \n" +
+    "						ng-if=\"msg.type != 'Reply'\"\n" +
+    "						style=\"margin-left: 20px;\">\n" +
+    "						{{msg.type}}\n" +
+    "					</span>	\n" +
+    "					\n" +
     "				</div>\n" +
-    "			</span>\n" +
-    "			<span class=\"date\" style=\"padding-left: 10px;\"> {{vm.posted}}</span>\n" +
-    "\n" +
-    "			<div class=\"comment-header-actions\" >\n" +
-    "				<button class=\"btn btn-pure btn-success icon fa-bookmark-o \" ></button>\n" +
-    "				<button class=\"btn btn-pure btn-success icon fa-star-o\" ></button>\n" +
     "			</div>\n" +
     "\n" +
     "			<comment-editor id=\"react\" content=\"msg.text\" readonly=\"true\" class=\"comment-content\"> </comment-editor>\n" +
@@ -76,10 +85,14 @@ angular.module("comment/comment.tpl.html", []).run(["$templateCache", function($
 angular.module("comment/replies.tpl.html", []).run(["$templateCache", function($templateCache) {
   $templateCache.put("comment/replies.tpl.html",
     "<div ng-if=\"vm.showFew\" style=\"text-align: right\">\n" +
-    "	<small>Showing {{vm.visibleReplies.length}} of {{vm.total}} <a href=\"#\" ng-click=\"vm.showAll()\" style=\"margin-left: 20px;\">Show all</a></small>\n" +
+    "	<small>Showing {{vm.visibleReplies.length}} of {{vm.total}} <a href=\"#\" ng-click=\"vm.showAll()\" style=\"margin-left: 20px;\" class=\"text-azure\">Show all</a></small>\n" +
     "</div>\n" +
-    "<div ng-if=\"!vm.showFew\" style=\"text-align: right\">\n" +
+    "<div ng-if=\"!vm.showFew && vm.total > 0\" style=\"text-align: right\">\n" +
     "	<small> {{vm.total}} responses</small>\n" +
+    "</div>\n" +
+    "\n" +
+    "<div ng-if=\"vm.total === 0\" style=\"text-align: right\">\n" +
+    "	<small class=\"text-grey\"> No responses</small>\n" +
     "</div>\n" +
     "\n" +
     "<comment msg=\"reply\" ng-repeat=\"reply in vm.visibleReplies\"></comment>");
@@ -88,25 +101,25 @@ angular.module("comment/replies.tpl.html", []).run(["$templateCache", function($
 angular.module("comment/submitActions.tpl.html", []).run(["$templateCache", function($templateCache) {
   $templateCache.put("comment/submitActions.tpl.html",
     "<!-- visible only for trainers-->\n" +
-    "<button class=\"btn btn-default btn-sm btn-round btn-success\" ng-class=\"vm.showReplyType==='submission'?'':' btn-outline'\" ng-click=\"vm.showReplies('submission')\"  style=\"height: 30px;\">Submissions ({{vm.submissionsCount}})</button> \n" +
+    "<button class=\"btn btn-default btn-sm btn-round btn-success\" ng-class=\"vm.showReplyType==='submission'?'':' btn-raised'\" ng-click=\"vm.showReplies('submission')\"  style=\"height: 30px;\">Submissions ({{vm.submissionsCount}})</button> \n" +
     "\n" +
     "<!-- visible only for students-->\n" +
-    "<button class=\"btn btn-default btn-sm btn-round btn-outline \" ng-click=\"vm.showPost('submission')\" style=\"height: 30px;\"><i class=\"icon fa-reply\" aria-hidden=\"true\"></i>Submit</button>\n" +
+    "<button class=\"btn btn-primary btn-sm btn-round btn-raised \" ng-click=\"vm.showPost('submission')\" style=\"height: 30px;\"><i class=\"icon fa-reply\" aria-hidden=\"true\"></i>Submit</button>\n" +
     "\n" +
     "<!-- visible only for trainers & students-->\n" +
     "\n" +
-    "<button class=\"btn btn-default btn-sm btn-round btn-info btn-outline \" ng-class=\"vm.showReplyType ==='reply'?'':' btn-outline'\"  ng-click=\"vm.showReplies('reply')\" style=\"height: 30px; margin-left: 20px;\">Q&amp;A ({{vm.qaCount}})</button>\n" +
+    "<button class=\"btn btn-default btn-sm btn-round btn-info btn-raised \" ng-class=\"vm.showReplyType ==='reply'?'':' btn-raised'\"  ng-click=\"vm.showReplies('reply')\" style=\"height: 30px; margin-left: 20px;\">Q&amp;A ({{vm.qaCount}})</button>\n" +
     "\n" +
-    "<button class=\"btn btn-default btn-sm btn-round btn-outline \" ng-click=\"vm.showPost('reply')\"  style=\"height: 30px;\"><i class=\"icon fa-reply\" aria-hidden=\"true\"></i>Ask Question?</button>\n" +
+    "<button class=\"btn btn-default btn-sm btn-round btn-raised \" ng-click=\"vm.showPost('reply')\"  style=\"height: 30px;\"><i class=\"icon fa-reply\" aria-hidden=\"true\"></i>Ask Question?</button>\n" +
     "\n" +
     "<!-- visible only for trainers-->\n" +
-    "<button class=\"btn btn-default btn-sm btn-round btn-outline btn-warning\"   style=\"height: 30px; margin-left: 20px;\">Pending (10)</button> ");
+    "<button class=\"btn btn-default btn-sm btn-round btn-raised btn-warning\"   style=\"height: 30px; margin-left: 20px;\">Pending (10)</button> ");
 }]);
 
 angular.module("comment/taskActions.tpl.html", []).run(["$templateCache", function($templateCache) {
   $templateCache.put("comment/taskActions.tpl.html",
     "<!-- visible only for trainers-->\n" +
-    "<button class=\"btn btn-default btn-sm btn-round btn-success\" ng-class=\"vm.showReplyType==='submission'?'':' btn-outline'\" ng-click=\"vm.showReplies('submission')\"  style=\"height: 30px;\">Completed ({{vm.submissionsCount}})</button> \n" +
+    "<button class=\"btn btn-default btn-sm btn-round btn-success\" ng-class=\"vm.showReplyType==='submission'?'':' btn-raised'\" ng-click=\"vm.showReplies('submission')\"  style=\"height: 30px;\">Completed ({{vm.submissionsCount}})</button> \n" +
     "\n" +
     "<!-- visible only for students-->\n" +
     "<button class=\"btn btn-primary btn-sm btn-round btn-raised \" ng-click=\"vm.onComplete()\" style=\"height: 30px;\" ng-if=\"!vm.userHasCompletedTask\"><i class=\"icon fa-check\" aria-hidden=\"true\"></i>I have completed</button>\n" +
@@ -114,12 +127,12 @@ angular.module("comment/taskActions.tpl.html", []).run(["$templateCache", functi
     "\n" +
     "<!-- visible only for trainers & students-->\n" +
     "\n" +
-    "<button class=\"btn btn-default btn-sm btn-round btn-info btn-outline \" ng-class=\"vm.showReplyType ==='reply'?'':' btn-outline'\"  ng-click=\"vm.showReplies('reply')\" style=\"height: 30px; margin-left: 20px;\">Q&amp;A ({{vm.qaCount}})</button>\n" +
+    "<button class=\"btn btn-default btn-sm btn-round btn-info btn-raised \" ng-class=\"vm.showReplyType ==='reply'?'':' btn-raised'\"  ng-click=\"vm.showReplies('reply')\" style=\"height: 30px; margin-left: 20px;\">Q&amp;A ({{vm.qaCount}})</button>\n" +
     "\n" +
-    "<button class=\"btn btn-default btn-sm btn-round btn-outline \" ng-click=\"vm.showPost('reply')\"  style=\"height: 30px;\"><i class=\"icon fa-reply\" aria-hidden=\"true\"></i>Ask Question?</button>\n" +
+    "<button class=\"btn btn-default btn-sm btn-round btn-raised \" ng-click=\"vm.showPost('reply')\"  style=\"height: 30px;\"><i class=\"icon fa-reply\" aria-hidden=\"true\"></i>Ask Question?</button>\n" +
     "\n" +
     "<!-- visible only for trainers-->\n" +
-    "<button class=\"btn btn-default btn-sm btn-round btn-outline btn-warning\"   style=\"height: 30px; margin-left: 20px;\">Pending (10)</button> ");
+    "<button class=\"btn btn-default btn-sm btn-round btn-raised btn-warning\"   style=\"height: 30px; margin-left: 20px;\">Pending (10)</button> ");
 }]);
 
 angular.module("events/calendar.tpl.html", []).run(["$templateCache", function($templateCache) {
@@ -641,16 +654,16 @@ angular.module("post/post.tpl.html", []).run(["$templateCache", function($templa
     "                    <div class=\"message-input\"> \n" +
     "                      <comment-editor id=\"react\" content=\"vm.post.text\" placeholder=\"{{vm.placeholder}}\" readonly=\"false\" on-select=\"vm.editStarted()\" on-reset=\"vm.reset(true)\"> </comment-editor>\n" +
     "                      <div class=\"message-input-actions btn-group\" style=\"z-index: 1000;\">\n" +
-    "                        <a class=\"btn btn-pure btn-icon btn-default\" type=\"button\" ng-click=\"vm.openCalendar()\">\n" +
+    "                        <a class=\"btn btn-pure btn-icon btn-default\" type=\"button\" ng-click=\"vm.openCalendar()\" uib-tooltip=\"Emojis\" tooltip-placement=\"bottom\"  tooltip-trigger=\"'mouseenter'\" tooltip-append-to-body=\"true\">\n" +
     "                          <i class=\"icon wb-emoticon\" aria-hidden=\"true\"></i>\n" +
     "                        </a>\n" +
-    "                        <a class=\"btn btn-pure btn-icon btn-default\" type=\"button\" ng-click=\"vm.uploadImages()\">\n" +
+    "                        <a class=\"btn btn-pure btn-icon btn-default\" type=\"button\" ng-click=\"vm.uploadImages()\" uib-tooltip=\"Attach Images\" tooltip-placement=\"bottom\"  tooltip-trigger=\"'mouseenter'\" tooltip-append-to-body=\"true\">\n" +
     "                          <i class=\"icon wb-image\" aria-hidden=\"true\"></i>\n" +
     "                        </a>\n" +
-    "                        <a class=\"btn btn-pure btn-icon btn-default\" type=\"button\" ng-click=\"vm.uploadFiles()\">\n" +
+    "                        <a class=\"btn btn-pure btn-icon btn-default\" type=\"button\" ng-click=\"vm.uploadFiles()\" uib-tooltip=\"Attach Files\" tooltip-placement=\"bottom\"  tooltip-trigger=\"'mouseenter'\" tooltip-append-to-body=\"true\">\n" +
     "                          <i class=\"icon wb-paperclip\" aria-hidden=\"true\"></i>\n" +
     "                        </a>\n" +
-    "                        <a class=\"btn btn-pure btn-icon btn-default\" type=\"button\" ng-click=\"vm.openRichtext()\">\n" +
+    "                        <a class=\"btn btn-pure btn-icon btn-default\" type=\"button\" ng-click=\"vm.openRichtext()\" uib-tooltip=\"Publish a Post\" tooltip-placement=\"bottom\"  tooltip-trigger=\"'mouseenter'\" tooltip-append-to-body=\"true\">\n" +
     "                          <i class=\"icon wb-pencil\" aria-hidden=\"true\"></i>\n" +
     "                        </a>\n" +
     "                      </div>\n" +
@@ -672,11 +685,11 @@ angular.module("post/post.tpl.html", []).run(["$templateCache", function($templa
     "                      </div>\n" +
     "\n" +
     "                      <div style=\"display: inline-block\" ng-if=\"vm.selection.programLabel\">\n" +
-    "                        <span class=\"label label-success post-label\">{{vm.selection.programLabel}}</span>\n" +
+    "                        <span class=\"label label-default post-label\">{{vm.selection.programLabel}}</span>\n" +
     "                      </div>\n" +
     "\n" +
     "                      <div style=\"display: inline-block\" ng-if=\"vm.selection.classLabel\">\n" +
-    "                        <span class=\"label label-success post-label\">{{vm.selection.classLabel}}</span>\n" +
+    "                        <span class=\"label label-default post-label\">{{vm.selection.classLabel}}</span>\n" +
     "                      </div>\n" +
     "                    </div>\n" +
     "              </div>\n" +
@@ -697,14 +710,14 @@ angular.module("post/post.tpl.html", []).run(["$templateCache", function($templa
     "              <hr />\n" +
     "              <div class=\"form-group\">\n" +
     "                <label class=\"control-label\" for=\"datepicker\">Due by</label>\n" +
-    "                <datepicker date-format=\"MM/dd/yyyy\" selector=\"form-control\"  id=\"datepicker\" style=\"float: initial;\">\n" +
-    "                    <div class=\"input-group\">\n" +
-    "                        <input class=\"form-control\" ng-model=\"vm.post.dueby\" />\n" +
-    "                        <span class=\"input-group-addon\" style=\"cursor: pointer\">\n" +
-    "                          <i class=\"fa fa-lg fa-calendar\"></i>\n" +
-    "                        </span>\n" +
-    "                    </div>\n" +
-    "                </datepicker>\n" +
+    "                \n" +
+    "                <div class=\"input-group\" style=\"float: left; width: 200px;\">\n" +
+    "                  <span class=\"input-group-addon\">\n" +
+    "                    <i class=\"icon wb-calendar\" aria-hidden=\"true\"></i>\n" +
+    "                  </span>\n" +
+    "                  <input type=\"text\" id=\"startDate\" class=\"form-control\" datepicker ng-model=\"vm.post.deuby\">\n" +
+    "                </div>\n" +
+    "\n" +
     "              </div>\n" +
     "\n" +
     "              <div class=\"form-group\">\n" +
@@ -813,7 +826,7 @@ angular.module("school/class/classEdit.tpl.html", []).run(["$templateCache", fun
     "                <li role=\"presentation\"><a data-toggle=\"tab\" href=\"#contactsTab\" aria-controls=\"contactsTab\" role=\"tab\" aria-expanded=\"false\">Contacts</a></li>\n" +
     "                <li role=\"presentation\"><a data-toggle=\"tab\" href=\"#summaryTab\" aria-controls=\"summaryTab\" role=\"tab\" aria-expanded=\"false\">Summary</a></li>\n" +
     "                <li role=\"presentation\"><a data-toggle=\"tab\" href=\"#curriculumTab\" aria-controls=\"curriculumTab\" role=\"tab\" aria-expanded=\"true\">Curriculum</a></li>\n" +
-    "                <li role=\"presentation\"><a data-toggle=\"tab\" href=\"#locationTab\" aria-controls=\"locationTab\" role=\"tab\" aria-expanded=\"true\">Location</a></li>\n" +
+    "                <li role=\"presentation\"><a data-toggle=\"tab\" href=\"#locationTab\" aria-controls=\"locationTab\" role=\"tab\" aria-expanded=\"true\" ng-click=\"vm.resizeMap()\">Location</a></li>\n" +
     "                <li role=\"presentation\"><a data-toggle=\"tab\" href=\"#attachmentsTab\" aria-controls=\"attachmentsTab\" role=\"tab\" aria-expanded=\"true\">Attachments</a></li>\n" +
     "            </ul>\n" +
     "\n" +
@@ -882,7 +895,7 @@ angular.module("school/class/classEdit.tpl.html", []).run(["$templateCache", fun
     "                      </div>\n" +
     "\n" +
     "                      <div class=\"form-group\">\n" +
-    "                        <label class=\"control-label\">Schedule <i class=\"icon fa-calendar-o\" aria-hidden=\"true\"></i></label>\n" +
+    "                        <label class=\"control-label\">Schedule <i class=\"icon fa-clock-o\" aria-hidden=\"true\"></i></label>\n" +
     "                        <a href=\"#\" ng-click=\"openEvent()\"> \n" +
     "                          <div class=\"height-50 \">\n" +
     "                            <span class=\"form-control text-azure\" style=\"border: none;\">{{vm.schedule.repeatText}}</span>\n" +
@@ -899,38 +912,38 @@ angular.module("school/class/classEdit.tpl.html", []).run(["$templateCache", fun
     "                </div>\n" +
     "                <div class=\"tab-pane\" id=\"summaryTab\" role=\"tabpanel\">\n" +
     "                  <div class=\"form-group\" >\n" +
-    "                          <label class=\"control-label \"> About {{class.name}} </label>\n" +
-    "                          <richtext on-publish=\"onPublish()\" on-cancel=\"onCancel()\" richtextid=\"{{richtextid}}\" readonly=\"false\"/>\n" +
+    "                          <rich-editor content=\"class.summary\" placeholder=\"Enter class details\" readonly=\"false\"/>\n" +
     "                  </div>\n" +
     "                </div>\n" +
     "                <div class=\"tab-pane\" id=\"curriculumTab\" role=\"tabpanel\">\n" +
     "                  <div class=\"form-group\">\n" +
-    "                    <label class=\"control-label \"> Curriculum </label><br>\n" +
-    "                    <div class=\"panel panel-bordered\" style=\"border: 1px solid #e4eaec; border-radius: 5px;\">\n" +
+    "                    <div class=\"panel\" >\n" +
+    "                      <div class=\"panel-heading padding-left-10\">\n" +
+    "                        <div ng-if=\"!sectionAdd\" style=\"text-align: right;\"><button class=\"btn btn-default btn-raised btn-sm\" ng-click=\"showAddSection()\"><i class=\"icon fa-plus\" aria-hidden=\"true\"></i>Section</button> &nbsp;&nbsp;<span class=\" label label-round label-success\" ng-if=\"showSuccess\"> {{successMessage}} </span>  </div>\n" +
+    "                        <div ng-if=\"sectionAdd\" class=\"padding-10 animate-if\">\n" +
+    "                          <h5>New Section</h5>\n" +
+    "                          <input type=\"text\" ng-model=\"newSection.title\" class=\"form-control\" placeholder=\"Enter section title\" /><br>\n" +
+    "                          <rich-editor content=\"newSection.summary\" placeholder=\"Enter class details\" readonly=\"false\"/>\n" +
+    "                          <button class=\"btn btn-default btn-raised btn-sm\" ng-click=\"addNewSection()\"><strong>Add</strong></button> <button class=\"btn btn-default btn-raised  btn-sm\" ng-click=\"hideAddSection()\" style=\"margin-left: 20px;\">Cancel</button>\n" +
+    "                          <hr />\n" +
+    "                        </div>\n" +
+    "                      </div>\n" +
+    "\n" +
+    "\n" +
     "                      <div class=\"panel-body padding-10\" style=\" min-height: 200px;\" id=\"classSections\">\n" +
     "                        <ul class=\"list-group list-group-full\">\n" +
     "                          <li class=\"list-group-item padding-right-40\" ng-repeat=\"section in class.sections\">\n" +
     "                            <div ng-if=\"section.edit\" class=\"padding-10\">\n" +
     "                              <input type=\"text\" ng-model=\"section.title\" class=\"form-control\" placeholder=\"Enter section title\" /><br>\n" +
-    "                              <textarea rows=\"4\" ng-model=\"section.summary\" class=\"form-control\" style=\"width: 100%\" placeholder=\"Section details\"></textarea> <br>\n" +
-    "                              <button class=\"btn btn-primary btn-round\" ng-click=\"section.edit = false\">DONE</button> \n" +
+    "                              <rich-editor content=\"section.summary\" placeholder=\"Enter class details\"  readonly=\"false\"/>\n" +
+    "                              <button class=\"btn btn-default btn-round  btn-sm\" ng-click=\"section.edit = false\">Done</button> \n" +
     "                            </div>\n" +
     "                            <div ng-if=\"!section.edit\">\n" +
-    "                              <h5 style=\"display: inline-block;\"> {{section.title}} </h5><div style=\"display: inline-block; \" class=\"pull-right\"> <a href=\"#\" ng-click=\"section.edit = true\"><i class=\"icon fa-edit\" aria-hidden=\"true\" ></i></a> &nbsp;&nbsp;<a href=\"#\" ng-click=\"removeSection(section.seq)\"> <i class=\"icon fa-remove\" aria-hidden=\"true\"></i></a></div>\n" +
-    "                              <p class=\"padding-left-10\" style=\"white-space: pre-wrap;\">{{section.summary}}</p>\n" +
+    "                              <h4 style=\"display: inline-block;\"> {{section.title}} </h4><div style=\"display: inline-block; \" class=\"pull-right\"> <a href=\"#\" ng-click=\"section.edit = true\"><i class=\"icon fa-edit\" aria-hidden=\"true\" ></i></a> &nbsp;&nbsp;<a href=\"#\" ng-click=\"removeSection(section.seq)\"> <i class=\"icon fa-remove\" aria-hidden=\"true\"></i></a></div>\n" +
+    "                              <rich-editor content=\"section.summary\" placeholder=\"Enter class details\"  readonly=\"true\"/>\n" +
     "                            </div>\n" +
     "                          </li>\n" +
     "                        </ul>\n" +
-    "                      </div>\n" +
-    "\n" +
-    "                      <div class=\"panel-footer padding-left-10\">\n" +
-    "                        <div ng-if=\"!sectionAdd\"><button class=\"btn btn-primary btn-round\" ng-click=\"showAddSection()\">Create Section</button> &nbsp;&nbsp;<span class=\" label label-round label-success\" ng-if=\"showSuccess\"> {{successMessage}} </span>  </div>\n" +
-    "                        <div ng-if=\"sectionAdd\" class=\"padding-10\">\n" +
-    "                          <h5>New Section</h5>\n" +
-    "                          <input type=\"text\" ng-model=\"newSection.title\" class=\"form-control\" placeholder=\"Enter section title\" /><br>\n" +
-    "                          <textarea rows=\"4\" ng-model=\"newSection.summary\" class=\"form-control\" style=\"width: 100%\" placeholder=\"Section details\"></textarea> <br>\n" +
-    "                          <button class=\"btn btn-primary btn-round\" ng-click=\"addNewSection()\">ADD</button> <button class=\"btn btn-default btn-round\" ng-click=\"hideAddSection()\">Cancel</button>\n" +
-    "                        </div>\n" +
     "                      </div>\n" +
     "\n" +
     "                    </div>\n" +
@@ -938,8 +951,8 @@ angular.module("school/class/classEdit.tpl.html", []).run(["$templateCache", fun
     "                </div>\n" +
     "                <div class=\"tab-pane\" id=\"locationTab\" role=\"tabpanel\">\n" +
     "                  <div class=\"form-group\" >\n" +
-    "                          <label class=\"control-label \"> Location </label>\n" +
     "                          <div class=\"gmap height-300\" placeid=\"class.placeid\" address=\"class.address\" ng-cloak></div>\n" +
+    "                           <p class=\"help-block text-small\">Drag and drop marker <i class=\"icon fa-map-marker\" style=\"color: red;\" aria-hidden=\"true\"></i> to select your location.</p>\n" +
     "                  </div>\n" +
     "                </div>\n" +
     "                <div class=\"tab-pane\" id=\"attachmentsTab\" role=\"tabpanel\">\n" +
@@ -974,13 +987,13 @@ angular.module("school/school.tpl.html", []).run(["$templateCache", function($te
     "<div id=\"page-content-wrapper\" style=\"padding-left: 5px; padding-right: 5px; padding-bottom: 0px; padding-top: 5px; \">\n" +
     "\n" +
     "	<div class=\"page-header padding-top-10 padding-bottom-10 \">\n" +
-    "	    <span class=\"page-title\"><i class=\"icon fa-bank\" aria-hidden=\"true\"></i>Kushi Painting School</span> &nbsp;&nbsp;&nbsp;<button type=\"button\" class=\"btn btn-raised btn-info  btn-sm\">Programs <span class=\"badge\">1</span> </button>&nbsp;&nbsp;&nbsp;<button type=\"button\" class=\"btn btn-raised btn-info  btn-sm\">Classes <span class=\"badge\">2</span> </button>\n" +
+    "	    <span class=\"page-title\"><i class=\"icon fa-bank\" aria-hidden=\"true\"></i>{{school.name}}</span> \n" +
     "\n" +
     "	    <div class=\"page-header-actions\">\n" +
     "	    	<button type=\"button\" class=\"btn btn-raised  btn-default btn-sm\" ui-sref=\"app.apph.apps.schoolusers({schoolid: schoolid})\"  uib-tooltip=\"Users\" tooltip-placement=\"bottom\"  tooltip-trigger=\"'mouseenter'\" tooltip-append-to-body=\"true\"><i class=\"icon fa-users\" aria-hidden=\"true\"></i> </button>\n" +
     "	        <button type=\"button\" class=\"btn btn-raised  btn-default  btn-sm\" ui-sref=\"app.apph.apps.schoolEdit\" uib-tooltip=\"Edit School\" tooltip-placement=\"bottom\"  tooltip-trigger=\"'mouseenter'\" tooltip-append-to-body=\"true\"><i class=\"icon fa-edit\" aria-hidden=\"true\"></i> </button>\n" +
     "		    <button type=\"button\" class=\"btn btn-raised btn-default  btn-sm\" ui-sref=\"app.apph.apps.program({schoolid: schoolid, classid: ''})\" uib-tooltip=\"Create Program\" tooltip-placement=\"bottom\"  tooltip-trigger=\"'mouseenter'\" tooltip-append-to-body=\"true\"><i class=\"icon fa-plus\" aria-hidden=\"true\"></i> Program </button>\n" +
-    "		    <button type=\"button\" class=\"btn btn-raised btn-default  btn-sm\" ui-sref=\"app.apph.apps.class({schoolid: schoolid, classid: ''})\" uib-tooltip=\"Create Class\" tooltip-placement=\"bottom\"  tooltip-trigger=\"'mouseenter'\" tooltip-append-to-body=\"true\"><i class=\"icon fa-plus\" aria-hidden=\"true\"></i> Class </button>\n" +
+    "		    <button type=\"button\" class=\"btn btn-raised btn-primary  btn-sm\" ui-sref=\"app.apph.apps.class({schoolid: schoolid, classid: ''})\" uib-tooltip=\"Create Class\" tooltip-placement=\"bottom\"  tooltip-trigger=\"'mouseenter'\" tooltip-append-to-body=\"true\"><i class=\"icon fa-plus\" aria-hidden=\"true\"></i> Class </button>\n" +
     "	    </div>\n" +
     "	</div>\n" +
     "\n" +
@@ -988,8 +1001,8 @@ angular.module("school/school.tpl.html", []).run(["$templateCache", function($te
     "		<div class=\"panel-body\" style=\"padding: 0px;\">	\n" +
     "			<table class=\"table no-margin\">\n" +
     "				<tbody>\n" +
-    "					<tr ng-repeat=\"clazz in classes\" ng-cloak>\n" +
-    "						<td class=\"max-width-100 hidden-xs\">\n" +
+    "					<tr ng-repeat=\"clazz in classes\" ng-cloak ng-class=\"clazz.program?'padding-left-20':''\">\n" +
+    "						<td class=\"max-width-100 hidden-xs\" >\n" +
     "							<div class=\"icons-effect padding-10\">\n" +
     "								<img src=\"assets/images/avatar-1-small.jpg\" class=\"img-rounded img-responsive\" style=\"height: 70px;\" alt=\"\">\n" +
     "							</div>\n" +
@@ -997,8 +1010,8 @@ angular.module("school/school.tpl.html", []).run(["$templateCache", function($te
     "						<td>\n" +
     "							<div class=\"padding-10\">\n" +
     "								<div class=\"title\">\n" +
-    "									<a ui-sref=\"app.apph.apps.program({schoolid: schoolid, classid: clazz._id})\" ng-if=\"clazz.type === 'program'\"> <strong style=\"margin-right: 20px\">{{clazz.name}}</strong> <span class=\"label label-info\">{{clazz.type}} </span></a> \n" +
-    "									<a ui-sref=\"app.apph.apps.class({schoolid: schoolid, classid: clazz._id})\" ng-if=\"clazz.type === 'class'\"\"><strong style=\"margin-right: 20px\">{{clazz.name}}</strong><span class=\"label label-info\">Class </span> </a> \n" +
+    "									<a ui-sref=\"app.apph.apps.program({schoolid: schoolid, classid: clazz._id})\" ng-if=\"clazz.type === 'program'\"> <strong style=\"margin-right: 20px\">{{clazz.name}}</strong> <span class=\"label label-success\">{{clazz.type}} </span></a> \n" +
+    "									<a ui-sref=\"app.apph.apps.class({schoolid: schoolid, classid: clazz._id})\" ng-if=\"clazz.type === 'class'\"\"><strong style=\"margin-right: 20px\">{{clazz.name}}</strong><span class=\"label label-default\">Class </span> </a> \n" +
     "\n" +
     "								</div>\n" +
     "								<span class=\"abstract\">Reiciendis iactant eligendi. Vestrae </span>\n" +
@@ -1023,7 +1036,7 @@ angular.module("school/school.tpl.html", []).run(["$templateCache", function($te
     "											<i class=\"fa fa-money \"></i> Payment\n" +
     "										</a>\n" +
     "										\n" +
-    "										<a href=\"#\" class=\"block  text-small\">\n" +
+    "										<a href=\"#\" class=\"block  text-small\" ui-sref=\"app.apph.events\">\n" +
     "											<i class=\"fa fa-calendar \"></i> Time table\n" +
     "										</a>\n" +
     "\n" +
@@ -1070,121 +1083,126 @@ angular.module("school/schoolEdit.tpl.html", []).run(["$templateCache", function
     "\n" +
     "<form name=\"Form\" id=\"form\" novalidate ng-submit=\"form.submit(Form)\" >\n" +
     "\n" +
-    "<div class=\"page-header padding-left-40 padding-top-10 padding-bottom-0\" ng-cloak>\n" +
-    "  <h1 class=\"page-title\"> <i class=\"icon fa-bank\" aria-hidden=\"true\"></i>  {{school.name}}&nbsp;&nbsp;&nbsp;&nbsp;</h1>\n" +
-    "  <button  class=\"btn btn-raised btn-primary\" type=\"submit\"><i class=\"icon fa-save\" aria-hidden=\"true\"></i> Save </button>\n" +
-    "  <span class=\"text-extra-small\" ng-if=\"!Form.$dirty\">&nbsp;&nbsp;&nbsp;&nbsp;All changes are saved</span>\n" +
-    "</div>\n" +
+    "<div id=\"page-content-wrapper\" style=\"padding-left: 5px; padding-right: 5px; padding-bottom: 0px; padding-top: 5px; \">\n" +
     "\n" +
-    "<div class=\"row\" ng-cloak>\n" +
-    "  <div class=\"col-md-12\">\n" +
-    "    <div id=\"panel_edit_account\" >\n" +
-    "      <fieldset ng-disabled=\"disableForm\">\n" +
-    "            <div class=\"row\">\n" +
-    "                <div class=\"col-md-5\">\n" +
-    "                    <div class=\"row\">\n" +
-    "                      <div class=\"col-md-4\" style=\"height: 80px;padding: 0px; overflow:hidden\">\n" +
-    "                        <div gallery files=\"school.avatar\" type='image' class=\"padding-0\" single='true' style=\"max-height: 80px; width: auto;\" size='sm'></div>\n" +
-    "                      </div>\n" +
-    "\n" +
-    "                      <div class=\"col-md-8\">\n" +
-    "                        <div class=\"form-group\" ng-class=\"{'has-error':Form.name.$dirty && Form.name.$invalid, 'has-success':Form.name.$valid}\">\n" +
-    "                            <label class=\"control-label\"> Name  <span class=\"symbol required\"></label>\n" +
-    "                            <input type=\"text\" class=\"form-control underline\" id=\"name\" name=\"name\" ng-model=\"school.name\" required >\n" +
-    "                            <span class=\"error text-small block\" ng-if=\"Form.name.$dirty && Form.name.$error.required\">Name is required.</span>\n" +
-    "                        </div>\n" +
-    "                      </div>\n" +
-    "                    </div>\n" +
-    "                      \n" +
-    "                    <div class=\"form-group\" >\n" +
-    "                        <label for=\"categories\" class=\"control-label\">Category</label>\n" +
-    "                        <select id=\"categories\" class=\"form-control \" multiple  ng-model=\"school.categories\" ui-select2 style=\"width: 100%\">\n" +
-    "                          <option ng-repeat=\"item in vm.categories\" ng-bind=\"item.value\" value=\"{{item.value}}\"></option>\n" +
-    "                        </select>\n" +
-    "                        <p class=\"help-block text-small\">select 3 categories</p>\n" +
-    "                    </div>\n" +
-    "                    \n" +
-    "\n" +
-    "                    <div class=\"form-group\" >\n" +
-    "                        <label for=\"trainingstyle\" class=\"control-label\">Medium</label>\n" +
-    "                        <select id=\"trainingstyle\" class=\"form-control \" multiple ng-model=\"school.medium\" ui-select2 style=\"width: 100%\">\n" +
-    "                          <option ng-repeat=\"option in vm.mediums\">{{option.value}}</option>\n" +
-    "                        </select>\n" +
-    "                        <p class=\"help-block text-small\">select 3 main mediums of teaching</p>\n" +
-    "                    </div>\n" +
-    "                    \n" +
-    "\n" +
-    "                    <div class=\"form-group\">\n" +
-    "                        <label class=\"control-label\"> Phone</label>\n" +
-    "                        <input type=\"text\" class=\"form-control\" id=\"phone\" name=\"phone\"  ui-mask=\"(999) 999-9999\"  ng-model=\"school.phone\">\n" +
-    "                        <p class=\"help-block text-small\">(999) 999.9999</p>\n" +
-    "                    </div>\n" +
-    "\n" +
-    "                    <div class=\"form-group\">\n" +
-    "                        <label class=\"control-label\"> Website</label>\n" +
-    "                        <input type=\"text\" class=\"form-control underline\" ng-model=\"school.website\"  >\n" +
-    "                        <p class=\"help-block text-small\">www.myschool.com</p>\n" +
-    "                    </div>\n" +
-    "\n" +
-    "                </div>\n" +
-    "                <div class=\"col-md-offset-1 col-md-5\" ng-cloak>\n" +
-    "                    <div class=\"height-250 margin-top-20 padding-20\" style=\"border: 2px solid #e4eaec;border-radius: 5px;\">                          \n" +
-    "                      <script type=\"text/ng-template\" id=\"customTemplate.html\">\n" +
-    "                        <a>\n" +
-    "\n" +
-    "                            <img ng-src=\"http://upload.wikimedia.org/wikipedia/commons/thumb/{{match.model.flag}}\" style=\"float: left;\" width=\"32\" height=\"32\">\n" +
-    "                            <span ng-bind-html=\"match.label | uibTypeaheadHighlight:query\"></span><br>\n" +
-    "                            <span class=\"text-small\">State of champions</span>\n" +
-    "                        </a>\n" +
-    "                      </script>\n" +
-    "                      <pre>Model: {{selected | json}}</pre>\n" +
-    "                      <input type=\"text\" ng-model=\"customSelected\" placeholder=\"Custom template\" uib-typeahead=\"state as state.name for state in statesWithFlags  | filter:{name:$viewValue} | limitTo:8\" typeahead-template-url=\"customTemplate.html\" class=\"form-control\" typeahead-show-hint=\"true\"  typeahead-on-select=\"itemSelected($item, $model, $label, $event);customSelected=''\" typeahead-min-length=\"2\" typeahead-wait-ms=\"500\">\n" +
-    "\n" +
-    "                      <ul>\n" +
-    "                        <li ng-repeat=\"value in selectedStates\">\n" +
-    "                          <div>\n" +
-    "                              <img ng-src=\"http://upload.wikimedia.org/wikipedia/commons/thumb/{{match.model.flag}}\" style=\"float: left;\" width=\"32\" height=\"32\">\n" +
-    "                              <span ng-bind-html=\"match.label | uibTypeaheadHighlight:query\"></span><br>\n" +
-    "                              <span class=\"text-small\">State of champions</span>\n" +
-    "                          </div>\n" +
-    "                        </li>\n" +
-    "                      </ul>\n" +
-    "\n" +
-    "                    </div>\n" +
-    "                    <div class=\"height-200 margin-top-20 padding-20\" style=\"border: 2px solid #e4eaec;border-radius: 5px;\">                          \n" +
-    "                      <h3>Contacts</h3>\n" +
-    "\n" +
-    "                    </div>\n" +
-    "                  \n" +
-    "                </div>\n" +
-    "            </div>\n" +
-    "\n" +
-    "            <div class=\"row\">\n" +
-    "\n" +
-    "              <div class=\"col-md-12 margin-top-20\">\n" +
-    "                 <div class=\"form-group\" >\n" +
-    "                          <label class=\"control-label \"> About {{school.name}} </label>\n" +
-    "                          <div id=\"react\" draft content=\"school.profile\" readonly=\"true\"> </div>\n" +
-    "                  </div>\n" +
-    "              </div>            \n" +
-    "              <div class=\"col-md-12 margin-top-20\" >\n" +
-    "              <div class=\"form-group\" >\n" +
-    "                      <label class=\"control-label \"> Location </label>\n" +
-    "                      <div class=\"gmap height-300\" placeid=\"school.placeid\" address=\"school.address\" ng-cloak></div>\n" +
-    "              </div>\n" +
-    "              </div>\n" +
-    "              <div class=\"col-md-12 margin-top-20\">\n" +
-    "                <div gallery files=\"school.gallery\" type='image' gallery-title=\"Photo Gallery\"></div>\n" +
-    "              </div>\n" +
-    "              \n" +
-    "              <div class=\"col-md-12 margin-top-20\">\n" +
-    "                <div gallery files=\"school.attachments\" type='pdf' gallery-title=\"Additional Information\"></div>\n" +
-    "              </div>\n" +
-    "\n" +
-    "      </fieldset>\n" +
-    "       \n" +
+    "  <div class=\"page-header padding-top-10 padding-bottom-10 \">\n" +
+    "    <h1 class=\"page-title\"> <i class=\"icon fa-language\" aria-hidden=\"true\"></i>  {{school.name}}&nbsp;&nbsp;&nbsp;&nbsp;</h1>\n" +
+    "    \n" +
+    "    <span class=\"text-extra-small\" ng-if=\"!Form.$dirty\">&nbsp;&nbsp;&nbsp;&nbsp;All changes are saved</span>\n" +
+    "    <div class=\"page-header-actions\">\n" +
+    "       <button type=\"button\" class=\"btn btn-raised  btn-default btn-sm\" ui-sref=\"app.apph.apps.schoolusers({schoolid: schoolid})\"  uib-tooltip=\"Users\" tooltip-placement=\"bottom\"  tooltip-trigger=\"'mouseenter'\" tooltip-append-to-body=\"true\"><i class=\"icon fa-users\" aria-hidden=\"true\"></i> </button>\n" +
+    "       <button type=\"button\" class=\"btn btn-raised  btn-default btn-sm\" ui-sref=\"app.apph.events\"  uib-tooltip=\"Calendar\" tooltip-placement=\"bottom\"  tooltip-trigger=\"'mouseenter'\" tooltip-append-to-body=\"true\"><i class=\"icon fa-calendar \" aria-hidden=\"true\"></i> </button>\n" +
+    "      <button  class=\"btn btn-raised btn-primary\" type=\"submit\"><i class=\"icon fa-save\" aria-hidden=\"true\"></i> Save </button>\n" +
     "    </div>\n" +
     "  </div>\n" +
+    "\n" +
+    "  <div class=\"panel\">\n" +
+    "      <div class=\"panel-body\" style=\"padding: 10px;\">  \n" +
+    "\n" +
+    "            <ul class=\"nav nav-tabs nav-tabs-line\" data-plugin=\"nav-tabs\" role=\"tablist\">\n" +
+    "                <li class=\"active\" role=\"presentation\"><a data-toggle=\"tab\" href=\"#introTab\" aria-controls=\"introTab\" role=\"tab\" aria-expanded=\"false\">Intro</a></li>\n" +
+    "                <li role=\"presentation\"><a data-toggle=\"tab\" href=\"#contactsTab\" aria-controls=\"contactsTab\" role=\"tab\" aria-expanded=\"false\">Contacts</a></li>\n" +
+    "                <li role=\"presentation\"><a data-toggle=\"tab\" href=\"#summaryTab\" aria-controls=\"summaryTab\" role=\"tab\" aria-expanded=\"false\">Summary</a></li>\n" +
+    "                <li role=\"presentation\"><a data-toggle=\"tab\" href=\"#locationTab\" aria-controls=\"locationTab\" role=\"tab\" aria-expanded=\"true\" ng-click=\"vm.resizeMap()\">Location</a></li>\n" +
+    "                <li role=\"presentation\"><a data-toggle=\"tab\" href=\"#attachmentsTab\" aria-controls=\"attachmentsTab\" role=\"tab\" aria-expanded=\"true\">Attachments</a></li>\n" +
+    "            </ul>\n" +
+    "\n" +
+    "            <div class=\"tab-content padding-top-20\">\n" +
+    "                <div class=\"tab-pane active\" id=\"introTab\" role=\"tabpanel\">\n" +
+    "                 \n" +
+    "                  <div class=\"col-md-5\">\n" +
+    "\n" +
+    "                      <div class=\"form-group\" ng-class=\"{'has-error':Form.name.$dirty && Form.name.$invalid, 'has-success':Form.name.$valid}\">\n" +
+    "                          <label class=\"control-label\"> Name  <span class=\"symbol required\"></label>\n" +
+    "                          <input type=\"text\" class=\"form-control underline\" id=\"name\" name=\"name\" ng-model=\"school.name\" required >\n" +
+    "                          <span class=\"error text-small block\" ng-if=\"Form.name.$dirty && Form.name.$error.required\">Name is required.</span>\n" +
+    "                      </div>\n" +
+    "\n" +
+    "                      <div class=\"form-group\" >\n" +
+    "                          <label for=\"categories\" class=\"control-label\">Category</label>\n" +
+    "                          <select id=\"categories\" class=\"form-control \" multiple  ng-model=\"school.categories\" ui-select2 style=\"width: 100%\">\n" +
+    "                            <option ng-repeat=\"item in vm.categories\" ng-bind=\"item.value\" value=\"{{item.value}}\"></option>\n" +
+    "                          </select>\n" +
+    "                          <p class=\"help-block text-small\">select 3 categories</p>\n" +
+    "                      </div>\n" +
+    "                      \n" +
+    "\n" +
+    "                      <div class=\"form-group\" >\n" +
+    "                          <label for=\"trainingstyle\" class=\"control-label\">Medium</label>\n" +
+    "                          <select id=\"trainingstyle\" class=\"form-control \" multiple ng-model=\"school.medium\" ui-select2 style=\"width: 100%\">\n" +
+    "                            <option ng-repeat=\"option in vm.mediums\">{{option.value}}</option>\n" +
+    "                          </select>\n" +
+    "                          <p class=\"help-block text-small\">select 3 main mediums of teaching</p>\n" +
+    "                      </div>\n" +
+    "                      \n" +
+    "\n" +
+    "                      <div class=\"form-group\">\n" +
+    "                          <label class=\"control-label\"> Phone <i class=\"icon fa-phone\" aria-hidden=\"true\"></i> </label>\n" +
+    "                          <input type=\"text\" class=\"form-control\" id=\"phone\" name=\"phone\"  ui-mask=\"(999) 999-9999\"  ng-model=\"school.phone\" style=\"width: 200px;\">\n" +
+    "                          <p class=\"help-block text-small\">(999) 999.9999</p>\n" +
+    "                      </div>\n" +
+    "\n" +
+    "                      <div class=\"form-group\">\n" +
+    "                          <label class=\"control-label\"> Website </label>\n" +
+    "                          <input type=\"text\" class=\"form-control\" ng-model=\"school.website\"  >\n" +
+    "                          <p class=\"help-block text-small\">www.myclass.com</p>\n" +
+    "                      </div>\n" +
+    "\n" +
+    "                  </div>\n" +
+    "                  <div class=\"col-md-offset-1 col-md-5\" ng-cloak>\n" +
+    "\n" +
+    "                      <div class=\"form-group\">\n" +
+    "                          <label class=\"control-label\"> Capacity </label>\n" +
+    "                          <select id=\"classCapacity\" class=\"form-control \" ng-model=\"school.capacity\" ui-select2 style=\"width: 200px;\">\n" +
+    "                            <option ng-repeat=\"option in vm.classCapacity\">{{option.value}}</option>\n" +
+    "                          </select>\n" +
+    "                      </div>\n" +
+    "                      <div class=\"form-group\">\n" +
+    "                          <label class=\"control-label\"> Cost <i class=\"icon fa-money\" aria-hidden=\"true\"></i> </label>\n" +
+    "                          <input type=\"text\" class=\"form-control underline\" ng-model=\"class.cost\" maskmoney width=\"200px;\">\n" +
+    "                      </div>\n" +
+    "\n" +
+    "                      <div class=\"form-group\">\n" +
+    "                        <label class=\"control-label\">Schedule <i class=\"icon fa-clock-o\" aria-hidden=\"true\"></i></label>\n" +
+    "                        <a href=\"#\" ng-click=\"openEvent()\"> \n" +
+    "                          <div class=\"height-50 \">\n" +
+    "                            <span class=\"form-control text-azure\" style=\"border: none;\">{{vm.schedule.repeatText}}</span>\n" +
+    "                          </div>\n" +
+    "                        </a>\n" +
+    "                      </div>      \n" +
+    "                  </div>\n" +
+    "                </div>\n" +
+    "\n" +
+    "                <div class=\"tab-pane\" id=\"contactsTab\" role=\"tabpanel\">\n" +
+    "                  <div class=\"height-200 margin-top-20 padding-20\" style=\"border: 2px solid #e4eaec;border-radius: 5px;\">                          \n" +
+    "                    <h3>Contacts</h3>\n" +
+    "                  </div>\n" +
+    "                </div>\n" +
+    "                <div class=\"tab-pane\" id=\"summaryTab\" role=\"tabpanel\">\n" +
+    "                  <div class=\"form-group\" >\n" +
+    "                          <rich-editor content=\"school.profile\" placeholder=\"Enter class details\" readonly=\"false\"/>\n" +
+    "                  </div>\n" +
+    "                </div>\n" +
+    "\n" +
+    "                <div class=\"tab-pane\" id=\"locationTab\" role=\"tabpanel\">\n" +
+    "                  <div class=\"form-group\" >\n" +
+    "                          <div class=\"gmap height-300\" placeid=\"school.placeid\" address=\"school.address\" ng-cloak></div>\n" +
+    "                           <p class=\"help-block text-small\">Drag and drop marker <i class=\"icon fa-map-marker\" style=\"color: red;\" aria-hidden=\"true\"></i> to select your location.</p>\n" +
+    "                  </div>\n" +
+    "                </div>\n" +
+    "                <div class=\"tab-pane\" id=\"attachmentsTab\" role=\"tabpanel\">\n" +
+    "                  <div class=\"margin-top-20\">\n" +
+    "                    <div gallery files=\"school.gallery\" type='image' gallery-title=\"Photo Gallery\"></div>\n" +
+    "                  </div>\n" +
+    "                  \n" +
+    "                  <div class=\"margin-top-20\">\n" +
+    "                    <div gallery files=\"school.attachments\" type='pdf' gallery-title=\"Additional Information\"></div>\n" +
+    "                  </div>\n" +
+    "                </div>\n" +
+    "              </div>\n" +
+    "      </div>\n" +
+    "  </div>\n" +
+    "\n" +
     "</div>\n" +
     "\n" +
     "</form>\n" +
@@ -1194,8 +1212,92 @@ angular.module("school/schoolEdit.tpl.html", []).run(["$templateCache", function
     "");
 }]);
 
-angular.module("school/users/classUser.tpl.html", []).run(["$templateCache", function($templateCache) {
-  $templateCache.put("school/users/classUser.tpl.html",
+angular.module("school/users/classUsers.tpl.html", []).run(["$templateCache", function($templateCache) {
+  $templateCache.put("school/users/classUsers.tpl.html",
+    "<style type=\"text/css\">\n" +
+    "  .list-group .list-group-item:hover {\n" +
+    "    background-color: #FAFAFA !important;\n" +
+    "  }\n" +
+    "</style>\n" +
+    "\n" +
+    "<script type=\"text/ng-template\" id=\"customTemplate.html\">\n" +
+    "  <a href=\"#\" class=\"padding-5\"> \n" +
+    "    <div class=\"media\">\n" +
+    "      <div class=\"media-left\">\n" +
+    "        <span class=\"avatar avatar-online\">\n" +
+    "          <img src=\"assets/images/avatar-1-small.jpg\" alt=\"\">\n" +
+    "        </span>\n" +
+    "      </div>\n" +
+    "      <div class=\"media-body\">\n" +
+    "        <h5 class=\"list-group-item-heading\">\n" +
+    "          <span ng-bind-html=\"match.label | uibTypeaheadHighlight:query\"></span>\n" +
+    "        </h5>\n" +
+    "        <p class=\"list-group-item-text ng-binding\">Student - Class 2N</p>\n" +
+    "      </div>\n" +
+    "    </div>\n" +
+    "  </a>\n" +
+    "</script>\n" +
+    "\n" +
+    "<div class=\"page-header padding-left-40 padding-top-10 padding-bottom-0 \">\n" +
+    "  <h1 class=\"page-title\"><i class=\"icon fa-users\" aria-hidden=\"true\"></i>{{vm.name}} - Users</h1>&nbsp;&nbsp;&nbsp;\n" +
+    "  \n" +
+    "  <a href=\"#\" \n" +
+    "  class=\"btn btn-raised btn-default padding-5 margin-right-10 text-small\" \n" +
+    "  ng-class=\"vm.selectedUserType === userType.type?'btn-success': ''\" \n" +
+    "  ng-click=\"vm.showUserType(userType.type)\" \n" +
+    "  ng-repeat=\"userType in vm.userTypes\">\n" +
+    "    {{userType.type}}s <span class=\"badge\">{{userType.count}}</span>\n" +
+    "  </a>\n" +
+    "\n" +
+    "  <div class=\"page-header-actions\">\n" +
+    "    <button type=\"button\" class=\"btn btn-raised btn-primary btn-sm margin-left-20\" ng-click=\"add('teacher')\" ><i class=\"icon fa-plus\" aria-hidden=\"true\" ></i>Enroll New</button>\n" +
+    "  </div>\n" +
+    "</div>\n" +
+    "<div class=\"row margin-10\">\n" +
+    "  <div class=\"col-md-12 col-xs-12\">\n" +
+    "    <div class=\"panel\"  >\n" +
+    "\n" +
+    "      <div class=\"panel-body padding-10\" >\n" +
+    "        \n" +
+    "        <div style=\"width: 300px;\" ng-if=\"vm.class\">\n" +
+    "           <input type=\"text\" ng-model=\"customSelected\" placeholder=\"Add school user to class \" uib-typeahead=\"user as user.name for user in vm.schoolusers  | filter:{name:$viewValue} | limitTo:8\" typeahead-template-url=\"customTemplate.html\" class=\"form-control\" typeahead-show-hint=\"true\"  typeahead-on-select=\"itemSelected($item, $model, $label, $event);customSelected=''\" typeahead-min-length=\"0\" typeahead-wait-ms=\"100\" width=\"300px\" />\n" +
+    "        </div>              \n" +
+    "            \n" +
+    "\n" +
+    "        <ul class=\"list-group list-group-full\">\n" +
+    "          <li class=\"list-group-item padding-10\"  ng-repeat=\"user in vm.visibleUsers | filter:search\" ng-cloak>\n" +
+    "            <div class=\"media\">\n" +
+    "              <div class=\"media-left\">\n" +
+    "                <span class=\"avatar avatar-online\">\n" +
+    "                  <img src=\"assets/images/avatar-1-small.jpg\" alt=\"\">\n" +
+    "                </span>\n" +
+    "              </div>\n" +
+    "              <div class=\"media-body\">\n" +
+    "                <h5 class=\"list-group-item-heading\">\n" +
+    "                  <span class=\"pull-right\">\n" +
+    "                    <a class=\"text-action\" href=\"#\"><i class=\"icon wb-pencil\" aria-hidden=\"true\" ng-click=\"edit(user)\" ></i></a>\n" +
+    "                    <a class=\"text-action\" href=\"#\"><i class=\"icon fa-remove\" aria-hidden=\"true\" ng-click=\"delete(user)\" ></i></a>\n" +
+    "                  </span>\n" +
+    "                  {{user.name}} &nbsp;&nbsp;&nbsp;&nbsp;<span class=\" text-extra-small text-muted\">{{user.type}} </span></a> \n" +
+    "                </h5>\n" +
+    "                <p class=\"list-group-item-text\" style=\"margin-top: 10px\"><a href=\"#\" class=\"margin-right-20\" ng-if=\"user.email\"> <i class=\"icon wb-envelope\" aria-hidden=\"true\"></i>{{user.email}}</a> <a href=\"#\" ng-if=\"user.mobile\">  <i class=\"icon fa-phone\" aria-hidden=\"true\"></i>{{user.mobile}} </a> </p>\n" +
+    "              </div>\n" +
+    "            </div>\n" +
+    "          </li>\n" +
+    "        </ul>\n" +
+    "\n" +
+    "\n" +
+    "\n" +
+    "      </div>\n" +
+    "    </div>\n" +
+    "  </div>\n" +
+    "</div>\n" +
+    "\n" +
+    "");
+}]);
+
+angular.module("school/users/schoolUser.tpl.html", []).run(["$templateCache", function($templateCache) {
+  $templateCache.put("school/users/schoolUser.tpl.html",
     "<style type=\"text/css\">\n" +
     "    \n" +
     "    .role {\n" +
@@ -1261,90 +1363,17 @@ angular.module("school/users/classUser.tpl.html", []).run(["$templateCache", fun
     "          Cancel\n" +
     "      </button>\n" +
     "\n" +
-    "      <button class=\"btn btn-primary btn-raised\" type=\"submit\">\n" +
+    "      <button class=\"btn btn-primary btn-raised\" type=\"submit\" ng-if=\"vm.user._id\">\n" +
     "          Save User\n" +
+    "      </button>\n" +
+    "\n" +
+    "      <button class=\"btn btn-primary btn-raised\" type=\"submit\" ng-if=\"!(vm.user._id)\">\n" +
+    "          Create User\n" +
     "      </button>\n" +
     "      \n" +
     "  </div>\n" +
     "\n" +
     "</form>\n" +
-    "");
-}]);
-
-angular.module("school/users/classUsers.tpl.html", []).run(["$templateCache", function($templateCache) {
-  $templateCache.put("school/users/classUsers.tpl.html",
-    "<style type=\"text/css\">\n" +
-    "  .list-group .list-group-item:hover {\n" +
-    "    background-color: #FAFAFA !important;\n" +
-    "  }\n" +
-    "</style>\n" +
-    "\n" +
-    "<script type=\"text/ng-template\" id=\"customTemplate.html\">\n" +
-    "  <a href=\"#\" class=\"padding-5\"> \n" +
-    "    <div class=\"media\">\n" +
-    "      <div class=\"media-left\">\n" +
-    "        <span class=\"avatar avatar-online\">\n" +
-    "          <img src=\"assets/images/avatar-1-small.jpg\" alt=\"\">\n" +
-    "        </span>\n" +
-    "      </div>\n" +
-    "      <div class=\"media-body\">\n" +
-    "        <h5 class=\"list-group-item-heading\">\n" +
-    "          <span ng-bind-html=\"match.label | uibTypeaheadHighlight:query\"></span>\n" +
-    "        </h5>\n" +
-    "        <p class=\"list-group-item-text ng-binding\">State of champions</p>\n" +
-    "      </div>\n" +
-    "    </div>\n" +
-    "  </a>\n" +
-    "</script>\n" +
-    "\n" +
-    "<div class=\"page-header padding-left-40 padding-top-10 padding-bottom-0 \">\n" +
-    "  <h1 class=\"page-title\"><i class=\"icon fa-users\" aria-hidden=\"true\"></i>Users</h1>&nbsp;&nbsp;&nbsp;<button type=\"button\" class=\"btn btn-raised btn-info  btn-sm\">Students <span class=\"badge\">10</span> </button>&nbsp;&nbsp;&nbsp;<button type=\"button\" class=\"btn btn-raised btn-info  btn-sm\">Teachers <span class=\"badge\">2</span> </button>&nbsp;&nbsp;&nbsp;<button type=\"button\" class=\"btn btn-raised btn-info  btn-sm\">Parents <span class=\"badge\">10</span> </button>&nbsp;&nbsp;&nbsp;<button type=\"button\" class=\"btn btn-raised btn-info  btn-sm\">Admins <span class=\"badge\">2</span> </button>\n" +
-    "  <div class=\"page-header-actions\">\n" +
-    "    <button type=\"button\" class=\"btn btn-raised  btn-default btn-sm\" ng-click=\"add('teacher')\" ><i class=\"icon fa-plus\" aria-hidden=\"true\" ></i>Add</button>\n" +
-    "  </div>\n" +
-    "</div>\n" +
-    "<div class=\"row margin-10\">\n" +
-    "  <div class=\"col-md-12 col-xs-12\">\n" +
-    "    <div class=\"panel\"  >\n" +
-    "\n" +
-    "      <div class=\"panel-body padding-10\" >\n" +
-    "        \n" +
-    "        <div class=\"row\">\n" +
-    "          <div class=\"col-md-4 text-left\">     \n" +
-    "           <input type=\"text\" ng-model=\"customSelected\" placeholder=\"Add user to class \" uib-typeahead=\"user as user.name for user in vm.schoolusers  | filter:{name:$viewValue} | limitTo:8\" typeahead-template-url=\"customTemplate.html\" class=\"form-control\" typeahead-show-hint=\"true\"  typeahead-on-select=\"itemSelected($item, $model, $label, $event);customSelected=''\" typeahead-min-length=\"2\" typeahead-wait-ms=\"100\" width=\"200px\" />\n" +
-    "          </div>  \n" +
-    "        </div>\n" +
-    "\n" +
-    "        <ul class=\"list-group list-group-full\">\n" +
-    "          <li class=\"list-group-item padding-10\"  ng-repeat=\"user in vm.users | filter:search\" ng-cloak>\n" +
-    "            <div class=\"media\">\n" +
-    "              <div class=\"media-left\">\n" +
-    "                <span class=\"avatar avatar-online\">\n" +
-    "                  <img src=\"assets/images/avatar-1-small.jpg\" alt=\"\">\n" +
-    "                </span>\n" +
-    "              </div>\n" +
-    "              <div class=\"media-body\">\n" +
-    "                <h5 class=\"list-group-item-heading\">\n" +
-    "                  <span class=\"pull-right\">\n" +
-    "                    <a class=\"text-action\" href=\"#\"><i class=\"icon wb-pencil\" aria-hidden=\"true\" ng-click=\"edit(user)\" ></i></a>\n" +
-    "                    <a class=\"text-action\" href=\"#\"><i class=\"icon fa-remove\" aria-hidden=\"true\" ng-click=\"delete(user)\" ></i></a>\n" +
-    "                    <a class=\"text-action\" href=\"#\"><i class=\"icon wb-payment\" aria-hidden=\"true\"></i></a>\n" +
-    "                  </span>\n" +
-    "                  {{user.lastname + ' ' + user.firstname}} &nbsp;&nbsp;&nbsp;&nbsp;<span class=\"label label-info\">{{user.type}} </span></a> \n" +
-    "                </h5>\n" +
-    "                <p class=\"list-group-item-text\">{{user.email}}</p>\n" +
-    "              </div>\n" +
-    "            </div>\n" +
-    "          </li>\n" +
-    "        </ul>\n" +
-    "\n" +
-    "\n" +
-    "\n" +
-    "      </div>\n" +
-    "    </div>\n" +
-    "  </div>\n" +
-    "</div>\n" +
-    "\n" +
     "");
 }]);
 
@@ -1392,9 +1421,6 @@ angular.module("shared/app.tpl.html", []).run(["$templateCache", function($templ
     "          </ul>\n" +
     "\n" +
     "          <ul class=\"nav navbar-toolbar navbar-right navbar-toolbar-right\">\n" +
-    "\n" +
-    "            <li><a href=\"#\">Rambabu Ravuri, Teacher at Rauzr</a></li>\n" +
-    "\n" +
     "            <li class=\"dropdown\">\n" +
     "              <a class=\"navbar-avatar dropdown-toggle\" data-toggle=\"dropdown\" href=\"#\" aria-expanded=\"false\"\n" +
     "              data-animation=\"scale-up\" role=\"button\">\n" +
@@ -2208,7 +2234,7 @@ angular.module("wall/wall.tpl.html", []).run(["$templateCache", function($templa
     "            </div>\n" +
     "            <div class=\"col-md-12\"  ng-repeat=\"msg in posts\" >\n" +
     "              <div class=\"panel panel-white  margin-bottom-5\" ng-cloak>\n" +
-    "                <div class=\"panel-body padding-10 \">\n" +
+    "                <div class=\"panel-body\" style=\"padding: 0px 5px 0px 5px\">\n" +
     "                    <comment msg=\"msg\" ></comment>\n" +
     "                </div>\n" +
     "              </div>\n" +

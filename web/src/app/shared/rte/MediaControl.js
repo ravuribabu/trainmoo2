@@ -206,6 +206,19 @@ class MediaToolbar extends React.Component {
           this.dropzone.open();
         }
 
+        this.closeModal = () => {
+          this.setState({
+            showModal : false
+          });
+
+           setTimeout(() => this.props.onToggle(this.state.type, 
+              {
+              }
+            ), 1000 );
+
+
+        }
+
     }
 
     render() {

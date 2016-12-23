@@ -4,7 +4,7 @@ var school = require('angular').module('school');
 
 
 school.controller('schoolEditController',
-function ($rootScope, $scope, $window, lazyLoadGmapApi, schoolFactory, appForm, $interval, alertify, $uibModal, lookupService) {
+function ($rootScope, $scope, $window, lazyLoadGmapApi, schoolFactory, appForm, $interval, alertify, $uibModal, lookupService, $timeout) {
 
     $scope.selected = undefined;
     $scope.selectedStates = [];
@@ -73,6 +73,10 @@ function ($rootScope, $scope, $window, lazyLoadGmapApi, schoolFactory, appForm, 
       
       
 
+      
+      vm.resizeMap = function() {
+        $timeout(function(){$scope.$broadcast('GMAP_RESIZE');}, 100);  
+      }
 
       $scope.form = new appForm.AppForm(angular, function(form){
 

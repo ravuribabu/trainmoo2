@@ -27,7 +27,7 @@ var ClassSchema = new Schema({
   contacts: [{ user: { type: Schema.Types.ObjectId, ref: 'User' },
                role: String,
                order : Number }],
-
+  summary: String,
   gallery: [AttachmentSchema],
   attachments: [AttachmentSchema],
   sections: [{

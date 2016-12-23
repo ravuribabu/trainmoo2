@@ -43,7 +43,7 @@ comment.controller('taskActionController', function($scope, $rootScope, $uibModa
 			parent: $scope.msg._id,
 			type: $scope.msg.type,
 			responseType: 'submission',
-			text: 'I have completed'
+			text: '{"entityMap":{},"blocks":[{"key":"dbf78","text":"I have completed","type":"unstyled","depth":0,"inlineStyleRanges":[],"entityRanges":[],"data":{}}]}'
 		};
 		postFactory.createPost(postForCompletedTask)
 						.success(function(data){

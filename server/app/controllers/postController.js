@@ -153,7 +153,27 @@ module.exports = function(router) {
 			  		}
 			  	});
 
-			  });
+			  })
+			.delete(function(req, res) {
+				Post.remove({parent: req.params.postid})
+					.exec(function(err, replies){
+						if (err) {
+							res.status(500).send(err);
+						} else {
+							Post.findById(req.params.postid)
+								.remove()
+								.exec(function(err, comment) {
+									if (err) {
+										res.status(500).send(err);
+									} else {
+										res.send('Deleted comment successfully.');
+									}
+								})
+						}
+					});
+
+				
+			});
 
 
 	router.route('/post/:postid/like/:userid')

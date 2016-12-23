@@ -28,7 +28,7 @@ school.config(function($stateProvider, $urlRouterProvider, $locationProvider) {
         }).state('app.apph.apps.schoolusers', {
                 url: "/school/:schoolid/users",
                 templateUrl: "school/users/classUsers.tpl.html",
-                controller: "schoolUsersController",
+                controller: "classUsersController",
                 controllerAs: "vm"
         }).state('app.apph.apps.classusers', {
             url: "/school/:schoolid/class/:classid/users",

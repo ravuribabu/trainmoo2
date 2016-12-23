@@ -16,16 +16,25 @@
         <h5 class="list-group-item-heading">
           <span ng-bind-html="match.label | uibTypeaheadHighlight:query"></span>
         </h5>
-        <p class="list-group-item-text ng-binding">State of champions</p>
+        <p class="list-group-item-text ng-binding">Student - Class 2N</p>
       </div>
     </div>
   </a>
 </script>
 
 <div class="page-header padding-left-40 padding-top-10 padding-bottom-0 ">
-  <h1 class="page-title"><i class="icon fa-users" aria-hidden="true"></i>Users</h1>&nbsp;&nbsp;&nbsp;<button type="button" class="btn btn-raised btn-info  btn-sm">Students <span class="badge">10</span> </button>&nbsp;&nbsp;&nbsp;<button type="button" class="btn btn-raised btn-info  btn-sm">Teachers <span class="badge">2</span> </button>&nbsp;&nbsp;&nbsp;<button type="button" class="btn btn-raised btn-info  btn-sm">Parents <span class="badge">10</span> </button>&nbsp;&nbsp;&nbsp;<button type="button" class="btn btn-raised btn-info  btn-sm">Admins <span class="badge">2</span> </button>
+  <h1 class="page-title"><i class="icon fa-users" aria-hidden="true"></i>{{vm.name}} - Users</h1>&nbsp;&nbsp;&nbsp;
+  
+  <a href="#" 
+  class="btn btn-raised btn-default padding-5 margin-right-10 text-small" 
+  ng-class="vm.selectedUserType === userType.type?'btn-success': ''" 
+  ng-click="vm.showUserType(userType.type)" 
+  ng-repeat="userType in vm.userTypes">
+    {{userType.type}}s <span class="badge">{{userType.count}}</span>
+  </a>
+
   <div class="page-header-actions">
-    <button type="button" class="btn btn-raised  btn-default btn-sm" ng-click="add('teacher')" ><i class="icon fa-plus" aria-hidden="true" ></i>Add</button>
+    <button type="button" class="btn btn-raised btn-primary btn-sm margin-left-20" ng-click="add('teacher')" ><i class="icon fa-plus" aria-hidden="true" ></i>Enroll New</button>
   </div>
 </div>
 <div class="row margin-10">
@@ -34,14 +43,13 @@
 
       <div class="panel-body padding-10" >
         
-        <div class="row">
-          <div class="col-md-4 text-left">     
-           <input type="text" ng-model="customSelected" placeholder="Add user to class " uib-typeahead="user as user.name for user in vm.schoolusers  | filter:{name:$viewValue} | limitTo:8" typeahead-template-url="customTemplate.html" class="form-control" typeahead-show-hint="true"  typeahead-on-select="itemSelected($item, $model, $label, $event);customSelected=''" typeahead-min-length="2" typeahead-wait-ms="100" width="200px" />
-          </div>  
-        </div>
+        <div style="width: 300px;" ng-if="vm.class">
+           <input type="text" ng-model="customSelected" placeholder="Add school user to class " uib-typeahead="user as user.name for user in vm.schoolusers  | filter:{name:$viewValue} | limitTo:8" typeahead-template-url="customTemplate.html" class="form-control" typeahead-show-hint="true"  typeahead-on-select="itemSelected($item, $model, $label, $event);customSelected=''" typeahead-min-length="0" typeahead-wait-ms="100" width="300px" />
+        </div>              
+            
 
         <ul class="list-group list-group-full">
-          <li class="list-group-item padding-10"  ng-repeat="user in vm.users | filter:search" ng-cloak>
+          <li class="list-group-item padding-10"  ng-repeat="user in vm.visibleUsers | filter:search" ng-cloak>
             <div class="media">
               <div class="media-left">
                 <span class="avatar avatar-online">
@@ -53,11 +61,10 @@
                   <span class="pull-right">
                     <a class="text-action" href="#"><i class="icon wb-pencil" aria-hidden="true" ng-click="edit(user)" ></i></a>
                     <a class="text-action" href="#"><i class="icon fa-remove" aria-hidden="true" ng-click="delete(user)" ></i></a>
-                    <a class="text-action" href="#"><i class="icon wb-payment" aria-hidden="true"></i></a>
                   </span>
-                  {{user.lastname + ' ' + user.firstname}} &nbsp;&nbsp;&nbsp;&nbsp;<span class="label label-info">{{user.type}} </span></a> 
+                  {{user.name}} &nbsp;&nbsp;&nbsp;&nbsp;<span class=" text-extra-small text-muted">{{user.type}} </span></a> 
                 </h5>
-                <p class="list-group-item-text">{{user.email}}</p>
+                <p class="list-group-item-text" style="margin-top: 10px"><a href="#" class="margin-right-20" ng-if="user.email"> <i class="icon wb-envelope" aria-hidden="true"></i>{{user.email}}</a> <a href="#" ng-if="user.mobile">  <i class="icon fa-phone" aria-hidden="true"></i>{{user.mobile}} </a> </p>
               </div>
             </div>
           </li>

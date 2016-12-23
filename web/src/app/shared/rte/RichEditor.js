@@ -12,7 +12,7 @@ export default class RichEditor extends React.Component {
 
         super(props);
 
-       const decorator = new CompositeDecorator([
+       this.decorator = new CompositeDecorator([
           {
             strategy: findLinkEntities,
             component: Link,
@@ -22,11 +22,11 @@ export default class RichEditor extends React.Component {
 
         if (this.props.content) {
             this.state = {
-                editorState: EditorState.createWithContent(convertFromRaw(JSON.parse(this.props.content)), decorator),
+                editorState: EditorState.createWithContent(convertFromRaw(JSON.parse(this.props.content)), this.decorator),
             };
         } else {
             this.state = {
-                editorState: EditorState.createEmpty(decorator)
+                editorState: EditorState.createEmpty(this.decorator)
             };
         }
 
@@ -43,6 +43,7 @@ export default class RichEditor extends React.Component {
         this.logState = () => {
             const content = this.state.editorState.getCurrentContent();
             console.log(convertToRaw(this.state.editorState.getCurrentContent()));
+            this.log();
         };
 
         this.unlink = () => {
@@ -57,8 +58,6 @@ export default class RichEditor extends React.Component {
 
 
         this.handlePastedText = (text, html) => {
-          console.log("TEXT: " + text);
-          console.log("HTML: " + html);
           return 'not-handled';
         }; 
 
@@ -69,11 +68,12 @@ export default class RichEditor extends React.Component {
       
       const selection = editorState.getSelection();
 
+      //editorState = this.trim();
       if(!this.props.readonly) {
         if (editorState.getCurrentContent().hasText() && editorState.getCurrentContent().getPlainText(' ').trim().length > 0) {
           this.props.update(JSON.stringify(convertToRaw(this.state.editorState.getCurrentContent())), editorState.getCurrentContent());
         } else {
-          this.props.update(undefined);
+          this.props.update('');
         }
       }
 
@@ -133,6 +133,88 @@ export default class RichEditor extends React.Component {
         this.onChange(RichUtils.toggleInlineStyle(this.state.editorState, inlineStyle));
     }
 
+    trim(){
+
+      const {editorState} = this.state;
+      const currentContent = editorState.getCurrentContent();
+      const blocks = currentContent.getBlocksAsArray();
+      let i = blocks.length - 1;
+      for ( ; (i>=0) ; i--) {
+        let block = blocks[i];
+        if (!(block.getType() === 'unstyled' && block.getLength()<=0)) {
+          break;
+        }
+      }
+
+      if (i < blocks.length - 1) {
+        return EditorState.createWithContent(ContentState.createFromBlockArray(blocks.slice(0, i + 1)), this.decorator);
+      } 
+      this.onChange(editorState);
+
+      return editorState;
+    
+      
+
+    }
+
+    log() {
+      const {editorState} = this.state;
+      const currentContent = editorState.getCurrentContent();
+      const blocks = currentContent.getBlocksAsArray();
+
+      blocks.forEach((b) => {
+
+        let noOfEntities = 0;
+        for (let i=0; (i<b.getLength()) ; i++ ) {
+          if (b.getEntityAt(i)) noOfEntities++;
+        }
+      })
+    }
+
+    previewImage() {
+      
+      const {editorState} = this.state;
+      const currentContent = editorState.getCurrentContent();
+
+      if (currentContent) {
+        const imgs = currentContent
+            .getBlocksAsArray()
+            .filter(f => { return (f.getType() === 'atomic') } )
+            .map((contentBlock) => {
+               
+              var images = contentBlock.getCharacterList()
+                    .map((c) => {
+                      const entityKey = c.getEntity();
+                      if (entityKey){
+                            const entity = Entity.get(entityKey);
+                            if (entity.type === 'image') {
+                              return entity.data.src.link;
+                            }
+                      }
+                    });
+              if (images && images.length > 0) {
+                return images.get(0);
+              }
+            })
+            .filter(x => {return x;});
+  
+  
+        if (imgs && imgs.length > 0) {
+          return imgs[0];
+        }
+      }
+
+      return '';  
+    }
+
+    previewText(){
+
+      const {editorState} = this.state;
+      const currentContent = editorState.getCurrentContent();
+      return currentContent?currentContent.getPlainText().replace(/\s\s+/g, ' ').replace(/\n/g, " ").substring(0, 200):'';
+    
+    }
+
     render() {
         const {editorState} = this.state;
 
@@ -162,7 +244,11 @@ export default class RichEditor extends React.Component {
             </div>;
         }
 
-        const editorStyle = {height: '500px', overflowY: 'scroll'};
+         let editorStyle = {};
+        // if (!this.props.readonly){
+        //   editorStyle = {height: '100px', overflowY: 'scroll'};
+        // }
+
         return (
             <div className="RichEditor-root">
                 <div className={className} onClick={this.focus}>
@@ -185,7 +271,7 @@ export default class RichEditor extends React.Component {
                     </div>
                 </div>
                 {/*<EmojiSuggestions/>*/}
-                {/* <input onClick={this.logState} type="button" value="Log State"/> */}
+                { <input onClick={this.logState} type="button" value="Log State"/> }
             </div>
         );
     }

@@ -185,11 +185,17 @@ core.directive('gmap', function($rootScope, lazyLoadGmapApi) {
     templateUrl: 'shared/gmap.tpl.html',
     link: function(scope, element, attrs) {
 			
-
 		var map = null;
 		var marker = null;
 		var input = null;
 
+		scope.$on('GMAP_RESIZE', function(){
+			if (map) {
+				var center = map.getCenter();
+				google.maps.event.trigger(map, "resize");
+				map.setCenter(center);
+			}
+		});
 
 		scope.$watch('placeid', function(newValue, oldValue) {
 			if (newValue && (!oldValue || (newValue === oldValue))){
@@ -201,7 +207,6 @@ core.directive('gmap', function($rootScope, lazyLoadGmapApi) {
 			}
 			
 		});
-        
       
       // Initialize the maph
       function initializeMap() {
@@ -233,9 +238,8 @@ core.directive('gmap', function($rootScope, lazyLoadGmapApi) {
 				  }
 	      	});
       	}
-      	
 
-         input = document.getElementById('pac-input');
+        input = document.getElementById('pac-input');
 		var autocomplete = new google.maps.places.Autocomplete(input);
 		map.controls[google.maps.ControlPosition.TOP_LEFT].push(input);
 
@@ -328,7 +332,7 @@ core.directive('gmap', function($rootScope, lazyLoadGmapApi) {
               lat: position.coords.latitude,
               lng: position.coords.longitude
             };
-            selectPlaceByLatlng(latlng);
+            selectPlaceByLatlng(pos);
              
           }, function() {
             window.alert('No results found');
