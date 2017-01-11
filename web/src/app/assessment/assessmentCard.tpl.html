@@ -1,0 +1,34 @@
+<style type="text/css">
+	.card {
+	    box-shadow: 0 4px 8px 0 rgba(0,0,0,0.2);
+	    transition: 0.3s;
+    	padding: 5px;
+    	background: #F3F7F9;
+	}
+	
+	.card:hover {
+	    box-shadow: 0 8px 16px 0 rgba(0,0,0,0.2);
+	}
+</style>
+ 
+<div style="margin-top: 20px;padding:5px;height: auto;cursor: pointer; border: 1px solid #f3f2f2; background: #F3F7F9;"  ng-click="vm.editAssessment()">
+	 <div class="media">
+		<div class="media-left">
+		    <div class="widget" style="margin-bottom: 0px;">
+              <div class="widget-content padding-10 bg-grey-200">
+                <div class="counter counter-lg">
+                  <div class="counter-label text-uppercase">Questions</div>
+                  <span class="counter-number">{{vm.assessmentCard.count}}</span>
+                </div>
+              </div>
+            </div>
+		</div>
+		<div class="media-body">
+		     <h4 class="media-heading">{{vm.assessmentCard.title}}</h4>
+			 {{vm.assessmentCard.description}}<br/>
+	         <span class="label label-default label-outline margin-right-20">True / False<span class="badge margin-left-5">{{vm.assessmentCard.tf}}</span></span>
+	         <span class="label label-default label-outline margin-right-20">Multiple Choice<span class="badge margin-left-5">{{vm.assessmentCard.mc}}</span></span>
+	         <span class="label label-default label-outline ">Simple Answer<span class="badge margin-left-5">{{vm.assessmentCard.sa}}</span></span>
+		</div>
+	</div>
+</div>

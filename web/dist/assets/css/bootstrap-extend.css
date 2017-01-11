@@ -3864,6 +3864,9 @@ fieldset[disabled] .btn-pure.focus {
 .label-lg {
   font-size: 16px;
 }
+.label-md {
+  font-size: 12px;
+}
 .label-sm {
   padding: .1em .5em .1em;
   font-size: 10px;

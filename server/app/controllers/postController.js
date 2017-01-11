@@ -3,6 +3,8 @@ var Post = require('../models/post').Post;
 var PostSchema = require('../models/post').PostSchema;
 var User = require('../models/user').User;
 var RichText = require('../models/richText').RichText;
+var Assessment = require('../models/assessment').Assessment;
+
 var mongoose = require('mongoose');
 
 var deepPopulate = require('mongoose-deep-populate')(mongoose);
@@ -95,6 +97,30 @@ module.exports = function(router) {
 							  		});
 
 							  	});
+						}
+
+
+						if (postJson.assessment) {
+
+							console.log('Updating assessments');
+							var bulk = Assessment.collection.initializeOrderedBulkOp();
+
+							console.log('created bulk for assessment');
+							bulk.find({ post: null })
+								.update( { $set : { post : post._id }});
+
+							console.log('Updated assessment with post');
+							
+							bulk.execute(function(err, assessments) {
+									  	if (err) {
+									  		console.log('Failed to update assessments: ' + err);
+									  		res.status(500).send(err);
+									  	} else {
+									  		console.log('Assessment updated successfully');
+									  	}
+									  });
+
+							console.log('Executed');
 						}
 					}
 				});

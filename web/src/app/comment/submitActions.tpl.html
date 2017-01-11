@@ -1,14 +1,31 @@
-<!-- visible only for trainers-->
+
+<div class="btn-group">
+
+	<button class="btn btn-default btn-sm btn-round btn-outline" uib-tooltip="Submit" tooltip-placement="bottom"  tooltip-trigger="'mouseenter'" tooltip-append-to-body="true" ng-click="vm.showPost('submission')" >Submit</button>
+	<button class="btn btn-default btn-sm btn-round btn-outline" ng-click="vm.showReplies('submission')" ><i class="icon fa-paper-plane-o"  ></i> ({{vm.submissionsCount}})</button>
+	<button class="btn btn-default btn-sm btn-round btn-outline"  uib-tooltip="Ask question" tooltip-placement="bottom"  tooltip-trigger="'mouseenter'" tooltip-append-to-body="true" ng-click="vm.showPost('reply')"><i class="icon fa-question"></i> ({{vm.qaCount}})</button>
+</div>
+</div>
+
+<div class="btn-group margin-left-10">
+	<button class="btn btn-pure btn-warning">Pending (20)</button>
+</div>
+
+
+<!-- visible only for trainers
 <button class="btn btn-default btn-sm btn-round btn-success" ng-class="vm.showReplyType==='submission'?'':' btn-raised'" ng-click="vm.showReplies('submission')"  style="height: 30px;">Submissions ({{vm.submissionsCount}})</button> 
 
-<!-- visible only for students-->
-<button class="btn btn-primary btn-sm btn-round btn-raised " ng-click="vm.showPost('submission')" style="height: 30px;"><i class="icon fa-reply" aria-hidden="true"></i>Submit</button>
 
-<!-- visible only for trainers & students-->
+visible only for students
+<button class="btn btn-default btn-sm btn-round btn-raised " ng-click="vm.showPost('submission')" style="height: 30px;"><i class="icon fa-reply" aria-hidden="true"></i>Submit</button>
 
-<button class="btn btn-default btn-sm btn-round btn-info btn-raised " ng-class="vm.showReplyType ==='reply'?'':' btn-raised'"  ng-click="vm.showReplies('reply')" style="height: 30px; margin-left: 20px;">Q&amp;A ({{vm.qaCount}})</button>
+visible only for trainers & students
+
+<button class="btn btn-default btn-sm btn-round btn-raised " ng-class="vm.showReplyType ==='reply'?'':' btn-raised'"  ng-click="vm.showReplies('reply')" style="height: 30px; margin-left: 20px;">Q&amp;A ({{vm.qaCount}})</button>
 
 <button class="btn btn-default btn-sm btn-round btn-raised " ng-click="vm.showPost('reply')"  style="height: 30px;"><i class="icon fa-reply" aria-hidden="true"></i>Ask Question?</button>
 
-<!-- visible only for trainers-->
-<button class="btn btn-default btn-sm btn-round btn-raised btn-warning"   style="height: 30px; margin-left: 20px;">Pending (10)</button> 
+ visible only for trainers
+<button class="btn btn-default btn-sm btn-round btn-raised"   style="height: 30px; margin-left: 20px;">Pending (10)</button> 
+
+-->

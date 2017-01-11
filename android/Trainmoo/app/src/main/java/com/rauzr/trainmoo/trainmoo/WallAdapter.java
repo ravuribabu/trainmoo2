@@ -67,7 +67,7 @@ public class WallAdapter extends RecyclerView.Adapter<WallAdapter.MessageHolder>
         void bind(int listIndex){
             Message message = messages.get(listIndex);
             binding.setMessage(message);
-            if (message.type.equalsIgnoreCase("notification") || message.type.equalsIgnoreCase("assignment")) {
+            if (message.type.equalsIgnoreCase("notification") || message.type.equalsIgnoreCase("assignment") || message.type.equalsIgnoreCase("assessment")) {
                 RobotoTextView robotoTextView = (RobotoTextView) itemView.findViewById(R.id.message_type);
                 robotoTextView.setTextColor(itemView.getResources().getColor(R.color.cpb_red));
             }

@@ -9,4 +9,5 @@ module.exports = function(router){
 	require('./schoolController')(router);
 	require('./lookupController')(router);
 	require('./richTextController')(router);
+	require('./assessmentController')(router);
 };

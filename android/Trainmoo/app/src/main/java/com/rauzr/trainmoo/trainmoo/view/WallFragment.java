@@ -93,14 +93,16 @@ public class WallFragment extends Fragment implements   LoaderManager.LoaderCall
         if (response != null)
             Log.i("RESPONSE: ", response);
         try {
-            JSONArray posts = new JSONArray(response);
+            if (response != null) {
+                JSONArray posts = new JSONArray(response);
 
-            for (int i=0; (i < posts.length()) ; i++) {
-                JSONObject jsonObject = posts.getJSONObject(i);
-                String type = jsonObject.getString("type").toString();
-                String text = jsonObject.getString("text").toString();
+                for (int i = 0; (i < posts.length()); i++) {
+                    JSONObject jsonObject = posts.getJSONObject(i);
+                    String type = jsonObject.getString("type").toString();
+                    String text = jsonObject.getString("text").toString();
 
-                messages.add(new Message("Rambabu Ravuri", "2 days ago", "Code School 1", type, text, 10, 2));
+                    messages.add(new Message("Rambabu Ravuri", "2 days ago", "Code School 1", type, text, 10, 2));
+                }
             }
 
         } catch (JSONException e) {

@@ -16,7 +16,7 @@ import java.util.Scanner;
 public class NetworkUtils {
 
     final static String WALL_URL =
-            "http://192.168.1.34:8080/api/posts?classids=582a85f6ebcc9c8939463ffc,582a8601ebcc9c8939463ffd,5829ffc6ebcc9c8939463ff6,5829ffd0ebcc9c8939463ff7,582a8eacc3decb8fc5eb0d86,582a8eb5c3decb8fc5eb0d87&postType=";
+            "http://192.168.1.34:8080/api/posts?classids=582a85f6ebcc9c8939463ffc,582a8601ebcc9c8939463ffd,5829ffc6ebcc9c8939463ff6,5829ffd0ebcc9c8939463ff7,582a8eacc3decb8fc5eb0d86,582a8eb5c3decb8fc5eb0d87,586141d31b13d00c99eac942,586a3541e8ff380f6312af02&postType=";
 
 
     public static String getResponseFromHttpUrl() throws IOException {

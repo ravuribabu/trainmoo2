@@ -1,0 +1,41 @@
+<form  name="Form" id="form" novalidate ng-submit="vm.form.submit(Form)">
+
+  <div class="modal-header">
+      <h3 class="modal-title" id="modal-title">
+        <input type="text" name="title" ng-model="vm.quiz.title" style= "border: 0;outline: none;" placeholder="Assessment title"  required />
+        <span class="error text-small block" ng-if="Form.title.$dirty && Form.title.$error.required">Title is required.</span>
+      </h3>
+  </div>
+  <div class="modal-body" id="modal-body">
+
+      <div class="form-group">
+        <label class="control-label" for="description">Description:</label>
+        <textarea name="title" class="form-control" ng-model="vm.quiz.description" placeholder="Enter description here." rows="3"  required > </textarea>
+        <span class="error text-small block" ng-if="Form.description.$dirty && Form.description.$error.required">Description is required.</span>
+      </div>
+
+      <div class="form-group">
+        <label class="control-label" for="duration">Duration (mins):</label>
+        <input class="form-control" type="number" id="duration" name="duration" ng-model="vm.quiz.duration" placeholder="Enter duration.." style="width: 200px;" />
+      </div>
+
+
+      <div ng-repeat="assessment in vm.assessments">
+        <assessment-short-answer assessment="assessment" remove="vm.remove($index)" moveup="vm.moveup($index)" movedown="vm.movedown($index)" ng-if="assessment.type === 'SA'"/>
+        <assessment-true-false assessment="assessment" remove="vm.remove($index)" moveup="vm.moveup($index)" movedown="vm.movedown($index)" ng-if="assessment.type === 'TF'"/>
+        <assessment-multiple-choice assessment="assessment" remove="vm.remove($index)" moveup="vm.moveup($index)" movedown="vm.movedown($index)" ng-if="assessment.type === 'MC'"/>
+      </div>
+   
+      <div class="padding-horizontal-50 padding-vertical-20">
+        <a href="#" class="btn btn-outline btn-success"  ng-click="vm.addTrueFalse()" > <i class="icon wb-plus text" aria-hidden="true"></i>True / False </a>
+        <a href="#" class="btn btn-outline btn-info margin-left-20" ng-click="vm.addMultipleChoice()"> <i class="icon wb-plus text" aria-hidden="true"></i>Multiple Choice </a>
+        <a href="#" class="btn btn-outline btn-warning margin-left-20" ng-click="vm.addShortAnswer()"> <i class="icon wb-plus text" aria-hidden="true"></i>Short Answer </a>
+      </div>
+
+  </div>
+
+  <div class="modal-footer">
+      <button class="btn btn-primary btn-raised" type="submit">Publish</button>
+  </div>
+
+</form>

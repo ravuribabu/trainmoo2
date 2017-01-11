@@ -26,7 +26,7 @@
 </style>
 
 <form  name="Form" id="form1" novalidate ng-submit="vm.form.submit(Form)" class="form-inline">
-    <div class="panel  margin-bottom-10" ng-cloak>
+    <div class="panel  margin-bottom-10" style="background-color: #fff" ng-class="vm.postSelected && !vm.isReply?'card':''" ng-cloak>
         <div class="panel-body padding-10">
                 <div class="app-message-input">
                     <div class="message-input"> 
@@ -49,11 +49,11 @@
                 </div>
 
             <div class="col-md-12 padding-right-0 padding-left-0" style="margin-top: 10px;" ng-if="vm.postSelected" >
-              <div class="col-md-8" style="text-align: left; display: inline-block;" >
+              <div class="col-xs-12 col-md-8" style="text-align: left; display: inline-block;" >
                     <div class="float: left;" ng-if="!vm.isReply">
                       <div style="display: inline-block;  width: 120px;" class="btn" ng-if="!vm.reply">
                         <div class="dropdown"  >
-                          <a class="dropdown-toggle inline-block" data-toggle="dropdown" href="#" aria-expanded="true" style="color: #62a8ea;"><i ng-class="vm.selection.postType.icon" class="site-menu-icon" aria-hidden="true"></i>{{vm.selection.postType.name}}<span class="caret"></span></a>
+                          <a class="dropdown-toggle inline-block" data-toggle="dropdown" href="#" aria-expanded="true"><i ng-class="vm.selection.postType.icon" class="site-menu-icon" aria-hidden="true"></i>{{vm.selection.postType.name}}<span class="caret"></span></a>
                           <ul class="dropdown-menu animation-slide-down animation-middle-left animation-duration-250" role="menu">
                             <li role="presentation" ng-repeat="postType in vm.postTypes"> 
                               <a href="#" ng-click="vm.selectPostType(postType)"><i ng-class="postType.icon" class="site-menu-icon" aria-hidden="true"></i> {{postType.name}}</a>
@@ -73,7 +73,7 @@
               </div>
 
               
-              <div class="col-md-4" style="text-align: right;">
+              <div class="col-xs-12 col-md-4" style="text-align: right;">
                 <button class="btn btn-default btn-sm btn-raised btn-default " ng-click="vm.reset()" style="width: 70px; height: 30px; margin-right: 10px;">Cancel</button>
                 <button class="btn btn-default btn-sm btn-raised btn-primary " type="submit" style="width: 70px; height: 30px;">Post</button>
               </div>
@@ -84,30 +84,37 @@
             </div>
 
 
-            <div class="col-md-12" ng-if="!vm.isReply && vm.postSelected && (vm.post.type === 'Assignment' || vm.post.type === 'Task')" style="padding-left: 10px;" >
+            <div class="col-md-12" ng-if="!vm.isReply && vm.postSelected && (vm.post.type === 'Assignment' || vm.post.type === 'Task' || vm.post.type === 'Assessment')" style="padding-left: 10px;" >
               <hr />
-              <div class="form-group">
-                <label class="control-label" for="datepicker">Due by</label>
-                
-                <div class="input-group" style="float: left; width: 200px;">
-                  <span class="input-group-addon">
-                    <i class="icon wb-calendar" aria-hidden="true"></i>
-                  </span>
-                  <input type="text" id="startDate" class="form-control" datepicker ng-model="vm.post.deuby">
+
+              <div class="col-xs-12 col-md-6">
+                <div class="form-group">
+                  <label class="control-label" for="datepicker">Due by</label>
+                  <div class="input-group" style=" width: 200px;">
+                    <span class="input-group-addon">
+                      <i class="icon wb-calendar" aria-hidden="true"></i>
+                    </span>
+                    <input type="text" id="startDate" class="form-control" datepicker ng-model="vm.post.dueby">
+                  </div>
+
                 </div>
-
               </div>
 
-              <div class="form-group">
-                <label class="control-label" for="title">Title </label>
-                <select id="title" class="form-control " ng-model="vm.post.section" ui-select2 style="min-width: 300px;">
-                  <option ng-repeat="p in vm.sections" >{{p.name}}</option>
-                </select>
-              </div>
+              <div class="col-xs-12 col-md-6">
 
-              
+                <div class="form-group">
+                  <label class="control-label" for="title">Title </label>
+                  <select id="title" class="form-control " ng-model="vm.post.section" ui-select2 style="min-width: 300px;">
+                    <option ng-repeat="p in vm.sections" >{{p.name}}</option>
+                  </select>
+                </div>   
+              </div>           
             </div>
 
+
+            <div class="col-md-12" ng-if="!vm.isReply && vm.postSelected && vm.post.type === 'Assessment'"  >
+              <assessment-card asmtpost="vm.post"/>
+            </div>
 
             <div class="col-md-12 margin-top-20" ng-if="vm.uploadImage">
               <div gallery files="vm.post.files" type='image' gallery-title="Attach Pictures" ></div>

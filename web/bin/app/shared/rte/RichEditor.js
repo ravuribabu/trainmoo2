@@ -271,7 +271,7 @@ export default class RichEditor extends React.Component {
                     </div>
                 </div>
                 {/*<EmojiSuggestions/>*/}
-                { <input onClick={this.logState} type="button" value="Log State"/> }
+                {/* <input onClick={this.logState} type="button" value="Log State"/> */}
             </div>
         );
     }

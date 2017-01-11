@@ -1,4 +1,4 @@
-<div class="comment media" ng-cloak style="width: 100%">
+<div class="comment media" ng-cloak style="width: 100%; padding-bottom: 10px;">
 	<a href="#" class="media-left">
 		<img alt="image" class="avatar avatar-lg" src="assets/images/avatar-1-small.jpg" >
 	</a>
@@ -6,48 +6,55 @@
 		<div class="comment-body">
 			<a href="#" class="comment-author">{{vm.name}}</a> 
 
-			<div class="comment-meta">
-				<span class="date" > {{vm.posted}}</span>
-			</div>
-
 			<span ng-if="!vm.isreply">
-				<span ng-if="msg.type != 'Reply'" style="margin: 0px 5px;"> on&nbsp;<span class="text-azure">{{vm.classnames | listToString}}</span> </span>
+				<class-list style="margin: 0px 5px;" classes="msg.classes"/>
 			</span>
+
+			<div class="comment-header-actions" ng-if="vm.isreply">
+				<div class="comment-meta">
+			      <span class="date" > {{vm.posted}}</span>
+			    </div>
+			</div>
 
 			<div class="comment-header-actions" ng-if="!vm.isreply">
 				
-				<div class="btn-group ">
-			        <button type="button" class="btn btn-pure btn-primary icon fa-bookmark-o"  aria-hidden="true"></button>
-			        <button type="button" class="btn btn-pure btn-primary  icon wb-star-outline" aria-hidden="true"></button>
-			        <button type="button" class="btn btn-pure btn-primary  icon wb-expand" aria-hidden="true"></button>
-			        <button type="button" class="btn btn-pure btn-primary  icon wb-close-mini" aria-hidden="true" ng-click="delete()"></button>
-			      </div>
-			      <div class="comment-meta">
-					<span class="label label-info margin-left-10" ng-if="msg.dueby">
+
+
+				<div class="comment-meta">
+					<span class="date" > {{vm.posted}}</span>
+					<span class="label label-md label-info margin-left-10" ng-if="msg.dueby">
 						Due {{vm.duein}}
 					</span>
-					<span class="label" 
+					<span class="label label-md" 
 						ng-class="{'label-primary' : ['Message', 'Discussion', 'Blog'].indexOf(msg.type) >= 0 , 'label-danger' : ['Assignment', 'Task'].indexOf(msg.type) >= 0 , 'label-warning' :['Notification', 'Newsletter',  'Assessment'].indexOf(msg.type) >= 0 , 'label-info' :['Material'].indexOf(msg.type) >= 0 }" 
 						ng-if="msg.type != 'Reply'"
-						style="margin-left: 20px;">
+						style="margin-left: 10px;">
 						{{msg.type}}
 					</span>	
-					
 				</div>
+
+				<div class="dropdown" style="display: inline;">
+				  <a class="dropdown-toggle inline-block text-azure" data-toggle="dropdown" href="#" aria-expanded="true"><span class="caret"></span></a>
+				  <ul class="dropdown-menu animation-slide-down animation-bottom-left animation-duration-250" role="menu">
+				    <li role="presentation"><a href="#"><i class="icon fa-bookmark-o" aria-hidden="true"></i> Bookmark</a></li>
+				    <li role="presentation"><a href="#"><i class="icon fa-thumb-tack" aria-hidden="true"></i> Pin it</a></li>
+				    <li role="presentation"><a href="#"><i class="icon fa-edit" aria-hidden="true"></i> Edit</a></li>
+				    <li role="presentation"><a href="#"><i class="icon wb-close-mini" aria-hidden="true"></i> Delete</a></li>
+				  </ul>
+				</div>
+
 			</div>
 
 			<comment-editor id="react" content="msg.text" readonly="true" class="comment-content"> </comment-editor>
+	        <richtext-card rtpost="msg" ng-if="vm.hasRichtext" ng-click="vm.openRichtext()"/>
+            <assessment-card asmtpost="msg" ng-if="msg.responseType !=='reply' && msg.responseType !=='submission' && msg.type === 'Assessment'" />
 
-            <richtext-card rtpost="msg" ng-if="vm.hasRichtext" ng-click="vm.openRichtext()"/>
-            
 			<div gallery files="msg.files" readonly="true" ng-if="msg.files && msg.files.length > 0"></div>
 
 			<div class="comment-actions">
 
 				<div ng-if="!vm.showSubmitActions &&  !vm.showTaskActions">
-					
 					<button class="btn btn-default btn-sm btn-round btn-outline " ng-click="showPost('reply')" style="height: 30px;"><i class="icon fa-reply" aria-hidden="true"></i>Reply</button>
-
 				</div>
 
 				<submit-actions msg="msg" ng-if="vm.showSubmitActions" show-replies="showReplies(type)" show-post="showPost(type)"/>

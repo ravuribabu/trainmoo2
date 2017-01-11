@@ -88,15 +88,15 @@ post.controller('postController', function($rootScope, $scope, postFactory, Swee
 			icon: 'wb-check' 
 		},
 		{ 
-			name: 'Assessments', 
+			name: 'Assessment', 
 			icon: 'fa-tachometer' 
 		},
 		{ 
-			name: 'Grades', 
+			name: 'Grade', 
 			icon: 'fa-bar-chart' 
 		},
 		{ 
-			name: 'Polls', 
+			name: 'Poll', 
 			icon: 'fa-tasks' 
 		}];
 
@@ -279,6 +279,8 @@ post.controller('postController', function($rootScope, $scope, postFactory, Swee
 		    
 		        });
 	}
+
+
 
 
 });

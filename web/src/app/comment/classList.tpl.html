@@ -1,0 +1,10 @@
+on <span class="text-azure" ng-if="!vm.showPopup"> {{vm.classText}}</span> 
+
+<div class="dropdown"  ng-if="vm.showPopup" style="display: inline;">
+  <a class="dropdown-toggle inline-block text-azure" data-toggle="dropdown" href="#" aria-expanded="true">{{vm.classText}}<span class="caret"></span></a>
+  <ul class="dropdown-menu animation-slide-down animation-middle-left animation-duration-250" role="menu">
+    <li role="presentation" ng-repeat="classname in vm.classnames"> 
+      <a href="#">{{classname}}</a>
+    </li>
+  </ul>
+</div>

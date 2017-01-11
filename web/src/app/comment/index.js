@@ -14,6 +14,7 @@ require('./commentController');
 require('./submitActionController');
 require('./taskActionController');
 require('./repliesController');
+require('./classListController');
 
 comment.filter('postTime', function(){
 	return function(d) {

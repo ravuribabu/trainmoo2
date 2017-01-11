@@ -1,8 +1,270 @@
-angular.module('templates.app', ['comment/comment.tpl.html', 'comment/replies.tpl.html', 'comment/submitActions.tpl.html', 'comment/taskActions.tpl.html', 'events/calendar.tpl.html', 'events/eventDetails.tpl.html', 'events/events.tpl.html', 'login/login.tpl.html', 'login/signup.tpl.html', 'nav/nav.tpl.html', 'post/post.tpl.html', 'richtext/richtext.tpl.html', 'richtext/richtextCard.tpl.html', 'school/appSchool.tpl.html', 'school/class/classEdit.tpl.html', 'school/pdfview.tpl.html', 'school/school.tpl.html', 'school/schoolEdit.tpl.html', 'school/users/classUsers.tpl.html', 'school/users/schoolUser.tpl.html', 'shared/app.tpl.html', 'shared/apph.tpl.html', 'shared/apptop.tpl.html', 'shared/gallery.tpl.html', 'shared/gmap.tpl.html', 'user/directive/userCard.tpl.html', 'user/userEdit.tpl.html', 'userList/userList.tpl.html', 'wall/wall.tpl.html']);
+angular.module('templates.app', ['assessment/assessmentCard.tpl.html', 'assessment/assessmentEdit.tpl.html', 'assessment/assessmentMC.tpl.html', 'assessment/assessmentSA.tpl.html', 'assessment/assessmentTF.tpl.html', 'comment/classList.tpl.html', 'comment/comment.tpl.html', 'comment/replies.tpl.html', 'comment/submitActions.tpl.html', 'comment/taskActions.tpl.html', 'events/calendar.tpl.html', 'events/eventDetails.tpl.html', 'events/events.tpl.html', 'login/login.tpl.html', 'login/signup.tpl.html', 'nav/nav.tpl.html', 'post/post.tpl.html', 'richtext/richtext.tpl.html', 'richtext/richtextCard.tpl.html', 'school/appSchool.tpl.html', 'school/class/classEdit.tpl.html', 'school/pdfview.tpl.html', 'school/school.tpl.html', 'school/schoolEdit.tpl.html', 'school/users/classUsers.tpl.html', 'school/users/schoolUser.tpl.html', 'shared/app.tpl.html', 'shared/apph.tpl.html', 'shared/apptop.tpl.html', 'shared/gallery.tpl.html', 'shared/gmap.tpl.html', 'user/directive/userCard.tpl.html', 'user/userEdit.tpl.html', 'userList/userList.tpl.html', 'wall/wall.tpl.html']);
+
+angular.module("assessment/assessmentCard.tpl.html", []).run(["$templateCache", function($templateCache) {
+  $templateCache.put("assessment/assessmentCard.tpl.html",
+    "<style type=\"text/css\">\n" +
+    "	.card {\n" +
+    "	    box-shadow: 0 4px 8px 0 rgba(0,0,0,0.2);\n" +
+    "	    transition: 0.3s;\n" +
+    "    	padding: 5px;\n" +
+    "    	background: #F3F7F9;\n" +
+    "	}\n" +
+    "	\n" +
+    "	.card:hover {\n" +
+    "	    box-shadow: 0 8px 16px 0 rgba(0,0,0,0.2);\n" +
+    "	}\n" +
+    "</style>\n" +
+    " \n" +
+    "<div style=\"margin-top: 20px;padding:5px;height: auto;cursor: pointer; border: 1px solid #f3f2f2; background: #F3F7F9;\"  ng-click=\"vm.editAssessment()\">\n" +
+    "	 <div class=\"media\">\n" +
+    "		<div class=\"media-left\">\n" +
+    "		    <div class=\"widget\" style=\"margin-bottom: 0px;\">\n" +
+    "              <div class=\"widget-content padding-10 bg-grey-200\">\n" +
+    "                <div class=\"counter counter-lg\">\n" +
+    "                  <div class=\"counter-label text-uppercase\">Questions</div>\n" +
+    "                  <span class=\"counter-number\">{{vm.assessmentCard.count}}</span>\n" +
+    "                </div>\n" +
+    "              </div>\n" +
+    "            </div>\n" +
+    "		</div>\n" +
+    "		<div class=\"media-body\">\n" +
+    "		     <h4 class=\"media-heading\">{{vm.assessmentCard.title}}</h4>\n" +
+    "			 {{vm.assessmentCard.description}}<br/>\n" +
+    "	         <span class=\"label label-default label-outline margin-right-20\">True / False<span class=\"badge margin-left-5\">{{vm.assessmentCard.tf}}</span></span>\n" +
+    "	         <span class=\"label label-default label-outline margin-right-20\">Multiple Choice<span class=\"badge margin-left-5\">{{vm.assessmentCard.mc}}</span></span>\n" +
+    "	         <span class=\"label label-default label-outline \">Simple Answer<span class=\"badge margin-left-5\">{{vm.assessmentCard.sa}}</span></span>\n" +
+    "		</div>\n" +
+    "	</div>\n" +
+    "</div>");
+}]);
+
+angular.module("assessment/assessmentEdit.tpl.html", []).run(["$templateCache", function($templateCache) {
+  $templateCache.put("assessment/assessmentEdit.tpl.html",
+    "<form  name=\"Form\" id=\"form\" novalidate ng-submit=\"vm.form.submit(Form)\">\n" +
+    "\n" +
+    "  <div class=\"modal-header\">\n" +
+    "      <h3 class=\"modal-title\" id=\"modal-title\">\n" +
+    "        <input type=\"text\" name=\"title\" ng-model=\"vm.quiz.title\" style= \"border: 0;outline: none;\" placeholder=\"Assessment title\"  required />\n" +
+    "        <span class=\"error text-small block\" ng-if=\"Form.title.$dirty && Form.title.$error.required\">Title is required.</span>\n" +
+    "      </h3>\n" +
+    "  </div>\n" +
+    "  <div class=\"modal-body\" id=\"modal-body\">\n" +
+    "\n" +
+    "      <div class=\"form-group\">\n" +
+    "        <label class=\"control-label\" for=\"description\">Description:</label>\n" +
+    "        <textarea name=\"title\" class=\"form-control\" ng-model=\"vm.quiz.description\" placeholder=\"Enter description here.\" rows=\"3\"  required > </textarea>\n" +
+    "        <span class=\"error text-small block\" ng-if=\"Form.description.$dirty && Form.description.$error.required\">Description is required.</span>\n" +
+    "      </div>\n" +
+    "\n" +
+    "      <div class=\"form-group\">\n" +
+    "        <label class=\"control-label\" for=\"duration\">Duration (mins):</label>\n" +
+    "        <input class=\"form-control\" type=\"number\" id=\"duration\" name=\"duration\" ng-model=\"vm.quiz.duration\" placeholder=\"Enter duration..\" style=\"width: 200px;\" />\n" +
+    "      </div>\n" +
+    "\n" +
+    "\n" +
+    "      <div ng-repeat=\"assessment in vm.assessments\">\n" +
+    "        <assessment-short-answer assessment=\"assessment\" remove=\"vm.remove($index)\" moveup=\"vm.moveup($index)\" movedown=\"vm.movedown($index)\" ng-if=\"assessment.type === 'SA'\"/>\n" +
+    "        <assessment-true-false assessment=\"assessment\" remove=\"vm.remove($index)\" moveup=\"vm.moveup($index)\" movedown=\"vm.movedown($index)\" ng-if=\"assessment.type === 'TF'\"/>\n" +
+    "        <assessment-multiple-choice assessment=\"assessment\" remove=\"vm.remove($index)\" moveup=\"vm.moveup($index)\" movedown=\"vm.movedown($index)\" ng-if=\"assessment.type === 'MC'\"/>\n" +
+    "      </div>\n" +
+    "   \n" +
+    "      <div class=\"padding-horizontal-50 padding-vertical-20\">\n" +
+    "        <a href=\"#\" class=\"btn btn-outline btn-success\"  ng-click=\"vm.addTrueFalse()\" > <i class=\"icon wb-plus text\" aria-hidden=\"true\"></i>True / False </a>\n" +
+    "        <a href=\"#\" class=\"btn btn-outline btn-info margin-left-20\" ng-click=\"vm.addMultipleChoice()\"> <i class=\"icon wb-plus text\" aria-hidden=\"true\"></i>Multiple Choice </a>\n" +
+    "        <a href=\"#\" class=\"btn btn-outline btn-warning margin-left-20\" ng-click=\"vm.addShortAnswer()\"> <i class=\"icon wb-plus text\" aria-hidden=\"true\"></i>Short Answer </a>\n" +
+    "      </div>\n" +
+    "\n" +
+    "  </div>\n" +
+    "\n" +
+    "  <div class=\"modal-footer\">\n" +
+    "      <button class=\"btn btn-primary btn-raised\" type=\"submit\">Publish</button>\n" +
+    "  </div>\n" +
+    "\n" +
+    "</form>");
+}]);
+
+angular.module("assessment/assessmentMC.tpl.html", []).run(["$templateCache", function($templateCache) {
+  $templateCache.put("assessment/assessmentMC.tpl.html",
+    "<form  name=\"Form\" id=\"form\" novalidate ng-submit=\"vm.form.submit(Form)\">\n" +
+    "\n" +
+    "  <div class=\"panel\" style=\"border-top: 5px solid #57c7d4; display: inline-block; background-color: #e4eaec; width: 100%\">\n" +
+    "    <div class=\"panel-body\" style=\"padding: 10px 50px 10px 10px;\">\n" +
+    "      <div class=\"padding-10\">\n" +
+    "\n" +
+    "        <span class=\"label label-danger\" ng-if=\"vm.errorMessage\"> {{vm.errorMessage}} </span>\n" +
+    "\n" +
+    "        <div class=\"form-group\" ng-class=\"{'has-error':Form.question.$dirty && Form.question.$invalid}\" >\n" +
+    "          <label class=\"control-label\">#{{vm.assessment.seqno}}</label>\n" +
+    "          <span style=\"display: block;\" ng-if=\"!vm.edit\">{{vm.assessment.question}}</span>\n" +
+    "          <input type=\"text\" name=\"question\" class=\"form-control\" ng-if=\"vm.edit\" ng-model=\"vm.assessment.question\" required/>\n" +
+    "          <span class=\"error text-small block\" style=\"background-color: #e4eaec;\" ng-if=\"Form.question.$dirty && Form.question.$error.required\">Question is required.</span>\n" +
+    "        </div>\n" +
+    "\n" +
+    "        <div class=\"row\">\n" +
+    "          <label class=\"control-label\" style=\"display: block;\">Answer Choice: <span style=\"float: right; margin-right: 20px;\">Correct</span></label>\n" +
+    "          <div class=\"col-md-12\" ng-repeat=\"option in vm.assessment.options\">\n" +
+    "              <div class=\"col-md-1\">\n" +
+    "                <span class=\"label label-primary\">{{option.seqno}}</span>\n" +
+    "              </div>\n" +
+    "              <div class=\"col-md-9\">\n" +
+    "                <div class=\"form-group\" ng-class=\"{'has-error':Form.optionText.$dirty && Form.optionText.$invalid}\"  ng-if=\"vm.edit\">\n" +
+    "                  <input type=\"text\" name=\"optionText\" class=\"form-control\" placeholder=\"Enter choice\" ng-model=\"option.text\"  required />\n" +
+    "                  <span class=\"error text-small block\" style=\"background-color: #e4eaec;\" ng-if=\"Form.optionText.$dirty && Form.optionText.$error.optionText\">Choice is required.</span>\n" +
+    "                </div>\n" +
+    "                <span ng-if=\"!vm.edit\">{{option.text}}</span>\n" +
+    "              </div>\n" +
+    "              <div class=\"col-md-1\" style=\"text-align: center;\"  >\n" +
+    "                <a href=\"#\" ng-click=\"vm.removeOption($index)\" ng-if=\"vm.edit\"><i class=\"icon fa-close \" aria-hidden=\"true\"></i></a>\n" +
+    "              </div>\n" +
+    "              <div class=\"col-md-1\" style=\"text-align: center;\"  >\n" +
+    "                <input type=\"checkbox\" ng-model=\"option.answer\" ng-if=\"vm.edit\">\n" +
+    "                <span ng-if=\"!vm.edit\">{{option.answer}}</span>\n" +
+    "              </div>\n" +
+    "          </div>\n" +
+    "          <a href=\"#\" class=\"btn btn-info margin-top-10\" ng-click=\"vm.addOption()\" ng-if=\"vm.edit\">Add</a>\n" +
+    "        </div>\n" +
+    "\n" +
+    "        <div class=\"form-group margin-top-20\">\n" +
+    "          <label class=\"control-label\">Explanation:</label>\n" +
+    "          <span class=\"wall\" style=\"display: block;\" ng-if=\"!vm.edit\">{{vm.assessment.explanation}}</span>\n" +
+    "          <textarea class=\"form-control\" ng-if=\"vm.edit\" ng-model=\"vm.assessment.explanation\" rows=\"4\"></textarea>\n" +
+    "        </div>\n" +
+    "\n" +
+    "        <div class=\"actionContainer\">\n" +
+    "          <a href=\"#\" class=\"btn bg-blue-100\" style=\"margin-top: 1px\" uib-tooltip=\"Edit\" tooltip-placement=\"left\"  tooltip-trigger=\"'mouseenter'\" tooltip-append-to-body=\"true\"  ng-click=\"vm.startEdit()\" ng-if=\"!vm.edit\"><i class=\"icon fa-edit \" aria-hidden=\"true\" ></i></a>\n" +
+    "          <button type=\"submit\" class=\"btn bg-blue-300\" style=\"margin-top: 1px\" uib-tooltip=\"Save\" tooltip-placement=\"left\"  tooltip-trigger=\"'mouseenter'\" tooltip-append-to-body=\"true\" ng-if=\"vm.edit\" ><i class=\"icon fa-save \" aria-hidden=\"true\" ></i></button>\n" +
+    "          <a href=\"#\" class=\"btn bg-blue-100 margin-top-5\" uib-tooltip=\"Move Up\" tooltip-placement=\"left\"  tooltip-trigger=\"'mouseenter'\" tooltip-append-to-body=\"true\"><i class=\"icon fa-arrow-up \" aria-hidden=\"true\" ng-click=\"vm.moveupAssessment()\"></i></a>\n" +
+    "          <a href=\"#\" class=\"btn bg-blue-100 margin-top-5\" uib-tooltip=\"Move Down\" tooltip-placement=\"left\"  tooltip-trigger=\"'mouseenter'\" tooltip-append-to-body=\"true\" ng-click=\"vm.movedownAssessment()\"><i class=\"icon fa-arrow-down \" aria-hidden=\"true\"></i></a>\n" +
+    "          <a href=\"#\" class=\"btn bg-blue-100 margin-top-5\" uib-tooltip=\"Delete\" tooltip-placement=\"left\"  tooltip-trigger=\"'mouseenter'\" tooltip-append-to-body=\"true\" ng-click=\"vm.removeAssessment()\"><i class=\"icon fa-trash-o \" aria-hidden=\"true\"></i></a>\n" +
+    "        </div>\n" +
+    "      </div>\n" +
+    "    </div>\n" +
+    "  </div>\n" +
+    "\n" +
+    "</form>\n" +
+    "");
+}]);
+
+angular.module("assessment/assessmentSA.tpl.html", []).run(["$templateCache", function($templateCache) {
+  $templateCache.put("assessment/assessmentSA.tpl.html",
+    "<form  name=\"Form\" id=\"form\" novalidate ng-submit=\"vm.form.submit(Form)\">\n" +
+    "\n" +
+    "  <div class=\"panel\" style=\"border-top: 5px solid #f2a654; display: inline-block; background-color: #e4eaec; width: 100%\">\n" +
+    "    <div class=\"panel-body\" style=\"padding: 10px 50px 10px 10px;\">\n" +
+    "      <div class=\"padding-10\">\n" +
+    "        \n" +
+    "        <span class=\"label label-danger\" ng-if=\"vm.errorMessage\"> {{vm.errorMessage}} </span>\n" +
+    "\n" +
+    "        <div class=\"form-group\" ng-class=\"{'has-error':Form.question.$dirty && Form.question.$invalid}\">\n" +
+    "          <label class=\"control-label\">#{{vm.assessment.seqno}}</label>\n" +
+    "          <span style=\"display: block;\" ng-if=\"!vm.edit\">{{vm.assessment.question}}</span>\n" +
+    "          <input type=\"text\" class=\"form-control\" ng-if=\"vm.edit\" ng-model=\"vm.assessment.question\" name=\"question\" required />\n" +
+    "          <span class=\"error text-small block\" style=\"background-color: #e4eaec;\" ng-if=\"Form.question.$dirty && Form.question.$error.required\">Question is required.</span>\n" +
+    "        </div>\n" +
+    "\n" +
+    "        <div class=\"form-group\">\n" +
+    "          <label class=\"control-label\">Correct Answers [optional]:</label>\n" +
+    "          <div ng-repeat=\"option in vm.assessment.options\">\n" +
+    "            <span class=\"wall\" ng-if=\"!vm.edit\">{{option.text}}</span>\n" +
+    "            <div style=\"display: block; position: relative;\" ng-if=\"vm.edit\" ng-class=\"{'has-error':Form.option.$dirty && Form.option.$invalid}\">\n" +
+    "              <input type=\"text\" class=\"form-control\" ng-model=\"option.text\" name=\"option\" required />\n" +
+    "              <a class=\"btn btn-pure btn-icon btn-default\" type=\"button\" ng-click=\"vm.removeOption($index)\" style=\"position: absolute; bottom: 0px; right: 0px;\">\n" +
+    "                <i class=\"icon fa-remove\" aria-hidden=\"true\"></i>\n" +
+    "              </a>\n" +
+    "            </div>\n" +
+    "          </div>\n" +
+    "          <div class=\"padding-10\">\n" +
+    "            <a href=\"#\" class=\"btn btn-info btn-sm\" ng-if=\"vm.edit\" ng-click=\"vm.addOption()\">Add</a>\n" +
+    "          </div>\n" +
+    "        </div>\n" +
+    "\n" +
+    "        <div class=\"form-group\">\n" +
+    "          <label class=\"control-label\">Explanation:</label>\n" +
+    "          <span class=\"wall\" style=\"display: block;\" ng-if=\"!vm.edit\">{{vm.assessment.explanation}}</span>\n" +
+    "          <textarea class=\"form-control\" ng-if=\"vm.edit\" ng-model=\"vm.assessment.explanation\" rows=\"4\"></textarea>\n" +
+    "        </div>\n" +
+    "\n" +
+    "\n" +
+    "        <div class=\"actionContainer\">\n" +
+    "          <a href=\"#\" class=\"btn bg-blue-100\" style=\"margin-top: 1px\" uib-tooltip=\"Edit\" tooltip-placement=\"left\"  tooltip-trigger=\"'mouseenter'\" tooltip-append-to-body=\"true\"  ng-click=\"vm.startEdit()\" ng-if=\"!vm.edit\"><i class=\"icon fa-edit \" aria-hidden=\"true\" ></i></a>\n" +
+    "          <button type=\"submit\" class=\"btn bg-blue-300\" style=\"margin-top: 1px\" uib-tooltip=\"Save\" tooltip-placement=\"left\"  tooltip-trigger=\"'mouseenter'\" tooltip-append-to-body=\"true\" ng-if=\"vm.edit\" ><i class=\"icon fa-save \" aria-hidden=\"true\" ></i></button>\n" +
+    "          <a href=\"#\" class=\"btn bg-blue-100 margin-top-5\" uib-tooltip=\"Move Up\" tooltip-placement=\"left\"  tooltip-trigger=\"'mouseenter'\" tooltip-append-to-body=\"true\"><i class=\"icon fa-arrow-up \" aria-hidden=\"true\" ng-click=\"vm.moveupAssessment()\"></i></a>\n" +
+    "          <a href=\"#\" class=\"btn bg-blue-100 margin-top-5\" uib-tooltip=\"Move Down\" tooltip-placement=\"left\"  tooltip-trigger=\"'mouseenter'\" tooltip-append-to-body=\"true\" ng-click=\"vm.movedownAssessment()\"><i class=\"icon fa-arrow-down \" aria-hidden=\"true\"></i></a>\n" +
+    "          <a href=\"#\" class=\"btn bg-blue-100 margin-top-5\" uib-tooltip=\"Delete\" tooltip-placement=\"left\"  tooltip-trigger=\"'mouseenter'\" tooltip-append-to-body=\"true\" ng-click=\"vm.removeAssessment()\"><i class=\"icon fa-trash-o \" aria-hidden=\"true\"></i></a>\n" +
+    "        </div>\n" +
+    "      </div>\n" +
+    "    </div>\n" +
+    "  </div>\n" +
+    "\n" +
+    "</form>\n" +
+    "");
+}]);
+
+angular.module("assessment/assessmentTF.tpl.html", []).run(["$templateCache", function($templateCache) {
+  $templateCache.put("assessment/assessmentTF.tpl.html",
+    "<form  name=\"Form\" id=\"form\" novalidate ng-submit=\"vm.form.submit(Form)\">\n" +
+    "\n" +
+    "<div class=\"panel\" style=\"border-top: 5px solid #3aa99e; display: inline-block; background-color: #e4eaec; width: 100%\">\n" +
+    "  <div class=\"panel-body\" style=\"padding: 10px 50px 10px 10px;\">\n" +
+    "    <div class=\"padding-10\">\n" +
+    "      \n" +
+    "      <span class=\"label label-danger\" ng-if=\"vm.errorMessage\"> {{vm.errorMessage}} </span>\n" +
+    "\n" +
+    "      <div class=\"form-group\"  ng-class=\"{'has-error':Form.question.$dirty && Form.question.$invalid}\">\n" +
+    "        <label class=\"control-label\">#{{vm.assessment.seqno}}</label>\n" +
+    "        <span style=\"display: block;\" ng-if=\"!vm.edit\">{{vm.assessment.question}}</span>\n" +
+    "        <input type=\"text\" class=\"form-control\" ng-if=\"vm.edit\" ng-model=\"vm.assessment.question\" name=\"question\" required />\n" +
+    "        <span class=\"error text-small block\" style=\"background-color: #e4eaec;\" ng-if=\"Form.question.$dirty && Form.question.$error.required\">Question is required.</span>\n" +
+    "      </div>\n" +
+    "\n" +
+    "      <div class=\"form-group\">\n" +
+    "        <label class=\"control-label\">Correct Answer:</label>\n" +
+    "\n" +
+    "        <div style=\"display: block;\" ng-if=\"!vm.edit\">\n" +
+    "        {{vm.assessment.answer}}\n" +
+    "        </div>\n" +
+    "        <div style=\"display: block;\" ng-if=\"vm.edit\">\n" +
+    "          <a href=\"#\" class=\"btn\" ng-class=\"vm.assessment.answer === 'true' ? 'btn-success' : 'btn-default'\" ng-click=\"vm.setAnswerTrue()\">True</a><a href=\"#\" class=\"btn margin-left-20\" ng-class=\"vm.assessment.answer === 'false' ? 'btn-success' : 'btn-default'\" ng-click=\"vm.setAnswerFalse()\">False</a>\n" +
+    "        </div>\n" +
+    "      </div>\n" +
+    "\n" +
+    "      <div class=\"form-group\">\n" +
+    "        <label class=\"control-label\">Explanation:</label>\n" +
+    "        <span class=\"wall\" style=\"display: block;\" ng-if=\"!vm.edit\">{{vm.assessment.explanation}}</span>\n" +
+    "        <textarea class=\"form-control\" ng-if=\"vm.edit\" ng-model=\"vm.assessment.explanation\" rows=\"4\"></textarea>\n" +
+    "      </div>\n" +
+    "\n" +
+    "      <div class=\"actionContainer\">\n" +
+    "        <a href=\"#\" class=\"btn bg-blue-100\" style=\"margin-top: 1px\" uib-tooltip=\"Edit\" tooltip-placement=\"left\"  tooltip-trigger=\"'mouseenter'\" tooltip-append-to-body=\"true\"  ng-click=\"vm.startEdit()\" ng-if=\"!vm.edit\"><i class=\"icon fa-edit \" aria-hidden=\"true\" ></i></a>\n" +
+    "        <button type=\"submit\" class=\"btn bg-blue-300\" style=\"margin-top: 1px\" uib-tooltip=\"Save\" tooltip-placement=\"left\"  tooltip-trigger=\"'mouseenter'\" tooltip-append-to-body=\"true\" ng-if=\"vm.edit\" ><i class=\"icon fa-save \" aria-hidden=\"true\" ></i></button>\n" +
+    "        <a href=\"#\" class=\"btn bg-blue-100 margin-top-5\" uib-tooltip=\"Move Up\" tooltip-placement=\"left\"  tooltip-trigger=\"'mouseenter'\" tooltip-append-to-body=\"true\"><i class=\"icon fa-arrow-up \" aria-hidden=\"true\" ng-click=\"vm.moveupAssessment()\"></i></a>\n" +
+    "        <a href=\"#\" class=\"btn bg-blue-100 margin-top-5\" uib-tooltip=\"Move Down\" tooltip-placement=\"left\"  tooltip-trigger=\"'mouseenter'\" tooltip-append-to-body=\"true\" ng-click=\"vm.movedownAssessment()\"><i class=\"icon fa-arrow-down \" aria-hidden=\"true\"></i></a>\n" +
+    "        <a href=\"#\" class=\"btn bg-blue-100 margin-top-5\" uib-tooltip=\"Delete\" tooltip-placement=\"left\"  tooltip-trigger=\"'mouseenter'\" tooltip-append-to-body=\"true\" ng-click=\"vm.removeAssessment()\"><i class=\"icon fa-trash-o \" aria-hidden=\"true\"></i></a>\n" +
+    "      </div>\n" +
+    "    </div>\n" +
+    "  </div>\n" +
+    "</div>\n" +
+    "\n" +
+    "</form>");
+}]);
+
+angular.module("comment/classList.tpl.html", []).run(["$templateCache", function($templateCache) {
+  $templateCache.put("comment/classList.tpl.html",
+    "on <span class=\"text-azure\" ng-if=\"!vm.showPopup\"> {{vm.classText}}</span> \n" +
+    "\n" +
+    "<div class=\"dropdown\"  ng-if=\"vm.showPopup\" style=\"display: inline;\">\n" +
+    "  <a class=\"dropdown-toggle inline-block text-azure\" data-toggle=\"dropdown\" href=\"#\" aria-expanded=\"true\">{{vm.classText}}<span class=\"caret\"></span></a>\n" +
+    "  <ul class=\"dropdown-menu animation-slide-down animation-middle-left animation-duration-250\" role=\"menu\">\n" +
+    "    <li role=\"presentation\" ng-repeat=\"classname in vm.classnames\"> \n" +
+    "      <a href=\"#\">{{classname}}</a>\n" +
+    "    </li>\n" +
+    "  </ul>\n" +
+    "</div>");
+}]);
 
 angular.module("comment/comment.tpl.html", []).run(["$templateCache", function($templateCache) {
   $templateCache.put("comment/comment.tpl.html",
-    "<div class=\"comment media\" ng-cloak style=\"width: 100%\">\n" +
+    "<div class=\"comment media\" ng-cloak style=\"width: 100%; padding-bottom: 10px;\">\n" +
     "	<a href=\"#\" class=\"media-left\">\n" +
     "		<img alt=\"image\" class=\"avatar avatar-lg\" src=\"assets/images/avatar-1-small.jpg\" >\n" +
     "	</a>\n" +
@@ -10,48 +272,55 @@ angular.module("comment/comment.tpl.html", []).run(["$templateCache", function($
     "		<div class=\"comment-body\">\n" +
     "			<a href=\"#\" class=\"comment-author\">{{vm.name}}</a> \n" +
     "\n" +
-    "			<div class=\"comment-meta\">\n" +
-    "				<span class=\"date\" > {{vm.posted}}</span>\n" +
-    "			</div>\n" +
-    "\n" +
     "			<span ng-if=\"!vm.isreply\">\n" +
-    "				<span ng-if=\"msg.type != 'Reply'\" style=\"margin: 0px 5px;\"> on&nbsp;<span class=\"text-azure\">{{vm.classnames | listToString}}</span> </span>\n" +
+    "				<class-list style=\"margin: 0px 5px;\" classes=\"msg.classes\"/>\n" +
     "			</span>\n" +
+    "\n" +
+    "			<div class=\"comment-header-actions\" ng-if=\"vm.isreply\">\n" +
+    "				<div class=\"comment-meta\">\n" +
+    "			      <span class=\"date\" > {{vm.posted}}</span>\n" +
+    "			    </div>\n" +
+    "			</div>\n" +
     "\n" +
     "			<div class=\"comment-header-actions\" ng-if=\"!vm.isreply\">\n" +
     "				\n" +
-    "				<div class=\"btn-group \">\n" +
-    "			        <button type=\"button\" class=\"btn btn-pure btn-primary icon fa-bookmark-o\"  aria-hidden=\"true\"></button>\n" +
-    "			        <button type=\"button\" class=\"btn btn-pure btn-primary  icon wb-star-outline\" aria-hidden=\"true\"></button>\n" +
-    "			        <button type=\"button\" class=\"btn btn-pure btn-primary  icon wb-expand\" aria-hidden=\"true\"></button>\n" +
-    "			        <button type=\"button\" class=\"btn btn-pure btn-primary  icon wb-close-mini\" aria-hidden=\"true\" ng-click=\"delete()\"></button>\n" +
-    "			      </div>\n" +
-    "			      <div class=\"comment-meta\">\n" +
-    "					<span class=\"label label-info margin-left-10\" ng-if=\"msg.dueby\">\n" +
+    "\n" +
+    "\n" +
+    "				<div class=\"comment-meta\">\n" +
+    "					<span class=\"date\" > {{vm.posted}}</span>\n" +
+    "					<span class=\"label label-md label-info margin-left-10\" ng-if=\"msg.dueby\">\n" +
     "						Due {{vm.duein}}\n" +
     "					</span>\n" +
-    "					<span class=\"label\" \n" +
+    "					<span class=\"label label-md\" \n" +
     "						ng-class=\"{'label-primary' : ['Message', 'Discussion', 'Blog'].indexOf(msg.type) >= 0 , 'label-danger' : ['Assignment', 'Task'].indexOf(msg.type) >= 0 , 'label-warning' :['Notification', 'Newsletter',  'Assessment'].indexOf(msg.type) >= 0 , 'label-info' :['Material'].indexOf(msg.type) >= 0 }\" \n" +
     "						ng-if=\"msg.type != 'Reply'\"\n" +
-    "						style=\"margin-left: 20px;\">\n" +
+    "						style=\"margin-left: 10px;\">\n" +
     "						{{msg.type}}\n" +
     "					</span>	\n" +
-    "					\n" +
     "				</div>\n" +
+    "\n" +
+    "				<div class=\"dropdown\" style=\"display: inline;\">\n" +
+    "				  <a class=\"dropdown-toggle inline-block text-azure\" data-toggle=\"dropdown\" href=\"#\" aria-expanded=\"true\"><span class=\"caret\"></span></a>\n" +
+    "				  <ul class=\"dropdown-menu animation-slide-down animation-bottom-left animation-duration-250\" role=\"menu\">\n" +
+    "				    <li role=\"presentation\"><a href=\"#\"><i class=\"icon fa-bookmark-o\" aria-hidden=\"true\"></i> Bookmark</a></li>\n" +
+    "				    <li role=\"presentation\"><a href=\"#\"><i class=\"icon fa-thumb-tack\" aria-hidden=\"true\"></i> Pin it</a></li>\n" +
+    "				    <li role=\"presentation\"><a href=\"#\"><i class=\"icon fa-edit\" aria-hidden=\"true\"></i> Edit</a></li>\n" +
+    "				    <li role=\"presentation\"><a href=\"#\"><i class=\"icon wb-close-mini\" aria-hidden=\"true\"></i> Delete</a></li>\n" +
+    "				  </ul>\n" +
+    "				</div>\n" +
+    "\n" +
     "			</div>\n" +
     "\n" +
     "			<comment-editor id=\"react\" content=\"msg.text\" readonly=\"true\" class=\"comment-content\"> </comment-editor>\n" +
+    "	        <richtext-card rtpost=\"msg\" ng-if=\"vm.hasRichtext\" ng-click=\"vm.openRichtext()\"/>\n" +
+    "            <assessment-card asmtpost=\"msg\" ng-if=\"msg.responseType !=='reply' && msg.responseType !=='submission' && msg.type === 'Assessment'\" />\n" +
     "\n" +
-    "            <richtext-card rtpost=\"msg\" ng-if=\"vm.hasRichtext\" ng-click=\"vm.openRichtext()\"/>\n" +
-    "            \n" +
     "			<div gallery files=\"msg.files\" readonly=\"true\" ng-if=\"msg.files && msg.files.length > 0\"></div>\n" +
     "\n" +
     "			<div class=\"comment-actions\">\n" +
     "\n" +
     "				<div ng-if=\"!vm.showSubmitActions &&  !vm.showTaskActions\">\n" +
-    "					\n" +
     "					<button class=\"btn btn-default btn-sm btn-round btn-outline \" ng-click=\"showPost('reply')\" style=\"height: 30px;\"><i class=\"icon fa-reply\" aria-hidden=\"true\"></i>Reply</button>\n" +
-    "\n" +
     "				</div>\n" +
     "\n" +
     "				<submit-actions msg=\"msg\" ng-if=\"vm.showSubmitActions\" show-replies=\"showReplies(type)\" show-post=\"showPost(type)\"/>\n" +
@@ -100,39 +369,70 @@ angular.module("comment/replies.tpl.html", []).run(["$templateCache", function($
 
 angular.module("comment/submitActions.tpl.html", []).run(["$templateCache", function($templateCache) {
   $templateCache.put("comment/submitActions.tpl.html",
-    "<!-- visible only for trainers-->\n" +
+    "<div class=\"btn-group\">\n" +
+    "\n" +
+    "	<button class=\"btn btn-default btn-sm btn-round btn-outline\" uib-tooltip=\"Submit\" tooltip-placement=\"bottom\"  tooltip-trigger=\"'mouseenter'\" tooltip-append-to-body=\"true\" ng-click=\"vm.showPost('submission')\" >Submit</button>\n" +
+    "	<button class=\"btn btn-default btn-sm btn-round btn-outline\" ng-click=\"vm.showReplies('submission')\" ><i class=\"icon fa-paper-plane-o\"  ></i> ({{vm.submissionsCount}})</button>\n" +
+    "	<button class=\"btn btn-default btn-sm btn-round btn-outline\"  uib-tooltip=\"Ask question\" tooltip-placement=\"bottom\"  tooltip-trigger=\"'mouseenter'\" tooltip-append-to-body=\"true\" ng-click=\"vm.showPost('reply')\"><i class=\"icon fa-question\"></i> ({{vm.qaCount}})</button>\n" +
+    "</div>\n" +
+    "</div>\n" +
+    "\n" +
+    "<div class=\"btn-group margin-left-10\">\n" +
+    "	<button class=\"btn btn-pure btn-warning\">Pending (20)</button>\n" +
+    "</div>\n" +
+    "\n" +
+    "\n" +
+    "<!-- visible only for trainers\n" +
     "<button class=\"btn btn-default btn-sm btn-round btn-success\" ng-class=\"vm.showReplyType==='submission'?'':' btn-raised'\" ng-click=\"vm.showReplies('submission')\"  style=\"height: 30px;\">Submissions ({{vm.submissionsCount}})</button> \n" +
     "\n" +
-    "<!-- visible only for students-->\n" +
-    "<button class=\"btn btn-primary btn-sm btn-round btn-raised \" ng-click=\"vm.showPost('submission')\" style=\"height: 30px;\"><i class=\"icon fa-reply\" aria-hidden=\"true\"></i>Submit</button>\n" +
     "\n" +
-    "<!-- visible only for trainers & students-->\n" +
+    "visible only for students\n" +
+    "<button class=\"btn btn-default btn-sm btn-round btn-raised \" ng-click=\"vm.showPost('submission')\" style=\"height: 30px;\"><i class=\"icon fa-reply\" aria-hidden=\"true\"></i>Submit</button>\n" +
     "\n" +
-    "<button class=\"btn btn-default btn-sm btn-round btn-info btn-raised \" ng-class=\"vm.showReplyType ==='reply'?'':' btn-raised'\"  ng-click=\"vm.showReplies('reply')\" style=\"height: 30px; margin-left: 20px;\">Q&amp;A ({{vm.qaCount}})</button>\n" +
+    "visible only for trainers & students\n" +
+    "\n" +
+    "<button class=\"btn btn-default btn-sm btn-round btn-raised \" ng-class=\"vm.showReplyType ==='reply'?'':' btn-raised'\"  ng-click=\"vm.showReplies('reply')\" style=\"height: 30px; margin-left: 20px;\">Q&amp;A ({{vm.qaCount}})</button>\n" +
     "\n" +
     "<button class=\"btn btn-default btn-sm btn-round btn-raised \" ng-click=\"vm.showPost('reply')\"  style=\"height: 30px;\"><i class=\"icon fa-reply\" aria-hidden=\"true\"></i>Ask Question?</button>\n" +
     "\n" +
-    "<!-- visible only for trainers-->\n" +
-    "<button class=\"btn btn-default btn-sm btn-round btn-raised btn-warning\"   style=\"height: 30px; margin-left: 20px;\">Pending (10)</button> ");
+    " visible only for trainers\n" +
+    "<button class=\"btn btn-default btn-sm btn-round btn-raised\"   style=\"height: 30px; margin-left: 20px;\">Pending (10)</button> \n" +
+    "\n" +
+    "-->");
 }]);
 
 angular.module("comment/taskActions.tpl.html", []).run(["$templateCache", function($templateCache) {
   $templateCache.put("comment/taskActions.tpl.html",
-    "<!-- visible only for trainers-->\n" +
+    "<div class=\"btn-group\">\n" +
+    "\n" +
+    "	<button class=\"btn btn-default btn-sm btn-round btn-outline\" uib-tooltip=\"Submit\" tooltip-placement=\"bottom\"  tooltip-trigger=\"'mouseenter'\" tooltip-append-to-body=\"true\" ng-click=\"vm.onComplete()\" ng-if=\"!vm.userHasCompletedTask\">I have completed</button>\n" +
+    "	<button class=\"btn btn-default btn-sm btn-round btn-outline\" uib-tooltip=\"Submit\" tooltip-placement=\"bottom\"  tooltip-trigger=\"'mouseenter'\" tooltip-append-to-body=\"true\" ng-if=\"vm.userHasCompletedTask\">Completed</button>\n" +
+    "	<button class=\"btn btn-default btn-sm btn-round btn-outline\" ng-click=\"vm.showReplies('submission')\" ><i class=\"icon fa-paper-plane-o\"  ></i> ({{vm.submissionsCount}})</button>\n" +
+    "	<button class=\"btn btn-default btn-sm btn-round btn-outline\"  uib-tooltip=\"Ask question\" tooltip-placement=\"bottom\"  tooltip-trigger=\"'mouseenter'\" tooltip-append-to-body=\"true\" ng-click=\"vm.showPost('reply')\"><i class=\"icon fa-question\"></i> ({{vm.qaCount}})</button>\n" +
+    "</div>\n" +
+    "</div>\n" +
+    "\n" +
+    "<div class=\"btn-group margin-left-10\">\n" +
+    "	<button class=\"btn btn-pure btn-warning\">Pending (20)</button>\n" +
+    "</div>\n" +
+    "\n" +
+    "\n" +
+    "\n" +
+    "<!-- visible only for trainers\n" +
     "<button class=\"btn btn-default btn-sm btn-round btn-success\" ng-class=\"vm.showReplyType==='submission'?'':' btn-raised'\" ng-click=\"vm.showReplies('submission')\"  style=\"height: 30px;\">Completed ({{vm.submissionsCount}})</button> \n" +
     "\n" +
-    "<!-- visible only for students-->\n" +
-    "<button class=\"btn btn-primary btn-sm btn-round btn-raised \" ng-click=\"vm.onComplete()\" style=\"height: 30px;\" ng-if=\"!vm.userHasCompletedTask\"><i class=\"icon fa-check\" aria-hidden=\"true\"></i>I have completed</button>\n" +
-    "<button class=\"btn btn-success btn-sm btn-round btn-raised \" style=\"height: 30px;\" ng-if=\"vm.userHasCompletedTask\" ng-disabled=\"vm.userHasCompletedTask\"><i class=\"icon fa-check\" aria-hidden=\"true\"></i>Completed</button>\n" +
+    "visible only for students\n" +
+    "<button class=\"btn btn-default btn-sm btn-round btn-raised \" ng-click=\"vm.onComplete()\" style=\"height: 30px;\" ng-if=\"!vm.userHasCompletedTask\"><i class=\"icon fa-check\" aria-hidden=\"true\"></i>I have completed</button>\n" +
+    "<button class=\"btn btn-default btn-sm btn-round btn-raised \" style=\"height: 30px;\" ng-if=\"vm.userHasCompletedTask\" ng-disabled=\"vm.userHasCompletedTask\"><i class=\"icon fa-check\" aria-hidden=\"true\"></i>Completed</button>\n" +
     "\n" +
-    "<!-- visible only for trainers & students-->\n" +
+    "visible only for trainers & students\n" +
     "\n" +
-    "<button class=\"btn btn-default btn-sm btn-round btn-info btn-raised \" ng-class=\"vm.showReplyType ==='reply'?'':' btn-raised'\"  ng-click=\"vm.showReplies('reply')\" style=\"height: 30px; margin-left: 20px;\">Q&amp;A ({{vm.qaCount}})</button>\n" +
+    "<button class=\"btn btn-default btn-sm btn-round btn-raised \" ng-class=\"vm.showReplyType ==='reply'?'':' btn-raised'\"  ng-click=\"vm.showReplies('reply')\" style=\"height: 30px; margin-left: 20px;\">Q&amp;A ({{vm.qaCount}})</button>\n" +
     "\n" +
     "<button class=\"btn btn-default btn-sm btn-round btn-raised \" ng-click=\"vm.showPost('reply')\"  style=\"height: 30px;\"><i class=\"icon fa-reply\" aria-hidden=\"true\"></i>Ask Question?</button>\n" +
     "\n" +
-    "<!-- visible only for trainers-->\n" +
-    "<button class=\"btn btn-default btn-sm btn-round btn-raised btn-warning\"   style=\"height: 30px; margin-left: 20px;\">Pending (10)</button> ");
+    "visible only for trainers-\n" +
+    "<button class=\"btn btn-default btn-sm btn-round btn-raised\"   style=\"height: 30px; margin-left: 20px;\">Pending (10)</button> ->");
 }]);
 
 angular.module("events/calendar.tpl.html", []).run(["$templateCache", function($templateCache) {
@@ -577,10 +877,6 @@ angular.module("nav/nav.tpl.html", []).run(["$templateCache", function($template
     "    <li class=\"sidebar-item\" ng-repeat=\"c in vm.visibleClasses\" ng-if=\"vm.hasClasses\">\n" +
     "      <a href=\"#\" ng-click=\"vm.selectClass(c.id)\" ng-class=\"c.id === vm.selection.class.id ? 'active' : ''\">\n" +
     "        {{c.name}}\n" +
-    "        <div style=\"position: absolute;right: 30px;display: inline-block; vertical-align: middle;\" \n" +
-    "              ng-if=\"c.newItems > 0\">\n" +
-    "          <span class=\"badge badge-danger\" >2</span>\n" +
-    "        </div>\n" +
     "      </a>\n" +
     "    </li>\n" +
     "\n" +
@@ -596,9 +892,7 @@ angular.module("nav/nav.tpl.html", []).run(["$templateCache", function($template
     "              ng-if=\"type.newItems > 0\">\n" +
     "          <span class=\"badge badge-danger\" >2</span>\n" +
     "        </div>\n" +
-    "        \n" +
     "      </a>\n" +
-    "      \n" +
     "    </li>\n" +
     "\n" +
     "    \n" +
@@ -648,7 +942,7 @@ angular.module("post/post.tpl.html", []).run(["$templateCache", function($templa
     "</style>\n" +
     "\n" +
     "<form  name=\"Form\" id=\"form1\" novalidate ng-submit=\"vm.form.submit(Form)\" class=\"form-inline\">\n" +
-    "    <div class=\"panel  margin-bottom-10\" ng-cloak>\n" +
+    "    <div class=\"panel  margin-bottom-10\" style=\"background-color: #fff\" ng-class=\"vm.postSelected && !vm.isReply?'card':''\" ng-cloak>\n" +
     "        <div class=\"panel-body padding-10\">\n" +
     "                <div class=\"app-message-input\">\n" +
     "                    <div class=\"message-input\"> \n" +
@@ -671,11 +965,11 @@ angular.module("post/post.tpl.html", []).run(["$templateCache", function($templa
     "                </div>\n" +
     "\n" +
     "            <div class=\"col-md-12 padding-right-0 padding-left-0\" style=\"margin-top: 10px;\" ng-if=\"vm.postSelected\" >\n" +
-    "              <div class=\"col-md-8\" style=\"text-align: left; display: inline-block;\" >\n" +
+    "              <div class=\"col-xs-12 col-md-8\" style=\"text-align: left; display: inline-block;\" >\n" +
     "                    <div class=\"float: left;\" ng-if=\"!vm.isReply\">\n" +
     "                      <div style=\"display: inline-block;  width: 120px;\" class=\"btn\" ng-if=\"!vm.reply\">\n" +
     "                        <div class=\"dropdown\"  >\n" +
-    "                          <a class=\"dropdown-toggle inline-block\" data-toggle=\"dropdown\" href=\"#\" aria-expanded=\"true\" style=\"color: #62a8ea;\"><i ng-class=\"vm.selection.postType.icon\" class=\"site-menu-icon\" aria-hidden=\"true\"></i>{{vm.selection.postType.name}}<span class=\"caret\"></span></a>\n" +
+    "                          <a class=\"dropdown-toggle inline-block\" data-toggle=\"dropdown\" href=\"#\" aria-expanded=\"true\"><i ng-class=\"vm.selection.postType.icon\" class=\"site-menu-icon\" aria-hidden=\"true\"></i>{{vm.selection.postType.name}}<span class=\"caret\"></span></a>\n" +
     "                          <ul class=\"dropdown-menu animation-slide-down animation-middle-left animation-duration-250\" role=\"menu\">\n" +
     "                            <li role=\"presentation\" ng-repeat=\"postType in vm.postTypes\"> \n" +
     "                              <a href=\"#\" ng-click=\"vm.selectPostType(postType)\"><i ng-class=\"postType.icon\" class=\"site-menu-icon\" aria-hidden=\"true\"></i> {{postType.name}}</a>\n" +
@@ -695,7 +989,7 @@ angular.module("post/post.tpl.html", []).run(["$templateCache", function($templa
     "              </div>\n" +
     "\n" +
     "              \n" +
-    "              <div class=\"col-md-4\" style=\"text-align: right;\">\n" +
+    "              <div class=\"col-xs-12 col-md-4\" style=\"text-align: right;\">\n" +
     "                <button class=\"btn btn-default btn-sm btn-raised btn-default \" ng-click=\"vm.reset()\" style=\"width: 70px; height: 30px; margin-right: 10px;\">Cancel</button>\n" +
     "                <button class=\"btn btn-default btn-sm btn-raised btn-primary \" type=\"submit\" style=\"width: 70px; height: 30px;\">Post</button>\n" +
     "              </div>\n" +
@@ -706,30 +1000,37 @@ angular.module("post/post.tpl.html", []).run(["$templateCache", function($templa
     "            </div>\n" +
     "\n" +
     "\n" +
-    "            <div class=\"col-md-12\" ng-if=\"!vm.isReply && vm.postSelected && (vm.post.type === 'Assignment' || vm.post.type === 'Task')\" style=\"padding-left: 10px;\" >\n" +
+    "            <div class=\"col-md-12\" ng-if=\"!vm.isReply && vm.postSelected && (vm.post.type === 'Assignment' || vm.post.type === 'Task' || vm.post.type === 'Assessment')\" style=\"padding-left: 10px;\" >\n" +
     "              <hr />\n" +
-    "              <div class=\"form-group\">\n" +
-    "                <label class=\"control-label\" for=\"datepicker\">Due by</label>\n" +
-    "                \n" +
-    "                <div class=\"input-group\" style=\"float: left; width: 200px;\">\n" +
-    "                  <span class=\"input-group-addon\">\n" +
-    "                    <i class=\"icon wb-calendar\" aria-hidden=\"true\"></i>\n" +
-    "                  </span>\n" +
-    "                  <input type=\"text\" id=\"startDate\" class=\"form-control\" datepicker ng-model=\"vm.post.deuby\">\n" +
+    "\n" +
+    "              <div class=\"col-xs-12 col-md-6\">\n" +
+    "                <div class=\"form-group\">\n" +
+    "                  <label class=\"control-label\" for=\"datepicker\">Due by</label>\n" +
+    "                  <div class=\"input-group\" style=\" width: 200px;\">\n" +
+    "                    <span class=\"input-group-addon\">\n" +
+    "                      <i class=\"icon wb-calendar\" aria-hidden=\"true\"></i>\n" +
+    "                    </span>\n" +
+    "                    <input type=\"text\" id=\"startDate\" class=\"form-control\" datepicker ng-model=\"vm.post.dueby\">\n" +
+    "                  </div>\n" +
+    "\n" +
     "                </div>\n" +
-    "\n" +
     "              </div>\n" +
     "\n" +
-    "              <div class=\"form-group\">\n" +
-    "                <label class=\"control-label\" for=\"title\">Title </label>\n" +
-    "                <select id=\"title\" class=\"form-control \" ng-model=\"vm.post.section\" ui-select2 style=\"min-width: 300px;\">\n" +
-    "                  <option ng-repeat=\"p in vm.sections\" >{{p.name}}</option>\n" +
-    "                </select>\n" +
-    "              </div>\n" +
+    "              <div class=\"col-xs-12 col-md-6\">\n" +
     "\n" +
-    "              \n" +
+    "                <div class=\"form-group\">\n" +
+    "                  <label class=\"control-label\" for=\"title\">Title </label>\n" +
+    "                  <select id=\"title\" class=\"form-control \" ng-model=\"vm.post.section\" ui-select2 style=\"min-width: 300px;\">\n" +
+    "                    <option ng-repeat=\"p in vm.sections\" >{{p.name}}</option>\n" +
+    "                  </select>\n" +
+    "                </div>   \n" +
+    "              </div>           \n" +
     "            </div>\n" +
     "\n" +
+    "\n" +
+    "            <div class=\"col-md-12\" ng-if=\"!vm.isReply && vm.postSelected && vm.post.type === 'Assessment'\"  >\n" +
+    "              <assessment-card asmtpost=\"vm.post\"/>\n" +
+    "            </div>\n" +
     "\n" +
     "            <div class=\"col-md-12 margin-top-20\" ng-if=\"vm.uploadImage\">\n" +
     "              <div gallery files=\"vm.post.files\" type='image' gallery-title=\"Attach Pictures\" ></div>\n" +
@@ -1400,7 +1701,7 @@ angular.module("shared/app.tpl.html", []).run(["$templateCache", function($templ
     "          title=\"Remark\">\n" +
     "          <img class=\"navbar-brand-logo navbar-brand-logo-special\" src=\"../assets/images/logo-blue.png\"\n" +
     "          title=\"Remark\">\n" +
-    "          <span class=\"navbar-brand-text hidden-xs\"> trainmoo</span>\n" +
+    "          <span class=\"navbar-brand-text hidden-xs\">trainmoo</span>\n" +
     "        </a>\n" +
     "\n" +
     "      </div>\n" +
@@ -2232,8 +2533,28 @@ angular.module("wall/wall.tpl.html", []).run(["$templateCache", function($templa
     "            <div class=\"col-md-12\">\n" +
     "              <post placeholder=\"Create new post..\"></post>\n" +
     "            </div>\n" +
+    "            <div class=\"col-md-12\" style=\"margin-bottom: 1px\">\n" +
+    "              <div class=\"panel margin-0\">\n" +
+    "                <div class=\"panel-header\">\n" +
+    "                  <span class=\"panel-title padding-10\">Latest Posts</span>\n" +
+    "                  \n" +
+    "                  <div class=\"panel-actions\">\n" +
+    "                    <div class=\"dropdown\" style=\"display: inline;\">\n" +
+    "                      <a class=\"dropdown-toggle inline-block text-azure\" data-toggle=\"dropdown\" href=\"#\" aria-expanded=\"true\"><span class=\"caret\"></span></a>\n" +
+    "                      <ul class=\"dropdown-menu animation-slide-down animation-bottom-left animation-duration-250\" role=\"menu\">\n" +
+    "                        <li role=\"presentation\"><a href=\"#\"><i class=\"icon fa-bookmark-o\" aria-hidden=\"true\"></i> Bookmark</a></li>\n" +
+    "                        <li role=\"presentation\"><a href=\"#\"><i class=\"icon fa-thumb-tack\" aria-hidden=\"true\"></i> Pin it</a></li>\n" +
+    "                        <li role=\"presentation\"><a href=\"#\"><i class=\"icon fa-edit\" aria-hidden=\"true\"></i> Edit</a></li>\n" +
+    "                        <li role=\"presentation\"><a href=\"#\"><i class=\"icon wb-close-mini\" aria-hidden=\"true\"></i> Delete</a></li>\n" +
+    "                      </ul>\n" +
+    "                    </div>\n" +
+    "                  </div>\n" +
+    "\n" +
+    "                </div>\n" +
+    "              </div>\n" +
+    "            </div>\n" +
     "            <div class=\"col-md-12\"  ng-repeat=\"msg in posts\" >\n" +
-    "              <div class=\"panel panel-white  margin-bottom-5\" ng-cloak>\n" +
+    "              <div class=\"panel panel-white  margin-bottom-10\" ng-cloak>\n" +
     "                <div class=\"panel-body\" style=\"padding: 0px 5px 0px 5px\">\n" +
     "                    <comment msg=\"msg\" ></comment>\n" +
     "                </div>\n" +

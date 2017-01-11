@@ -63,8 +63,28 @@
             <div class="col-md-12">
               <post placeholder="Create new post.."></post>
             </div>
+            <div class="col-md-12" style="margin-bottom: 1px">
+              <div class="panel margin-0">
+                <div class="panel-header">
+                  <span class="panel-title padding-10">Latest Posts</span>
+                  
+                  <div class="panel-actions">
+                    <div class="dropdown" style="display: inline;">
+                      <a class="dropdown-toggle inline-block text-azure" data-toggle="dropdown" href="#" aria-expanded="true"><span class="caret"></span></a>
+                      <ul class="dropdown-menu animation-slide-down animation-bottom-left animation-duration-250" role="menu">
+                        <li role="presentation"><a href="#"><i class="icon fa-bookmark-o" aria-hidden="true"></i> Bookmark</a></li>
+                        <li role="presentation"><a href="#"><i class="icon fa-thumb-tack" aria-hidden="true"></i> Pin it</a></li>
+                        <li role="presentation"><a href="#"><i class="icon fa-edit" aria-hidden="true"></i> Edit</a></li>
+                        <li role="presentation"><a href="#"><i class="icon wb-close-mini" aria-hidden="true"></i> Delete</a></li>
+                      </ul>
+                    </div>
+                  </div>
+
+                </div>
+              </div>
+            </div>
             <div class="col-md-12"  ng-repeat="msg in posts" >
-              <div class="panel panel-white  margin-bottom-5" ng-cloak>
+              <div class="panel panel-white  margin-bottom-10" ng-cloak>
                 <div class="panel-body" style="padding: 0px 5px 0px 5px">
                     <comment msg="msg" ></comment>
                 </div>

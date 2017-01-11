@@ -1,16 +1,15 @@
 package com.rauzr.trainmoo.trainmoo;
 
+import android.app.SearchManager;
+import android.content.Context;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
-import android.support.v4.app.LoaderManager;
-import android.support.v4.content.AsyncTaskLoader;
-import android.support.v4.content.Loader;
-import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.View;
+import android.widget.SearchView;
 import android.support.design.widget.NavigationView;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
@@ -19,19 +18,9 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
-
-import com.rauzr.trainmoo.trainmoo.model.Message;
-import com.rauzr.trainmoo.trainmoo.utils.NetworkUtils;
 import com.rauzr.trainmoo.trainmoo.view.CalendarFragment;
 import com.rauzr.trainmoo.trainmoo.view.SchoolFragment;
 import com.rauzr.trainmoo.trainmoo.view.WallFragment;
-
-import org.json.JSONArray;
-import org.json.JSONException;
-import org.json.JSONObject;
-
-import java.io.IOException;
-import java.util.ArrayList;
 
 public class WallActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
@@ -74,8 +63,6 @@ public class WallActivity extends AppCompatActivity
 
     }
 
-
-
     @Override
     public void onBackPressed() {
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
@@ -90,6 +77,14 @@ public class WallActivity extends AppCompatActivity
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
         getMenuInflater().inflate(R.menu.wall, menu);
+
+        SearchManager searchManager =
+                (SearchManager) getSystemService(Context.SEARCH_SERVICE);
+        SearchView searchView =
+                (SearchView) menu.findItem(R.id.search).getActionView();
+        searchView.setSearchableInfo(
+                searchManager.getSearchableInfo(getComponentName()));
+
         return true;
     }
 

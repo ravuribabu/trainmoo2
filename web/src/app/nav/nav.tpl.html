@@ -23,10 +23,6 @@
     <li class="sidebar-item" ng-repeat="c in vm.visibleClasses" ng-if="vm.hasClasses">
       <a href="#" ng-click="vm.selectClass(c.id)" ng-class="c.id === vm.selection.class.id ? 'active' : ''">
         {{c.name}}
-        <div style="position: absolute;right: 30px;display: inline-block; vertical-align: middle;" 
-              ng-if="c.newItems > 0">
-          <span class="badge badge-danger" >2</span>
-        </div>
       </a>
     </li>
 
@@ -42,9 +38,7 @@
               ng-if="type.newItems > 0">
           <span class="badge badge-danger" >2</span>
         </div>
-        
       </a>
-      
     </li>
 
     

@@ -4,7 +4,7 @@ var AttachmentSchema = require('./attachment').AttachmentSchema;
 
 var PostSchema = new Schema({	
 
-	type: { type: String, enum: ['Discussion', 'Message' , 'Assignment', 'Notification', 'Blog', 'Material', 'Newsletter', 'Task']},
+	type: { type: String, enum: ['Discussion', 'Message' , 'Assignment', 'Notification', 'Blog', 'Material', 'Newsletter', 'Task', 'Assessment']},
 	author : {type:Schema.Types.ObjectId, ref: 'User', required: true},
 	classes : [{
 		id: {type:Schema.Types.ObjectId, ref: 'Class'},
@@ -33,6 +33,17 @@ var PostSchema = new Schema({
 		previewImg: String,
 	    previewText: String,
 	    title: String
+	},
+
+	// avg score - stats for teachers etc 
+	assessment: {
+		title: String,
+		description: String,
+		duration: Number,
+		count: Number,
+		tf: Number, 
+		mc: Number, 
+		sa: Number,
 	},
 	
 	created_by: String,

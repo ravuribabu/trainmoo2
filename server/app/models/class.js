@@ -4,7 +4,6 @@ var User = require('./user').User;
 var User = require('./school').School;
 var AttachmentSchema = require('./attachment').AttachmentSchema;
 
-
 var Schema = mongoose.Schema;
 
 //ClassSchema will be used for programs and classes

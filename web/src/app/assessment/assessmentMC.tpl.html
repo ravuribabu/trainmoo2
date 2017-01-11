@@ -1,0 +1,57 @@
+<form  name="Form" id="form" novalidate ng-submit="vm.form.submit(Form)">
+
+  <div class="panel" style="border-top: 5px solid #57c7d4; display: inline-block; background-color: #e4eaec; width: 100%">
+    <div class="panel-body" style="padding: 10px 50px 10px 10px;">
+      <div class="padding-10">
+
+        <span class="label label-danger" ng-if="vm.errorMessage"> {{vm.errorMessage}} </span>
+
+        <div class="form-group" ng-class="{'has-error':Form.question.$dirty && Form.question.$invalid}" >
+          <label class="control-label">#{{vm.assessment.seqno}}</label>
+          <span style="display: block;" ng-if="!vm.edit">{{vm.assessment.question}}</span>
+          <input type="text" name="question" class="form-control" ng-if="vm.edit" ng-model="vm.assessment.question" required/>
+          <span class="error text-small block" style="background-color: #e4eaec;" ng-if="Form.question.$dirty && Form.question.$error.required">Question is required.</span>
+        </div>
+
+        <div class="row">
+          <label class="control-label" style="display: block;">Answer Choice: <span style="float: right; margin-right: 20px;">Correct</span></label>
+          <div class="col-md-12" ng-repeat="option in vm.assessment.options">
+              <div class="col-md-1">
+                <span class="label label-primary">{{option.seqno}}</span>
+              </div>
+              <div class="col-md-9">
+                <div class="form-group" ng-class="{'has-error':Form.optionText.$dirty && Form.optionText.$invalid}"  ng-if="vm.edit">
+                  <input type="text" name="optionText" class="form-control" placeholder="Enter choice" ng-model="option.text"  required />
+                  <span class="error text-small block" style="background-color: #e4eaec;" ng-if="Form.optionText.$dirty && Form.optionText.$error.optionText">Choice is required.</span>
+                </div>
+                <span ng-if="!vm.edit">{{option.text}}</span>
+              </div>
+              <div class="col-md-1" style="text-align: center;"  >
+                <a href="#" ng-click="vm.removeOption($index)" ng-if="vm.edit"><i class="icon fa-close " aria-hidden="true"></i></a>
+              </div>
+              <div class="col-md-1" style="text-align: center;"  >
+                <input type="checkbox" ng-model="option.answer" ng-if="vm.edit">
+                <span ng-if="!vm.edit">{{option.answer}}</span>
+              </div>
+          </div>
+          <a href="#" class="btn btn-info margin-top-10" ng-click="vm.addOption()" ng-if="vm.edit">Add</a>
+        </div>
+
+        <div class="form-group margin-top-20">
+          <label class="control-label">Explanation:</label>
+          <span class="wall" style="display: block;" ng-if="!vm.edit">{{vm.assessment.explanation}}</span>
+          <textarea class="form-control" ng-if="vm.edit" ng-model="vm.assessment.explanation" rows="4"></textarea>
+        </div>
+
+        <div class="actionContainer">
+          <a href="#" class="btn bg-blue-100" style="margin-top: 1px" uib-tooltip="Edit" tooltip-placement="left"  tooltip-trigger="'mouseenter'" tooltip-append-to-body="true"  ng-click="vm.startEdit()" ng-if="!vm.edit"><i class="icon fa-edit " aria-hidden="true" ></i></a>
+          <button type="submit" class="btn bg-blue-300" style="margin-top: 1px" uib-tooltip="Save" tooltip-placement="left"  tooltip-trigger="'mouseenter'" tooltip-append-to-body="true" ng-if="vm.edit" ><i class="icon fa-save " aria-hidden="true" ></i></button>
+          <a href="#" class="btn bg-blue-100 margin-top-5" uib-tooltip="Move Up" tooltip-placement="left"  tooltip-trigger="'mouseenter'" tooltip-append-to-body="true"><i class="icon fa-arrow-up " aria-hidden="true" ng-click="vm.moveupAssessment()"></i></a>
+          <a href="#" class="btn bg-blue-100 margin-top-5" uib-tooltip="Move Down" tooltip-placement="left"  tooltip-trigger="'mouseenter'" tooltip-append-to-body="true" ng-click="vm.movedownAssessment()"><i class="icon fa-arrow-down " aria-hidden="true"></i></a>
+          <a href="#" class="btn bg-blue-100 margin-top-5" uib-tooltip="Delete" tooltip-placement="left"  tooltip-trigger="'mouseenter'" tooltip-append-to-body="true" ng-click="vm.removeAssessment()"><i class="icon fa-trash-o " aria-hidden="true"></i></a>
+        </div>
+      </div>
+    </div>
+  </div>
+
+</form>
